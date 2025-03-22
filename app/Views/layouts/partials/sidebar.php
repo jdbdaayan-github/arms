@@ -38,8 +38,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('records/search'); ?>" 
-                               class="nav-link text-dark <?= service('request')->getUri()->getSegment(2) == 'search' ? 'active' : '' ?>">
+                            <a href="<?= base_url('records/advancedsearch'); ?>" 
+                               class="nav-link text-dark <?= service('request')->getUri()->getSegment(2) == 'advancedsearch' ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Advanced Search</p>
                             </a>

@@ -13,4 +13,9 @@ class Home extends BaseController
     {
         return view('pages/records/recordscreate');
     }
+
+    public function advancedSearch()
+    {
+        return view('pages/records/advancedsearch');
+    }
 }

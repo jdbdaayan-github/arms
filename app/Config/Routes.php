@@ -8,3 +8,5 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/dashboard', 'Home::index', ['as', 'dashboard']);
 
 $routes->get('/records/create', 'Home::addrecord', ['as', 'addrecord']);
+
+$routes->get('records/advancedsearch', 'Home::advancedsearch', ['as', 'advancedsearch']);
