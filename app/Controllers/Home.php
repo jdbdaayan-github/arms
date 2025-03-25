@@ -4,6 +4,11 @@ namespace App\Controllers;
 
 class Home extends BaseController
 {
+    public function home()
+    {
+        return view('pages/records/recordsdash');
+    }
+
     public function index(): string
     {
         return view('pages/dashboard');

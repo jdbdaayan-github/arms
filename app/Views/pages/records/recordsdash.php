@@ -76,7 +76,7 @@
         </div>
 
         <!-- Documents Table -->
-        <div class="card card-primary card-outline">
+        <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Recent Documents</h3>
             </div>

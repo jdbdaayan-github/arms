@@ -5,9 +5,9 @@
 <!-- Content Header (Breadcrumbs) -->
 <section class="content-header">
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-1 mt-2">
             <div class="col-sm-6">
-                <h1 class="h4">Add Record</h1>
+                <h2 class="h4">Add Record</h2>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right small">

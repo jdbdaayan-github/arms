@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminLTE in CodeIgniter 4</title>
+    <title>ARMS | Admin</title>
+
+        <!-- FontAwesome - Load First -->
+    <link rel="stylesheet" href="<?= base_url('vendor/adminlte/plugins/fontawesome-free/css/all.min.css'); ?>" crossorigin="anonymous" as="font">
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/style.css?v=' . time()); ?>">
 
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="<?= base_url('vendor/adminlte/dist/css/adminlte.min.css'); ?>">
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="<?= base_url('vendor/adminlte/plugins/fontawesome-free/css/all.min.css'); ?>">
 
-    <!-- Data-Tables -->
-     <link rel="stylesheet" href="<?= base_url('vendor/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')?>">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="<?= base_url('vendor/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css'); ?>">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
@@ -49,5 +50,10 @@
     <!-- DataTables Script -->
     <script src="<?= base_url('vendor/adminlte/plugins/datatables/jquery.dataTables.min.js'); ?>"></script>
     <script src="<?= base_url('vendor/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/js/scripts.js') ?>"></script>
+    <script>
+    
+</script>
+
 </body>
 </html>

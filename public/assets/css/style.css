@@ -1,0 +1,76 @@
+/* Sidebar background color set to white */
+.main-sidebar {
+    background-color: #fff;
+}
+
+/* Reduce sidebar font size */
+.main-sidebar .nav-sidebar .nav-link {
+    font-size: 0.85rem; /* Smaller font */
+}
+
+/* Reduce font size for the section headers */
+.main-sidebar .nav-header {
+    font-size: 0.75rem; /* Smaller than default */
+    font-weight: bold;
+    color: #555;
+}
+
+/* Reduce font size for the brand/logo text */
+
+
+/* Reduce font size for icons */
+.main-sidebar .nav-icon {
+    font-size: 0.9rem;
+}
+
+/* Active main menu item */
+.nav-sidebar .nav-item > .nav-link.active {
+    background-color: #17a2b8 !important;
+    color: #fff !important;
+    font-size: 0.85rem; /* Apply same font size */
+}
+
+/* Active submenu item */
+.nav-sidebar .nav-treeview .nav-item > .nav-link.active {
+    background-color: #5bc0de !important;
+    color: #fff !important;
+    font-size: 0.8rem; /* Make submenu text even smaller */
+}
+
+/* Hover effect for submenu items */
+.nav-sidebar .nav-treeview .nav-item > .nav-link:hover {
+    background-color: #31b0d5 !important;
+    color: #fff !important;
+}
+
+/* Submenu background */
+.nav .nav-treeview {
+    background-color: #edecec;
+}
+
+/* Make full-height layout */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    flex: 1;
+}
+body{
+    height:100vh !important;
+}
+.btn
+{
+    border-radius: 0 !important;
+}
+input
+{
+    border-radius: 0 !important;
+}
