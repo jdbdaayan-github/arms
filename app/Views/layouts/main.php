@@ -37,11 +37,6 @@
 
     </div>
 
-    <!-- Guest view -->
-    <div class="guest">
-        <?= $this->renderSection('content'); ?>
-    </div>
-
 
     <!-- jQuery (necessary for AdminLTE and Bootstrap) -->
     <script src="<?= base_url('assets/adminlte/plugins/jquery/jquery.min.js'); ?>"></script>

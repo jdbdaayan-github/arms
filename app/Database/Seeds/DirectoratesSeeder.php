@@ -10,8 +10,8 @@ class DirectoratesSeeder extends Seeder
     {
         $data = [
             [
-                'code' => 'AS',
-                'name'     => 'Administrative Service',
+                'code' => 'CO',
+                'name'     => 'Central Office',
                 'created_at'      => date('Y-m-d H:i:s'),
                 'updated_at'      => date('Y-m-d H:i:s'),
             ],

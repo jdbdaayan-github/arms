@@ -1,7 +1,7 @@
 <?php
 $request = service('request');
 $segment = $request->getUri()->getSegment(1) ?? '';
-$path = $request->getUri()->getPath(); // full path like 'records/upload'
+$path = $request->getUri()->getPath(); // Full path like 'records/upload'
 ?>
 
 <!-- Sidebar -->
@@ -128,6 +128,8 @@ $path = $request->getUri()->getPath(); // full path like 'records/upload'
 
                 <!-- SETTINGS & LOGOUT -->
                 <li class="nav-header">SETTINGS</li>
+
+                <!-- System Settings -->
                 <li class="nav-item">
                     <a href="<?= base_url('settings') ?>" class="nav-link <?= ($segment == 'settings') ? 'active' : ''; ?>">
                         <i class="nav-icon fas fa-cogs"></i>
@@ -135,6 +137,7 @@ $path = $request->getUri()->getPath(); // full path like 'records/upload'
                     </a>
                 </li>
 
+                <!-- Logout -->
                 <li class="nav-item">
                     <a href="<?= base_url('logout') ?>" class="nav-link text-danger">
                         <i class="nav-icon fas fa-sign-out-alt"></i>
