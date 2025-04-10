@@ -104,18 +104,18 @@ $path = $request->getUri()->getPath(); // Full path like 'records/upload'
                     </a>
                     <ul class="nav nav-treeview">
                         <!-- Records Submenu -->
-                        <li class="nav-item has-treeview <?= (in_array($segment, ['categories', 'types', 'indexes']) || strpos($path, 'libraries/records/') === 0) ? 'menu-open' : ''; ?>">
-                            <a href="#" class="nav-link <?= (in_array($segment, ['categories', 'types', 'indexes'])) ? 'active' : ''; ?>">
+                        <li class="nav-item has-treeview <?= (in_array($segment, ['libraries', 'records','categories', 'types', 'indexes']) || strpos($path, 'libraries/records/') === 0) ? 'menu-open' : ''; ?>">
+                            <a href="#" class="nav-link <?= (in_array($segment, ['libraries', 'records','categories', 'types', 'indexes'])) ? 'active' : ''; ?>">
                                 <i class="nav-icon far fa-circle"></i> <!-- Circle icon for main menu -->
                                 <p>Records <i class="right fas fa-angle-left"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="<?= base_url('libraries/records/categories') ?>" class="nav-link <?= ($path == 'libraries/records/categories') ? 'active' : ''; ?>">
-                                        <i class="nav-icon fas fa-folder"></i> <!-- Uniform folder icon for categories -->
-                                        <p>Categories</p>
-                                    </a>
-                                </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url('libraries/records/categories') ?>" class="nav-link <?= (in_array($segment, ['libraries', 'records','categories', 'types', 'indexes'])  || strpos($path, 'libraries/records/categories') === 0) ? 'active' : ''; ?>">
+                                    <i class="nav-icon fas fa-folder"></i>
+                                    <p>Categories</p>
+                                </a>
+                            </li>
                                 <li class="nav-item">
                                     <a href="<?= base_url('libraries/records/types') ?>" class="nav-link <?= ($path == 'libraries/records/types') ? 'active' : ''; ?>">
                                         <i class="nav-icon fas fa-folder"></i> <!-- Uniform folder icon for types -->
