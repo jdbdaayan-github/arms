@@ -15,33 +15,16 @@ class UserModel extends Model
     protected $allowedFields    = ['firstname', 'middlename', 'lastname', 'extension', 'email', 'office_id', 'username', 'password','status_id', 'verified', 'login_attempts'];
 
 
-    protected bool $allowEmptyInserts = false;
-    protected bool $updateOnlyChanged = true;
+    public function getUsers()
+    {
 
-    protected array $casts = [];
-    protected array $castHandlers = [];
-
-    // Dates
-    protected $useTimestamps = false;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
-
-    // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
-    protected $skipValidation       = false;
-    protected $cleanValidationRules = true;
-
-    // Callbacks
-    protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
-    protected $beforeFind     = [];
-    protected $afterFind      = [];
-    protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+        return $this->select('users.*, offices.code as office_code, user_statuses.name as status_name, GROUP_CONCAT(roles.role_name) as role_names')
+                    ->join('offices', 'offices.id = users.office_id')
+                    ->join('user_statuses', 'user_statuses.id = users.status_id')
+                    ->join('user_roles', 'user_roles.user_id = users.id')  // Join user_roles to link users to their roles
+                    ->join('roles', 'roles.id = user_roles.role_id')  // Join roles to fetch the role names
+                    ->groupBy('users.id')  // Group by user to ensure roles are combined for each user
+                    ->orderBy('lastname', 'asc')
+                    ->findAll();
+    }
 }
