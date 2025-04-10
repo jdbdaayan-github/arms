@@ -130,27 +130,6 @@ $path = $request->getUri()->getPath(); // Full path like 'records/upload'
                                 </li>
                             </ul>
                         </li>
-                        <!-- Users Submenu -->
-                        <li class="nav-item">
-                            <a href="<?= base_url('libraries/user_status') ?>" class="nav-link <?= ($path == 'libraries/user_status') ? 'active' : ''; ?>">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>User Status</p>
-                            </a>
-                        </li>
-                        <!-- Other Libraries Submenus -->
-                        <li class="nav-item">
-                            <a href="<?= base_url('libraries/record_status') ?>" class="nav-link <?= ($path == 'libraries/record_status') ? 'active' : ''; ?>">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Records Status</p>
-                            </a>
-                        </li>
-                        <!-- Record Classifications -->
-                        <li class="nav-item">
-                            <a href="<?= base_url('libraries/record_classifications') ?>" class="nav-link <?= ($path == 'libraries/record_classifications') ? 'active' : ''; ?>">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Record Classifications</p>
-                            </a>
-                        </li>
                     </ul>
                 </li>
 
