@@ -97,33 +97,33 @@ $path = $request->getUri()->getPath(); // Full path like 'records/upload'
                 </li>
 
                 <!-- Libraries -->
-                <li class="nav-item has-treeview <?= ($segment == 'libraries') ? 'menu-open' : ''; ?>">
+                <li class="nav-item has-treeview <?= (in_array($segment, ['libraries', 'records']) || strpos($path, 'libraries/records/') === 0) ? 'menu-open' : ''; ?>">
                     <a href="#" class="nav-link <?= ($segment == 'libraries') ? 'active' : ''; ?>">
                         <i class="nav-icon fas fa-book"></i>
                         <p>Manage Libraries <i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <!-- Records Submenu -->
-                        <li class="nav-item has-treeview <?= in_array($segment, ['categories', 'types', 'indexes']) ? 'menu-open' : ''; ?>">
-                            <a href="#" class="nav-link <?= in_array($segment, ['categories', 'types', 'indexes']) ? 'active' : ''; ?>">
+                        <li class="nav-item has-treeview <?= (in_array($segment, ['categories', 'types', 'indexes']) || strpos($path, 'libraries/records/') === 0) ? 'menu-open' : ''; ?>">
+                            <a href="#" class="nav-link <?= (in_array($segment, ['categories', 'types', 'indexes'])) ? 'active' : ''; ?>">
                                 <i class="nav-icon far fa-circle"></i> <!-- Circle icon for main menu -->
                                 <p>Records <i class="right fas fa-angle-left"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= base_url('libraries/record_categories') ?>" class="nav-link <?= ($path == 'libraries/record_categories') ? 'active' : ''; ?>">
+                                    <a href="<?= base_url('libraries/records/categories') ?>" class="nav-link <?= ($path == 'libraries/records/categories') ? 'active' : ''; ?>">
                                         <i class="nav-icon fas fa-folder"></i> <!-- Uniform folder icon for categories -->
                                         <p>Categories</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= base_url('libraries/record_types') ?>" class="nav-link <?= ($path == 'libraries/record_types') ? 'active' : ''; ?>">
+                                    <a href="<?= base_url('libraries/records/types') ?>" class="nav-link <?= ($path == 'libraries/records/types') ? 'active' : ''; ?>">
                                         <i class="nav-icon fas fa-folder"></i> <!-- Uniform folder icon for types -->
                                         <p>Types</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= base_url('libraries/record_indexes') ?>" class="nav-link <?= ($path == 'libraries/record_indexes') ? 'active' : ''; ?>">
+                                    <a href="<?= base_url('libraries/records/indexes') ?>" class="nav-link <?= ($path == 'libraries/records/indexes') ? 'active' : ''; ?>">
                                         <i class="nav-icon fas fa-folder"></i> <!-- Uniform folder icon for indexes -->
                                         <p>Indexes</p>
                                     </a>

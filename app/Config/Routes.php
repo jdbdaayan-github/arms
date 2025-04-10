@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Controllers\CategoryController;
 use App\Controllers\DirectorateController;
 use App\Controllers\Home;
 use App\Controllers\OfficeController;
@@ -46,13 +47,28 @@ $routes->group('permissions',['filter'=> 'auth'], function (RouteCollection $rou
 });
 
 // Directorate routes
-$routes->group('directorates',[''=> ''], function (RouteCollection $routes) {
+$routes->group('directorates',['filter'=> 'auth'], function (RouteCollection $routes) {
     $routes->get('', [DirectorateController::class,'index']);
     $routes->get('getDirectoratesData', [DirectorateController::class,'getDirectoratesData']);
 });
 
 // Offices routes
-$routes->group('offices',[''=> ''], function ( RouteCollection $routes) {
+$routes->group('offices',['filter'=> 'auth'], function ( RouteCollection $routes) {
     $routes->get('', [OfficeController::class,'index']);
     $routes->get('getOfficesData', [OfficeController::class,'getOfficesData']);
+});
+
+// Libraries routes
+$routes->group('libraries', ['filter' => 'auth'], function (RouteCollection $routes) { 
+    
+    // Libraries/Records
+    $routes->group('records', function (RouteCollection $routes) { 
+
+        // Libraries/Records/Categories
+        $routes->group('categories', function (RouteCollection $routes) { 
+            $routes->get('', [CategoryController::class, 'index']);
+            $routes->get('getCategoriesData', [CategoryController::class,'getCategoriesData']);
+        });
+    
+    });
 });
