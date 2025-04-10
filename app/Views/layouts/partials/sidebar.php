@@ -104,15 +104,27 @@ $path = $request->getUri()->getPath(); // Full path like 'records/upload'
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('libraries') ?>" class="nav-link <?= ($path == 'libraries') ? 'active' : ''; ?>">
+                            <a href="<?= base_url('libraries/record_types') ?>" class="nav-link <?= ($path == 'libraries/record_types') ? 'active' : ''; ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Libraries List</p>
+                                <p>Records Types</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('libraries/status') ?>" class="nav-link <?= ($path == 'libraries/status') ? 'active' : ''; ?>">
+                            <a href="<?= base_url('libraries/record_indexes') ?>" class="nav-link <?= ($path == 'libraries/record_indexes') ? 'active' : ''; ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Status</p>
+                                <p>Records Indexes</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('libraries/record_status') ?>" class="nav-link <?= ($path == 'libraries/record_status') ? 'active' : ''; ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Records Status</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('libraries/user_status') ?>" class="nav-link <?= ($path == 'libraries/user_status') ? 'active' : ''; ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>User Status</p>
                             </a>
                         </li>
                     </ul>
