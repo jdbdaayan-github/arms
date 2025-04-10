@@ -35,6 +35,7 @@ class Createrbactable extends Migration
             'user_id'  => ['type' => 'INT', 'unsigned' => true],
             'role_id'  => ['type' => 'INT', 'unsigned' => true],
             'created_at' => ['type' => 'DATETIME', 'null' => true],
+            'updated_at'       => ['type' => 'DATETIME', 'null' => true],
         ]);
         $this->forge->addPrimaryKey(['user_id', 'role_id']);  // Composite Primary Key
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
@@ -46,6 +47,7 @@ class Createrbactable extends Migration
             'role_id'       => ['type' => 'INT', 'unsigned' => true],
             'permission_id' => ['type' => 'INT', 'unsigned' => true],
             'created_at'    => ['type' => 'DATETIME', 'null' => true],
+            'updated_at'       => ['type' => 'DATETIME', 'null' => true],
         ]);
 
         $this->forge->addPrimaryKey(['role_id', 'permission_id']);
