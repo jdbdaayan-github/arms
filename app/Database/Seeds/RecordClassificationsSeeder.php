@@ -4,48 +4,48 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class RecordTypesSeeder extends Seeder
+class RecordClassificationsSeeder extends Seeder
 {
     public function run()
     {
         $data = [
             [
-                'code' => 'AO',
-                'name'     => 'ADMINISTRATIVE ORDER',
-                'category_id'=> 1,
+                "id"=> 1,
+                'code' => 'A',
+                'name'     => 'Administrative Records',
                 'created_at'      => date('Y-m-d H:i:s'),
                 'updated_at'      => date('Y-m-d H:i:s'),
             ],
             [
-                'code' => 'MA',
-                'name'     => 'MEMORANDUM ADVISORY',
-                'category_id'=> 1,
+                'id'=> 2,
+                'code' => 'F',
+                'name'     => 'FIinancial Records',
                 'created_at'      => date('Y-m-d H:i:s'),
                 'updated_at'      => date('Y-m-d H:i:s'),
             ],
             [
-                'code' => 'MC',
-                'name'     => 'MEMORANDUM CIRCULAR',
-                'category_id'=> 1,
+                'id'=> 3,
+                'code' => 'L',
+                'name'     => 'Legal Records',
                 'created_at'      => date('Y-m-d H:i:s'),
                 'updated_at'      => date('Y-m-d H:i:s'),
             ],
             [
-                'code' => 'SO',
-                'name'     => 'SPECIAL ORDER',
-                'category_id'=> 1,
+                'id'=> 4,
+                'code' => 'P',
+                'name'     => 'Personnel Records',
                 'created_at'      => date('Y-m-d H:i:s'),
                 'updated_at'      => date('Y-m-d H:i:s'),
             ],
             [
-                'code' => 'CERT',
-                'name'     => 'CERTIFICATE',
-                'category_id'=> 1,
+                'id'=> 5,
+                'code' => 'SS',
+                'name'     => 'Social Services Records',
                 'created_at'      => date('Y-m-d H:i:s'),
                 'updated_at'      => date('Y-m-d H:i:s'),
             ],
         ];
 
-        $this->db->table('record_types')->insertBatch($data);
+        $this->db->table('record_classifications')->insertBatch($data);
     }
 }

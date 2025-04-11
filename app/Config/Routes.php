@@ -2,6 +2,7 @@
 
 use App\Controllers\AuthController;
 use App\Controllers\CategoryController;
+use App\Controllers\ClassificationController;
 use App\Controllers\DirectorateController;
 use App\Controllers\Home;
 use App\Controllers\OfficeController;
@@ -63,6 +64,12 @@ $routes->group('libraries', ['filter' => 'auth'], function (RouteCollection $rou
     
     // Libraries/Records
     $routes->group('records', function (RouteCollection $routes) { 
+
+        // Libraries/Records/classifications
+        $routes->group('classifications', function (RouteCollection $routes) { 
+            $routes->get('', [ClassificationController::class, 'index']);
+            $routes->get('getClassificationsData', [ClassificationController::class,'getClassificationsData']);
+        });
 
         // Libraries/Records/Categories
         $routes->group('categories', function (RouteCollection $routes) { 

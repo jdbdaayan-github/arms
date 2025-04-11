@@ -24,6 +24,7 @@ class CategoryController extends BaseController
             $data[] = [
                 'code' => $category['code'],
                 'name' => $category['name'],
+                'classification_name' => $category['classification_name'],
                 'actions' => 
                     '<a href="' . base_url('permissions/edit/' . $category['id']) . '" class="btn btn-primary btn-sm">
                         <i class="fas fa-edit"></i> Edit
