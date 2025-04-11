@@ -1,24 +1,29 @@
 <?php
 
-use App\Controllers\AuthController;
-use App\Controllers\CategoryController;
-use App\Controllers\ClassificationController;
-use App\Controllers\DirectorateController;
 use App\Controllers\Home;
-use App\Controllers\OfficeController;
-use App\Controllers\PermissionController;
+use App\Controllers\AuthController;
 use App\Controllers\RoleController;
 use App\Controllers\UserController;
+use App\Controllers\OfficeController;
+use App\Controllers\RecordController;
+use App\Controllers\SessionController;
+use App\Controllers\CategoryController;
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\PermissionController;
+use App\Controllers\DirectorateController;
+use App\Controllers\ClassificationController;
 
 /**
  * @var RouteCollection $routes
  */
 $routes->get('/', 'AuthController::index');
 $routes->post('login/authenticate', [AuthController::class,'authenticate']);
+$routes->get('logout', [AuthController::class,'logout']);
+$routes->get('check-session', [SessionController::class,'check']);
 
+// Dashboard
 $routes->group('dashboard',['filter'=>'auth'], function (RouteCollection $routes) {
-    $routes->get('', [Home::class,'index']);
+    $routes->get('', [RecordController::class,'index']);
 });
 
 // User routes

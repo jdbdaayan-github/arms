@@ -77,4 +77,11 @@ class AuthController extends BaseController
 
         return redirect()->to('dashboard')->with('success', 'Welcome! '. $user['firstname']);
     }
+
+    public function logout()
+    {
+        $session = session();
+        $session->destroy();
+        return redirect()->to('/');
+    }
 }

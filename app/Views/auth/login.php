@@ -3,7 +3,7 @@
 <?= $this->section('content'); ?>
 <div class="login-box" style="width: 100%;">
     <div class="login-logo">
-        <a href="<?= base_url(); ?>"><b>ARMS</b></a>
+        <a href="<?= base_url(); ?>">ARMS</a>
         <p class="logo-name mb-4">Archival Records Management System</p>
     </div>
     <!-- /.login-logo -->

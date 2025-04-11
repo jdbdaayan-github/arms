@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="<?= base_url('assets/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css'); ?>">
     <!-- Fontawesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- AdminLTE Checkbox -->
+    <link rel="stylesheet" href="<?= base_url('assets/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') ?>">
+    
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -37,6 +40,8 @@
 
     </div>
 
+    <!-- Session Expiration Modal -->
+     <?= view('system/session_expiration_modal') ?>
 
     <!-- jQuery (necessary for AdminLTE and Bootstrap) -->
     <script src="<?= base_url('assets/adminlte/plugins/jquery/jquery.min.js'); ?>"></script>
@@ -63,5 +68,23 @@
 
     <!-- Script rendering section -->
     <?= $this->renderSection('scripts');?>
+    <script>
+    const checkSessionUrl = "<?= base_url('check-session') ?>";
+
+    function checkSession() {
+        fetch(checkSessionUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.active) {
+                    $('#sessionExpiredModal').modal('show');
+                }
+            })
+            .catch(error => {
+                console.error("Session check failed:", error);
+            });
+    }
+
+    setInterval(checkSession, 60000); // every 60 seconds
+</script>
 </body>
 </html>

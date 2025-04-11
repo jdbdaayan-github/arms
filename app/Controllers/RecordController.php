@@ -9,6 +9,6 @@ class RecordController extends BaseController
 {
     public function index()
     {
-        //
+        return view("pages/records/index");
     }
 }
