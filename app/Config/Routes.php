@@ -12,6 +12,7 @@ use CodeIgniter\Router\RouteCollection;
 use App\Controllers\PermissionController;
 use App\Controllers\DirectorateController;
 use App\Controllers\ClassificationController;
+use App\Controllers\SystemController;
 
 /**
  * @var RouteCollection $routes
@@ -24,6 +25,13 @@ $routes->get('check-session', [SessionController::class,'check']);
 // Dashboard
 $routes->group('dashboard',['filter'=>'auth'], function (RouteCollection $routes) {
     $routes->get('', [RecordController::class,'index']);
+});
+
+$routes->group('records',['filter'=> 'auth'], function ( RouteCollection $routes) {
+    $routes->get('search', [RecordController::class,'search']);
+    $routes->post('search', [RecordController::class,'search']);
+    $routes->get('upload', [RecordController::class,'track_history']);
+    $routes->get('view', [RecordController::class,'show']);
 });
 
 // User routes
@@ -84,3 +92,6 @@ $routes->group('libraries', ['filter' => 'auth'], function (RouteCollection $rou
     
     });
 });
+
+//Sytstem Routes
+ $routes->get('logs', [SystemController::class,'audit']);

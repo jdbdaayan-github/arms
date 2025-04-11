@@ -1,5 +1,5 @@
 <!-- Session Expired Modal -->
-<div class="modal fade" id="sessionExpiredModal" tabindex="-1" role="dialog" aria-labelledby="sessionExpiredModalLabel" aria-hidden="true">
+<div class="modal fade" id="sessionExpiredModal" tabindex="-1" role="dialog" aria-labelledby="sessionExpiredModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-dialog" role="document">
     <div class="modal-content border border-info shadow-lg">
       <div class="modal-header bg-info text-white">

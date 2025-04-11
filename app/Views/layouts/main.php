@@ -84,7 +84,7 @@
             });
     }
 
-    setInterval(checkSession, 60000); // every 60 seconds
+    setInterval(checkSession, 60); // every 60 seconds
 </script>
 </body>
 </html>
