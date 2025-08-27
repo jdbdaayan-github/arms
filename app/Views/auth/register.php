@@ -1,8 +1,8 @@
 <?= $this->extend('layouts/guest'); ?>
 
-<?= $this->section('title')?>
-  Register
-<?= $this->endSection()?>
+<?= $this->section('title') ?>
+Register
+<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="login-box">
@@ -22,9 +22,39 @@
       <form action="<?= base_url('register/store') ?>" method="post" autocomplete="off">
         <?= csrf_field() ?>
 
-        <!-- Name -->
+        <!-- First Name -->
         <div class="input-group mb-3">
-          <input type="text" name="name" class="form-control rounded-0" placeholder="Full Name" value="<?= set_value('name') ?>" required>
+          <input type="text" name="firstname" class="form-control rounded-0" placeholder="First Name" value="<?= set_value('firstname') ?>" required>
+          <div class="input-group-append">
+            <div class="input-group-text rounded-0">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle Name -->
+        <div class="input-group mb-3">
+          <input type="text" name="middlename" class="form-control rounded-0" placeholder="Middle Name" value="<?= set_value('middlename') ?>">
+          <div class="input-group-append">
+            <div class="input-group-text rounded-0">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="input-group mb-3">
+          <input type="text" name="lastname" class="form-control rounded-0" placeholder="Last Name" value="<?= set_value('lastname') ?>" required>
+          <div class="input-group-append">
+            <div class="input-group-text rounded-0">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extension -->
+        <div class="input-group mb-3">
+          <input type="text" name="extension" class="form-control rounded-0" placeholder="Extension (Jr., Sr., etc.)" value="<?= set_value('extension') ?>">
           <div class="input-group-append">
             <div class="input-group-text rounded-0">
               <span class="fas fa-user"></span>
@@ -38,6 +68,16 @@
           <div class="input-group-append">
             <div class="input-group-text rounded-0">
               <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="input-group mb-3">
+          <input type="text" name="username" class="form-control rounded-0" placeholder="Username" value="<?= set_value('username') ?>" required>
+          <div class="input-group-append">
+            <div class="input-group-text rounded-0">
+              <span class="fas fa-user-circle"></span>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Controllers\SystemController;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -21,5 +22,8 @@ $routes->group('',['filter' => 'auth'], function($routes){
     $routes->get('/dashboard', 'Home::index');
     $routes->get('/records', 'Home::records');
     $routes->get('/records/create', 'Home::create');
+
+    $routes->get('logs/access', [SystemController::class, 'access']);
+    $routes->get('logs/audit', [SystemController::class, 'audit']);
 });
 

@@ -5,7 +5,7 @@ $segment1 = $segments[0] ?? '';
 $segment2 = $segments[1] ?? '';
 ?>
 
-<aside class="main-sidebar sidebar-dark-primary elevation-1">
+<aside class="main-sidebar sidebar-dark-info elevation-1 sidebar-no-expand">
     <a href="<?= base_url('dashboard') ?>" class="brand-link">
         <img src="<?= base_url('assets/template/dist/img/AdminLTELogo.png') ?>" 
              alt="ARMS Logo" 
@@ -45,7 +45,7 @@ $segment2 = $segments[1] ?? '';
                 <!-- Records with sub-menu -->
                 <li class="nav-item has-treeview <?= $segment1 === 'records' ? 'menu-open' : '' ?>">
                     <a href="#" class="nav-link <?= $segment1 === 'records' ? 'active' : '' ?>">
-                        <i class="nav-icon fas fa-folder"></i>
+                        <i class="nav-icon fas fa-folder-open"></i>
                         <p>
                             Records
                             <i class="right fas fa-angle-left"></i>

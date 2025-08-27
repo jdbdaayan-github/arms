@@ -12,34 +12,19 @@
     <ul class="navbar-nav ml-auto">
         <!-- User Dropdown Menu -->
         <li class="nav-item dropdown user-menu">
-            <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-toggle="dropdown">
-                <img src="<?= base_url('assets/template/dist/img/user2-160x160.jpg') ?>" 
-                     class="user-image img-circle elevation-2 mr-2" 
-                     alt="User Image" 
-                     style="height:35px; width:35px; object-fit:cover;">
-                <span class="d-none d-md-inline"><?= session()->get('username') ?? 'Guest' ?></span>
+            <a href="#" class="nav-link dropdown-toggle d-flex pr-0 align-items-center" data-toggle="dropdown">
+                <span class="d-none d-md-inline font-weight-bold"><?= session()->get('user_name') ?? 'Guest' ?></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User header -->
-                <li class="user-header bg-primary">
+                <li class="user-header bg-info">
                     <img src="<?= base_url('assets/template/dist/img/user2-160x160.jpg') ?>" 
                          class="img-circle elevation-2" 
                          alt="User Image">
                     <p>
-                        <?= session()->get('username') ?? 'Guest' ?>
+                        <?= session()->get('user_name') ?? 'Guest' ?>
                         <small>Administrator</small>
                     </p>
-                </li>
-                <!-- Optional body with quick links -->
-                <li class="user-body">
-                    <div class="row text-center">
-                        <div class="col-6 border-right">
-                            <a href="<?= base_url('profile') ?>">Profile</a>
-                        </div>
-                        <div class="col-6">
-                            <a href="<?= base_url('settings/preferences') ?>">Settings</a>
-                        </div>
-                    </div>
                 </li>
                 <!-- Footer with buttons -->
                 <li class="user-footer">
