@@ -1,38 +1,95 @@
-<?= $this->extend('layouts/guest') ?>
+<?= $this->extend('layouts/guest'); ?>
+
+<?= $this->section('title')?>
+  Login
+<?= $this->endSection()?>
 
 <?= $this->section('content') ?>
-<p class="login-box-msg">Sign in to start your session</p>
+<div class="login-box">
+  <div class="login-logo d-flex flex-column align-items-center justify-content-center mb-4">
+    <div class="d-flex align-items-center">
+      <a href="<?= base_url() ?>"><b>ARMS</b></a>
+    </div>
+    <small style="font-size: 0.8rem; color: #666;">Electronic Records Management System</small>
+  </div>
+  <!-- /.login-logo -->
 
-<form action="<?= base_url('login') ?>" method="post">
-    <div class="input-group mb-3">
-        <input type="email" name="email" class="form-control" placeholder="Email" required>
-        <div class="input-group-append">
-            <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg mb-3">Sign in to start your session</p>
+
+      <?php if (session()->getFlashdata('error')) : ?>
+        <div class="alert alert-danger">
+          <?= session()->getFlashdata('error') ?>
         </div>
-    </div>
-    <div class="input-group mb-3">
-        <input type="password" name="password" class="form-control" placeholder="Password" required>
-        <div class="input-group-append">
-            <div class="input-group-text"><span class="fas fa-lock"></span></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-8">
-            <div class="icheck-primary">
-                <input type="checkbox" id="remember">
-                <label for="remember">Remember Me</label>
+      <?php endif; ?>
+
+      <form action="<?= base_url('auth/authenticate') ?>" method="post" autocomplete="off">
+        <?= csrf_field() ?>
+        <div class="input-group mb-3">
+          <input type="email" name="email" class="form-control rounded-0" placeholder="Email"  autofocus value="<?= set_value('email')?>">
+          <div class="input-group-append">
+            <div class="input-group-text rounded-0">
+              <span class="fas fa-envelope"></span>
             </div>
+          </div>
         </div>
-        <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-        </div>
-    </div>
-</form>
 
-<p class="mb-1 mt-3">
-    <a href="#">I forgot my password</a>
-</p>
-<p class="mb-0">
-    <a href="<?= base_url('register') ?>" class="text-center">Register a new membership</a>
-</p>
-<?= $this->endSection() ?>
+        <div class="input-group mb-1">
+          <input type="password" name="password" id="password" class="form-control rounded-0" placeholder="Password" >
+          <div class="input-group-append">
+            <div class="input-group-text rounded-0">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 text-right">
+          <span id="togglePassword" class="text-info" style="cursor: pointer; user-select: none;">Show Password</span>
+        </div>
+
+        <!-- CAPTCHA -->
+        <div class="form-group text-center">
+          <img src="<?= $captcha_image ?>" alt="CAPTCHA Image" class="mb-2 img-fluid" style="border: 1px solid #ccc; padding: 4px;">
+          <input type="text" name="captcha" class="form-control rounded-0" placeholder="Enter CAPTCHA" required>
+        </div>
+
+        
+          <div class="mb-3">
+            <div class="icheck-info">
+              <input type="checkbox" id="remember" name="remember">
+              <label for="remember">Remember Me</label>
+            </div>
+          </div>
+
+          <div>
+            <button type="submit" class="btn btn-block btn-info btn-flat">Sign In</button>
+          </div>
+        
+      </form>
+
+      <p class="mb-1 mt-3 text-center">
+        <a href="<?= base_url('auth/forgot') ?>">I forgot my password</a>
+      </p>
+      <p class="mb-3 text-center">
+        Don't have an account?<a href="<?= base_url('auth/register') ?>" class="text-center"> Register here.</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+
+<script>
+  // Show/hide password toggle with "Show" / "Hide" text
+  document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordInput = document.getElementById('password');
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      this.textContent = 'Hide Password';
+    } else {
+      passwordInput.type = 'password';
+      this.textContent = 'Show Password';
+    }
+  });
+</script>
+<?= $this->endSection(); ?>

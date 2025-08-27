@@ -16,36 +16,9 @@
 
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="<?= base_url('assets/template/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>">
-
-    <style>
-        body {
-            background: #f4f6f9;
-        }
-        .login-box, .register-box {
-            width: 400px;
-        }
-        @media (max-width: 576px) {
-            .login-box, .register-box {
-                width: 100%;
-                padding: 0 15px;
-            }
-        }
-    </style>
 </head>
 <body class="hold-transition login-page">
-
-<div class="login-box">
-    <!-- Brand Logo -->
-    <div class="login-logo">
-        <a href="#"><b>ARMS</b></a>
-    </div>
-
-    <!-- Content Wrapper -->
-    <div class="card">
-        <div class="card-body">
             <?= $this->renderSection('content') ?>
-        </div>
-    </div>
 </div>
 
 <!-- REQUIRED SCRIPTS -->
