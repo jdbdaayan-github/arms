@@ -19,9 +19,36 @@ $routes->group('auth', function($routes){
 });
 
 $routes->group('',['filter' => 'auth'], function($routes){
+
     $routes->get('/dashboard', 'Home::index');
-    $routes->get('/records', 'Home::records');
-    $routes->get('/records/create', 'Home::create');
+
+    #Records
+    $routes->group('records', function($routes)
+    {
+        $routes->get('', 'Home::records');
+        $routes->get('create', 'Home::create');
+    });
+    
+    #Users
+    $routes->group('users', function($routes)
+    {
+        $routes->get('', 'UserController::index');
+        $routes->get('create', 'UserController::create');
+    });
+
+    #Roles
+    $routes->group('roles', function($routes)
+    {
+        $routes->get('', 'RoleController::index');
+        $routes->get('create', 'RoleController::create');
+    });
+
+    #Permissions
+    $routes->group('permissions', function($routes)
+    {
+        $routes->get('', 'PermissionController::index');
+        $routes->get('create', 'PermissionController::create');
+    });
 
     $routes->get('logs/access', [SystemController::class, 'access']);
     $routes->get('logs/audit', [SystemController::class, 'audit']);

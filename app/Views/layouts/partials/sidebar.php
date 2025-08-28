@@ -3,6 +3,27 @@ $uri = service('uri');
 $segments = $uri->getSegments();
 $segment1 = $segments[0] ?? '';
 $segment2 = $segments[1] ?? '';
+
+// Helper functions
+function isActive($segment1Expected, $segment2Expected = null) {
+    $uri = service('uri');
+    $segments = $uri->getSegments();
+    $segment1 = $segments[0] ?? '';
+    $segment2 = $segments[1] ?? '';
+
+    if ($segment2Expected !== null) {
+        return ($segment1 === $segment1Expected && $segment2 === $segment2Expected) ? 'active' : '';
+    }
+
+    return ($segment1 === $segment1Expected) ? 'active' : '';
+}
+
+function isMenuOpen($segment1Expected) {
+    $uri = service('uri');
+    $segments = $uri->getSegments();
+    $segment1 = $segments[0] ?? '';
+    return ($segment1 === $segment1Expected) ? 'menu-open' : '';
+}
 ?>
 
 <aside class="main-sidebar sidebar-dark-info elevation-1 sidebar-no-expand">
@@ -36,15 +57,15 @@ $segment2 = $segments[1] ?? '';
 
                 <!-- Dashboard -->
                 <li class="nav-item">
-                    <a href="<?= base_url('dashboard') ?>" class="nav-link <?= $segment1 === 'dashboard' ? 'active' : '' ?>">
+                    <a href="<?= base_url('dashboard') ?>" class="nav-link <?= isActive('dashboard') ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
-                <!-- Records with sub-menu -->
-                <li class="nav-item has-treeview <?= $segment1 === 'records' ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $segment1 === 'records' ? 'active' : '' ?>">
+                <!-- Records -->
+                <li class="nav-item has-treeview <?= isMenuOpen('records') ?>">
+                    <a href="#" class="nav-link <?= isActive('records') ?>">
                         <i class="nav-icon fas fa-folder-open"></i>
                         <p>
                             Records
@@ -53,13 +74,13 @@ $segment2 = $segments[1] ?? '';
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('records') ?>" class="nav-link <?= $segment2 === '' ? 'active' : '' ?>">
+                            <a href="<?= base_url('records') ?>" class="nav-link <?= isActive('records', '') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('records/create') ?>" class="nav-link <?= $segment2 === 'create' ? 'active' : '' ?>">
+                            <a href="<?= base_url('records/create') ?>" class="nav-link <?= isActive('records', 'create') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create</p>
                             </a>
@@ -67,9 +88,9 @@ $segment2 = $segments[1] ?? '';
                     </ul>
                 </li>
 
-                <!-- Users with sub-menu -->
-                <li class="nav-item has-treeview <?= $segment1 === 'users' ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $segment1 === 'users' ? 'active' : '' ?>">
+                <!-- Users -->
+                <li class="nav-item has-treeview <?= isMenuOpen('users') ?>">
+                    <a href="#" class="nav-link <?= isActive('users') ?>">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             Users
@@ -78,13 +99,13 @@ $segment2 = $segments[1] ?? '';
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('users') ?>" class="nav-link <?= $segment2 === '' ? 'active' : '' ?>">
+                            <a href="<?= base_url('users') ?>" class="nav-link <?= isActive('users', '') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('users/create') ?>" class="nav-link <?= $segment2 === 'create' ? 'active' : '' ?>">
+                            <a href="<?= base_url('users/create') ?>" class="nav-link <?= isActive('users', 'create') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create</p>
                             </a>
@@ -96,8 +117,8 @@ $segment2 = $segments[1] ?? '';
                 <li class="nav-header">ADMINISTRATION</li>
 
                 <!-- Roles -->
-                <li class="nav-item has-treeview <?= $segment1 === 'roles' ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $segment1 === 'roles' ? 'active' : '' ?>">
+                <li class="nav-item has-treeview <?= isMenuOpen('roles') ?>">
+                    <a href="#" class="nav-link <?= isActive('roles') ?>">
                         <i class="nav-icon fas fa-user-shield"></i>
                         <p>
                             Roles
@@ -106,13 +127,13 @@ $segment2 = $segments[1] ?? '';
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('roles') ?>" class="nav-link <?= $segment2 === '' ? 'active' : '' ?>">
+                            <a href="<?= base_url('roles') ?>" class="nav-link <?= isActive('roles', '') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('roles/create') ?>" class="nav-link <?= $segment2 === 'create' ? 'active' : '' ?>">
+                            <a href="<?= base_url('roles/create') ?>" class="nav-link <?= isActive('roles', 'create') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create</p>
                             </a>
@@ -121,8 +142,8 @@ $segment2 = $segments[1] ?? '';
                 </li>
 
                 <!-- Permissions -->
-                <li class="nav-item has-treeview <?= $segment1 === 'permissions' ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $segment1 === 'permissions' ? 'active' : '' ?>">
+                <li class="nav-item has-treeview <?= isMenuOpen('permissions') ?>">
+                    <a href="#" class="nav-link <?= isActive('permissions') ?>">
                         <i class="nav-icon fas fa-key"></i>
                         <p>
                             Permissions
@@ -131,13 +152,13 @@ $segment2 = $segments[1] ?? '';
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('permissions') ?>" class="nav-link <?= $segment2 === '' ? 'active' : '' ?>">
+                            <a href="<?= base_url('permissions') ?>" class="nav-link <?= isActive('permissions', '') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('permissions/create') ?>" class="nav-link <?= $segment2 === 'create' ? 'active' : '' ?>">
+                            <a href="<?= base_url('permissions/create') ?>" class="nav-link <?= isActive('permissions', 'create') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create</p>
                             </a>
@@ -146,8 +167,8 @@ $segment2 = $segments[1] ?? '';
                 </li>
 
                 <!-- Classifications -->
-                <li class="nav-item has-treeview <?= $segment1 === 'classifications' ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $segment1 === 'classifications' ? 'active' : '' ?>">
+                <li class="nav-item has-treeview <?= isMenuOpen('classifications') ?>">
+                    <a href="#" class="nav-link <?= isActive('classifications') ?>">
                         <i class="nav-icon fas fa-th-list"></i>
                         <p>
                             Classifications
@@ -156,13 +177,13 @@ $segment2 = $segments[1] ?? '';
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('classifications') ?>" class="nav-link <?= $segment2 === '' ? 'active' : '' ?>">
+                            <a href="<?= base_url('classifications') ?>" class="nav-link <?= isActive('classifications', '') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('classifications/create') ?>" class="nav-link <?= $segment2 === 'create' ? 'active' : '' ?>">
+                            <a href="<?= base_url('classifications/create') ?>" class="nav-link <?= isActive('classifications', 'create') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create</p>
                             </a>
@@ -171,8 +192,8 @@ $segment2 = $segments[1] ?? '';
                 </li>
 
                 <!-- Document Types -->
-                <li class="nav-item has-treeview <?= $segment1 === 'document-types' ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $segment1 === 'document-types' ? 'active' : '' ?>">
+                <li class="nav-item has-treeview <?= isMenuOpen('document-types') ?>">
+                    <a href="#" class="nav-link <?= isActive('document-types') ?>">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>
                             Document Types
@@ -181,13 +202,13 @@ $segment2 = $segments[1] ?? '';
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('document-types') ?>" class="nav-link <?= $segment2 === '' ? 'active' : '' ?>">
+                            <a href="<?= base_url('document-types') ?>" class="nav-link <?= isActive('document-types', '') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('document-types/create') ?>" class="nav-link <?= $segment2 === 'create' ? 'active' : '' ?>">
+                            <a href="<?= base_url('document-types/create') ?>" class="nav-link <?= isActive('document-types', 'create') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create</p>
                             </a>
@@ -196,8 +217,8 @@ $segment2 = $segments[1] ?? '';
                 </li>
 
                 <!-- Logs -->
-                <li class="nav-item has-treeview <?= $segment1 === 'logs' ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $segment1 === 'logs' ? 'active' : '' ?>">
+                <li class="nav-item has-treeview <?= isMenuOpen('logs') ?>">
+                    <a href="#" class="nav-link <?= isActive('logs') ?>">
                         <i class="nav-icon fas fa-clipboard-list"></i>
                         <p>
                             Logs
@@ -206,13 +227,13 @@ $segment2 = $segments[1] ?? '';
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('logs/audit') ?>" class="nav-link <?= $segment2 === 'audit' ? 'active' : '' ?>">
+                            <a href="<?= base_url('logs/audit') ?>" class="nav-link <?= isActive('logs', 'audit') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Audit</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('logs/access') ?>" class="nav-link <?= $segment2 === 'access' ? 'active' : '' ?>">
+                            <a href="<?= base_url('logs/access') ?>" class="nav-link <?= isActive('logs', 'access') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Access</p>
                             </a>
@@ -221,8 +242,8 @@ $segment2 = $segments[1] ?? '';
                 </li>
 
                 <!-- Settings -->
-                <li class="nav-item has-treeview <?= $segment1 === 'settings' ? 'menu-open' : '' ?>">
-                    <a href="#" class="nav-link <?= $segment1 === 'settings' ? 'active' : '' ?>">
+                <li class="nav-item has-treeview <?= isMenuOpen('settings') ?>">
+                    <a href="#" class="nav-link <?= isActive('settings') ?>">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
                             Settings
@@ -231,20 +252,19 @@ $segment2 = $segments[1] ?? '';
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('settings/profile') ?>" class="nav-link <?= $segment2 === 'profile' ? 'active' : '' ?>">
+                            <a href="<?= base_url('settings/profile') ?>" class="nav-link <?= isActive('settings', 'profile') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Profile</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('settings/preferences') ?>" class="nav-link <?= $segment2 === 'preferences' ? 'active' : '' ?>">
+                            <a href="<?= base_url('settings/preferences') ?>" class="nav-link <?= isActive('settings', 'preferences') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Preferences</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-
             </ul>
         </nav>
     </div>
