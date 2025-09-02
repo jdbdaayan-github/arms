@@ -43,4 +43,15 @@ class User extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getUserById($id)
+    {
+        return $this->find($id);
+    }
+    
+    public function getUserRoleByUserId($id)
+    {
+        return $this->select('roles.role_name')->join('roles','roles.id = users.role_id')->where('users.id', $id)
+        ->first();
+    }
 }

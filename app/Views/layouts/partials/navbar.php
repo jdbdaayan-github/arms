@@ -1,3 +1,6 @@
+<?php
+    $user_id = session()->get('user_id');
+?>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links (Burger icon) -->
     <ul class="navbar-nav">
@@ -23,13 +26,13 @@
                          alt="User Image">
                     <p>
                         <?= session()->get('user_name') ?? 'Guest' ?>
-                        <small>Administrator</small>
+                        <small><?= session()->get('role') ?? 'Guest' ?></small>
                     </p>
                 </li>
                 <!-- Footer with buttons -->
                 <li class="user-footer">
-                    <a href="<?= base_url('profile') ?>" class="btn btn-default btn-flat">Profile</a>
-                    <a href="<?= base_url('logout') ?>" class="btn btn-danger btn-flat float-right">Logout</a>
+                    <a href="<?= base_url('users/profile') ?>/<?= $user_id ?>" class="btn btn-default btn-flat">Profile</a>
+                    <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger btn-flat float-right">Logout</a>
                 </li>
             </ul>
         </li>

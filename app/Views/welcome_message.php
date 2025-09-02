@@ -129,6 +129,41 @@ Dashboard
       </div>
     </div>
 
+    <!-- Classification Pie Chart -->
+    <div class="card mt-3">
+      <div class="card-header">
+        <h3 class="card-title">Records by Classification</h3>
+      </div>
+      <div class="card-body">
+        <canvas id="classificationChart" style="height:300px;"></canvas>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- Chart.js Script -->
+<script src="<?= base_url('assets/template/plugins/chart.js/Chart.min.js') ?>"></script>
+<script>
+  var ctx = document.getElementById('classificationChart').getContext('2d');
+  var classificationChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Administrative', 'Financial', 'Legal', 'Personnel', 'Social Services'],
+      datasets: [{
+        data: [25, 30, 15, 20, 10], // Example values, replace with PHP dynamic data
+        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#dc3545']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+</script>
 <?= $this->endSection(); ?>

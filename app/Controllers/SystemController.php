@@ -16,4 +16,14 @@ class SystemController extends BaseController
     {
         return view('system/audit_logs');
     }
+
+    public function preferences()
+    {
+        return view('system/preferences');
+    }
+
+    public function profile()
+    {
+        return view('system/profile');
+    }
 }

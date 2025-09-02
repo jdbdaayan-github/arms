@@ -18,6 +18,7 @@ class CreateUserTable extends Migration
             'username'    => ['type' => 'VARCHAR', 'constraint' => '100', 'unique' => true],
             'password'    => ['type' => 'VARCHAR', 'constraint' => '255'],
             'status_id'   => ['type' => 'INT', 'unsigned' => true, 'default' => 1],
+            'role_id'     => ['type' => 'INT', 'unsigned' => true],
             'verified'    => ['type' => 'BOOLEAN', 'default' => FALSE],
             'login_attempts' => ['type' => 'INT', 'default' => 0],
             'created_at'  => ['type' => 'DATETIME'],
@@ -27,6 +28,7 @@ class CreateUserTable extends Migration
 
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('status_id', 'user_statuses', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('role_id', 'roles', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('users'); 
     }
 

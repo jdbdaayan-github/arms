@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use App\Models\UserRole;
 use App\Models\Permission;
 use App\Controllers\BaseController;
 use App\Controllers\CaptchaController;
@@ -16,7 +15,7 @@ class AuthController extends BaseController
         $captcha_controller = new CaptchaController();
         $data['captcha_image'] = $captcha_controller->generate();
 
-        return view('auth/login',$data);
+        return view('auth/login', $data);
     }
 
     public function authenticate()
@@ -30,27 +29,25 @@ class AuthController extends BaseController
         $captcha_input = $this->request->getPost('captcha');
 
         $user_model = new User();
-        $user_role_model = new UserRole();
         $user = $user_model->where('email', $email)->first();
 
         if (!$user) {
-            return redirect()->to('/login')->with('error', 'Invalid username or password.');
+            return redirect()->to('/auth/login')->with('error', 'Invalid username or password.');
         }
 
         if ($user->login_attempts >= 5) {
-            return redirect()->to('/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.');
+            return redirect()->to('/auth/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.');
         }
 
         // Verify the user’s account
         if ($user->verified == 0) {
-            return redirect()->to('/login')->with('error', 'Your account has not been verified. Contact the administrator.');
+            return redirect()->to('/auth/login')->with('error', 'Your account has not been verified. Contact the administrator.');
         }
 
         // Check the CAPTCHA input
-        if ($captcha_input !== $captcha_word) 
-        {
+        if ($captcha_input !== $captcha_word) {
             $newAttempts = $user->login_attempts + 1;
-            return redirect()->to('/login')->with('error', 'Incorrect CAPTCHA. Please try again.');
+            return redirect()->to('/auth/login')->with('error', 'Incorrect CAPTCHA. Please try again.');
         }
 
         // Verify password
@@ -60,19 +57,16 @@ class AuthController extends BaseController
 
             if ($newAttempts >= 5) {
                 $user_model->update($user->id, ['status_id' => 4]);
-                return redirect()->to('/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.');
+                return redirect()->to('/auth/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.');
             }
 
-            return redirect()->to('/login')->with('error', 'Invalid username or password.');
+            return redirect()->to('/auth/login')->with('error', 'Invalid username or password.');
         }
 
 
         // Reset login attempts after successful login
         $user_model->update($user->id, ['login_attempts' => 0]);
 
-        // Get user roles
-        $roles = $user_role_model->getUserRoles($user->id);
-        $userRoles = array_column($roles, 'role_name');
 
         //Get user permissions
         $permissionModel = new Permission();
@@ -81,12 +75,14 @@ class AuthController extends BaseController
         // Prepare full name (fixed concatenation)
         $fullName = $user->firstname . " " . $user->middlename . " " . $user->lastname . " " . $user->extension;
 
+        $role = $user_model->getUserRoleByUserId($user->id);
+
         // Store session data
         $session->set([
             'user_id'   => $user->id,
             'user_name' => $fullName,
             'user_email' => $user->email,
-            'roles'     => $userRoles,
+            'role'     => $role->role_name,
             'permissions' => $permission,
             'logged_in' => TRUE,
         ]);
@@ -94,24 +90,30 @@ class AuthController extends BaseController
         // Remove generated Captcha
         $session->remove(['captcha_word', 'captcha_filename']);
 
-        if(in_array('superadmin', $userRoles)) {
+        if ($role->role_name == 'Super Admin') {
             return redirect()->to('/')->with('success', 'Welcome! ' . $user->firstname);
         }
-        
-        if(in_array('admin', $userRoles)) {
+
+        if ($role->role_name == 'Administrator') {
             return redirect()->to('dashboard/a')->with('success', 'Welcome! ' . $user->firstname);
         }
 
-        return redirect()->to('dashboard/b')->with('success','Welcome! ' . $user->firstname);
-
+        return redirect()->to('dashboard/b')->with('success', 'Welcome! ' . $user->firstname);
     }
 
     public function register()
     {
         $captcha_controller = new CaptchaController();
         $data['captcha_image'] = $captcha_controller->generate();
-        
+
         return view('auth/register', $data);
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+
+        return redirect()->to('auth/login');
     }
 
     public function forgot()

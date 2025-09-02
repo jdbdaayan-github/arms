@@ -32,18 +32,6 @@ class CreateRBACTable extends Migration
         $this->forge->addPrimaryKey('id');
         $this->forge->createTable('permissions');
 
-        // User Roles Table (Many-to-Many)
-        $this->forge->addField([
-            'user_id'  => ['type' => 'INT', 'unsigned' => true],
-            'role_id'  => ['type' => 'INT', 'unsigned' => true],
-            'created_at' => ['type' => 'DATETIME', 'null' => true],
-            'updated_at'       => ['type' => 'DATETIME', 'null' => true],
-        ]);
-        $this->forge->addPrimaryKey(['user_id', 'role_id']);  // Composite Primary Key
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('role_id', 'roles', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('user_roles');
-
         // Role Permissions Table (Many-to-Many)
         $this->forge->addField([
             'role_id'       => ['type' => 'INT', 'unsigned' => true],
@@ -60,7 +48,6 @@ class CreateRBACTable extends Migration
     public function down()
     {
         $this->forge->dropTable('role_permissions');
-        $this->forge->dropTable('user_roles');
         $this->forge->dropTable('permissions');
         $this->forge->dropTable('roles');
     }

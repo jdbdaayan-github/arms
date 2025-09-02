@@ -5,10 +5,7 @@ Records
 <?= $this->endSection() ?>
 
 <?= $this->section('content-breadcrumbs') ?>
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="<?= base_url('dashboard') ?>">Home</a></li>
     <li class="breadcrumb-item active">Records</li>
-</ol>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

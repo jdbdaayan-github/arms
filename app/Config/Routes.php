@@ -8,11 +8,17 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
+
+$routes->get('/', function(){
+    return redirect()->to('auth/login');
+});
+
 //auth
 $routes->group('auth', function($routes){
     $routes->get('login', [AuthController::class, 'login']);
     $routes->post('authenticate', [AuthController::class, 'authenticate']);
     $routes->get('register', [AuthController::class, 'register']);
+    $routes->get('logout', [AuthController::class, 'logout']);
     $routes->get('forgot', [AuthController::class, 'forgot']);
     $routes->get('reset', [AuthController::class, 'reset']);
     $routes->get('terms', [AuthController::class, 'terms']);
@@ -20,13 +26,14 @@ $routes->group('auth', function($routes){
 
 $routes->group('',['filter' => 'auth'], function($routes){
 
-    $routes->get('/dashboard', 'Home::index');
+    $routes->get('dashboard', 'Home::index');
 
     #Records
     $routes->group('records', function($routes)
     {
         $routes->get('', 'Home::records');
         $routes->get('create', 'Home::create');
+        $routes->get('view', 'Home::view');
     });
     
     #Users
@@ -34,6 +41,7 @@ $routes->group('',['filter' => 'auth'], function($routes){
     {
         $routes->get('', 'UserController::index');
         $routes->get('create', 'UserController::create');
+        $routes->get('profile/(:num)', 'UserController::profile/$1');
     });
 
     #Roles
@@ -52,5 +60,7 @@ $routes->group('',['filter' => 'auth'], function($routes){
 
     $routes->get('logs/access', [SystemController::class, 'access']);
     $routes->get('logs/audit', [SystemController::class, 'audit']);
+    $routes->get('settings/profile', [SystemController::class, 'profile']);
+    $routes->get('settings/preferences', [SystemController::class, 'preferences']);
 });
 

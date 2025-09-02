@@ -23,4 +23,9 @@ class Home extends BaseController
     {
         return view('pages/records/create');
     }
+
+    public function view()
+    {
+        return view('pages/records/view');
+    }
 }

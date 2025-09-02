@@ -44,7 +44,7 @@ class Permission extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-     public function getPermissions()
+    public function getPermissions()
     {
         return $this->findAll();
     }
@@ -54,7 +54,7 @@ class Permission extends Model
         return $this->find($id);
     }
 
-    public function addPermission($data):int
+    public function addPermission($data): int
     {
         $this->save($data);
         return $this->getInsertID();
@@ -69,23 +69,23 @@ class Permission extends Model
     {
         return $this->delete($id);
     }
-        
+
     public function getPermissionsForRole($role_id)
     {
         return $this->join('role_permissions', 'role_permissions.permission_id = permissions.id')
-                    ->where('role_permissions.role_id', $role_id)
-                    ->findAll();
+            ->where('role_permissions.role_id', $role_id)
+            ->findAll();
     }
 
     public function getPermissionsByUserId($user_id)
     {
-        $permissions = $this->select('permissions.permission_name as permission_name')
-                            ->join('role_permissions rp', 'permissions.id = rp.permission_id')
-                            ->join('user_roles', 'user_roles.role_id = rp.role_id')
-                            ->join('roles', 'roles.id = user_roles.role_id')
-                            ->where('user_roles.user_id', $user_id)
-                            ->groupBy('permissions.permission_name')
-                            ->findAll();
+        $permissions = $this->select('permissions.permission_name')
+            ->join('role_permissions rp', 'permissions.id = rp.permission_id')
+            ->join('roles', 'roles.id = rp.role_id')
+            ->join('users', 'users.role_id = roles.id')
+            ->where('users.id', $user_id)
+            ->groupBy('permissions.permission_name')
+            ->findAll();
 
         return array_column($permissions, 'permission_name');
     }
