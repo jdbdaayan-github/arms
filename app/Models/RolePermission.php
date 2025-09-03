@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Role extends Model
+class RolePermission extends Model
 {
-    protected $table            = 'roles';
-    protected $primaryKey       = 'id';
+    protected $table            = 'role_permissions';
+    protected $primaryKey       = ['role_id', 'permission_id'];
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['role_name', 'description'];
+    protected $allowedFields    = ['role_id', 'permission_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -44,27 +44,11 @@ class Role extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getRoles()
+    public function getPermissionsByRole($role_id)
     {
-        $userRole = session()->get('role');
-
-        // Get all roles first
-        $roles = $this->findAll();
-
-        // Filter if user is not Super Admin
-        if ($userRole !== 'Superadmin') {
-            $roles = array_filter($roles, function ($role) {
-                // Adjust property access depending on result type (array vs object)
-                return $role->role_name !== 'Superadmin';
-            });
-            $roles = array_values($roles); // reindex array
-        }
-
-        return $roles;
-    }
-
-    public function getRoleById($id)
-    {
-        return $this->find($id);
+        return $this->select('permissions.id, permissions.permission_name, permissions.description')
+                ->join('permissions', 'permissions.id = role_permissions.permission_id')
+                ->where('role_permissions.role_id', $role_id)
+                ->findAll();
     }
 }

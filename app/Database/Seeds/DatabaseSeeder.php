@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RecordCategoryIndexSeeder::class);
         $this->call(RecordStatusSeeder::class);
         $this->call(SettingsSeeder::class);
+        $this->call(UserTesterSeeder::class);
     }
 }

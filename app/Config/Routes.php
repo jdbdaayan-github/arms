@@ -1,6 +1,8 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Controllers\PermissionController;
+use App\Controllers\RoleController;
 use App\Controllers\SystemController;
 use CodeIgniter\Router\RouteCollection;
 
@@ -31,9 +33,10 @@ $routes->group('',['filter' => 'auth'], function($routes){
     #Records
     $routes->group('records', function($routes)
     {
-        $routes->get('', 'Home::records');
-        $routes->get('create', 'Home::create');
+        $routes->get('', 'RecordController::index');
+        $routes->get('create', 'RecordController::create');
         $routes->get('view', 'Home::view');
+        $routes->get('getIndexes/(:num)', 'RecordController::getIndexes/$1');
     });
     
     #Users
@@ -49,6 +52,10 @@ $routes->group('',['filter' => 'auth'], function($routes){
     {
         $routes->get('', 'RoleController::index');
         $routes->get('create', 'RoleController::create');
+        $routes->get('ajaxRolesData', [RoleController::class, 'ajaxRolesData']);
+        $routes->get('permissions/(:num)', [RoleController::class, 'rolePermissions']);
+        $routes->post('savePermissions/(:num)', [RoleController::class, 'savePermissions']);
+        //$routes->get('ajaxRolePermissionData/(:num)', [RoleController::class,'ajaxRolePermissionData']);
     });
 
     #Permissions
@@ -56,6 +63,10 @@ $routes->group('',['filter' => 'auth'], function($routes){
     {
         $routes->get('', 'PermissionController::index');
         $routes->get('create', 'PermissionController::create');
+        $routes->get('ajaxPermissionsData', [PermissionController::class, 'ajaxPermissionsData']);
+        $routes->post('store', [PermissionController::class, 'store']);
+        $routes->get('edit/(:num)', [PermissionController::class, 'edit']);
+       
     });
 
     $routes->get('logs/access', [SystemController::class, 'access']);

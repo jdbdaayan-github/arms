@@ -5,8 +5,8 @@ Add Record
 <?= $this->endSection() ?>
 
 <?= $this->section('content-breadcrumbs') ?>
-    <li class="breadcrumb-item"><a href="<?= base_url('records') ?>">Records</a></li>
-    <li class="breadcrumb-item active">Add Record</li>
+<li class="breadcrumb-item"><a href="<?= base_url('records') ?>">Records</a></li>
+<li class="breadcrumb-item active">Add Record</li>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -14,7 +14,7 @@ Add Record
     <div class="container-fluid">
 
         <!-- Create Record Form -->
-        <div class="card card-outline card-primary">
+        <div class="card card-outline card-primary mb-0">
             <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-plus mr-2"></i>NEW RECORD</h3>
             </div>
@@ -64,28 +64,33 @@ Add Record
                                     DOCUMENT TYPE <span class="text-danger">*</span>
                                 </label>
                                 <select class="form-control form-control-sm select2bs4" id="category" name="category" required>
-                                    <option value="">-- Select --</option>
-                                    <option value="Project">Project</option>
-                                    <option value="Report">Report</option>
-                                    <option value="Employee">Employee</option>
-                                    <option value="Memo">Memo</option>
-                                    <option value="Other">Other</option>
+                                    <option class="text-sm" value="">-- Select --</option>
+                                    <?php foreach ($categories as $category): ?>
+                                        <option class="text-sm" value="<?= $category->id ?>"><?= esc($category->name) ?></option>
+                                    <?php endforeach ?>
                                 </select>
                             </div>
 
                             <!-- Document Date -->
-                            <div class="form-group">
+                            <div class="form-group mb-4">
                                 <label for="document_date" class="text-sm font-weight-medium">
                                     DOCUMENT DATE <span class="text-danger">*</span>
                                 </label>
                                 <input type="date" class="form-control form-control-sm" id="document_date" name="document_date" required>
                             </div>
 
+                            <div class="card card-sm">
+                                <div class="card-header text-sm p-2">Record Index</div>
+                                <div class="card-body p-2">
+                                    <div id="dynamic_indexes"></div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <!-- Right Side PDF Preview -->
                         <div class="col-md-6">
-                            <div class="card card-outline card-secondary">
+                            <div class="card card-outline card-secondary height-full">
                                 <div class="card-header py-2">
                                     <h3 class="card-title text-sm"><i class="fas fa-file-pdf mr-2"></i> PDF Preview</h3>
                                 </div>
@@ -116,6 +121,51 @@ Add Record
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script>
+$(document).ready(function () {
+    // Init Select2
+    $('#category').select2({
+        placeholder: "-- Select Category --",
+        allowClear: true
+    });
+
+    // Detect change (Select2 safe)
+    $('#category').on('select2:select select2:clear change', function (e) {
+        let categoryId = $(this).val();
+        let indexInputs = $('#dynamic_indexes');
+
+        if (!categoryId) {
+            indexInputs.html('');
+            return;
+        }
+
+        // AJAX call to controller
+        $.ajax({
+            url: `/records/getIndexes/${categoryId}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function (indexes) {
+                let html = '';
+                indexes.forEach(idx => {
+                    html += `
+                        <div class="form-group mb-2">
+                            <label class="text-sm mb-0">${idx.name}</label>
+                            <input type="${idx.type}" 
+                                   name="indexes[${idx.id}]" 
+                                   class="form-control form-control-sm" 
+                                   placeholder="${idx.placeholder ?? ''}">
+                        </div>
+                    `;
+                });
+                indexInputs.html(html);
+            },
+            error: function (xhr) {
+                console.error("Error loading indexes", xhr);
+            }
+        });
+    });
+});
+</script>
 <script>
     $(function() {
         // Initialize Select2

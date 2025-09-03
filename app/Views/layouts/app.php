@@ -38,6 +38,10 @@
 
     <!-- AdminLTE -->
     <link rel="stylesheet" href="<?= base_url('assets/template/dist/css/adminlte.min.css') ?>">
+
+    <!-- Dual Lits Box -->
+    <link rel="stylesheet" href="<?= base_url('assets/template/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css') ?>">
+
     <style>
         /* Make Select2 small same as form-control-sm */
         .select2-container--bootstrap4 .select2-selection--single {
@@ -58,6 +62,15 @@
             /* height ng small inputs */
             font-size: .875rem;
         }
+
+        .content-wrapper {
+            min-height: auto;
+        }
+        section.content
+        {
+            padding-bottom: 15px !important;
+        }
+        
     </style>
 </head>
 
@@ -141,9 +154,12 @@
 
     <!-- Moment.js (required for daterangepicker) -->
     <script src="<?= base_url('assets/template/plugins/moment/moment.min.js') ?>"></script>
-    
+
     <!-- Daterangepicker JS -->
     <script src="<?= base_url('assets/template/plugins/daterangepicker/daterangepicker.js') ?>"></script>
+
+    <!-- Dual List Box -->
+    <script src="<?= base_url('assets/template/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') ?>"></script>
 
     <!-- Custom Scripts -->
     <?= $this->renderSection('scripts') ?>

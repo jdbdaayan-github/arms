@@ -11,7 +11,7 @@ class RoleSeeder extends Seeder
         $data = [
             [
                 'id' => 1,
-                'role_name'   => 'Super Admin',  
+                'role_name'   => 'Superadmin',  
                 'description' => 'Full access to all parts of the system. Can manage users, roles, and permissions.',
                 'created_at'  => date('Y-m-d H:i:s'),
                 'updated_at'  => date('Y-m-d H:i:s'),
@@ -32,7 +32,7 @@ class RoleSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'role_name'   => 'Record Contributor',  
+                'role_name'   => 'Contributor',  
                 'description' => 'Can create and upload records but has limited access to administrative features.',
                 'created_at'  => date('Y-m-d H:i:s'),
                 'updated_at'  => date('Y-m-d H:i:s'),

@@ -20,7 +20,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User header -->
-                <li class="user-header bg-info">
+                <li class="user-header bg-light">
                     <img src="<?= base_url('assets/template/dist/img/user2-160x160.jpg') ?>" 
                          class="img-circle elevation-2" 
                          alt="User Image">
@@ -29,9 +29,10 @@
                         <small><?= session()->get('role') ?? 'Guest' ?></small>
                     </p>
                 </li>
+                <hr class="m-0 mx-2">
                 <!-- Footer with buttons -->
                 <li class="user-footer">
-                    <a href="<?= base_url('users/profile') ?>/<?= $user_id ?>" class="btn btn-default btn-flat">Profile</a>
+                    <a href="<?= base_url('users/profile') ?>/<?= $user_id ?>" class="btn btn-info btn-flat">Profile</a>
                     <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger btn-flat float-right">Logout</a>
                 </li>
             </ul>

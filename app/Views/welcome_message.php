@@ -130,7 +130,7 @@ Dashboard
     </div>
 
     <!-- Classification Pie Chart -->
-    <div class="card mt-3">
+    <div class="card mt-3 mb-0">
       <div class="card-header">
         <h3 class="card-title">Records by Classification</h3>
       </div>

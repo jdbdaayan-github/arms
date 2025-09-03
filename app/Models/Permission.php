@@ -56,7 +56,7 @@ class Permission extends Model
 
     public function addPermission($data): int
     {
-        $this->save($data);
+        $this->insert($data);
         return $this->getInsertID();
     }
 
