@@ -19,7 +19,7 @@ class CreateRecordsTable extends Migration
                 'type'=> 'VARCHAR',
                 'constraint' => 255,
             ],
-            'category_id'=> [
+            'series_id'=> [
                 'type'=> 'INT',
                 'constrain' => 11,
                 'unsigned' => true,
@@ -57,7 +57,7 @@ class CreateRecordsTable extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('category_id', 'record_categories', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('series_id', 'record_series', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('deleted_by', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('created_by', 'users','id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('status_id', 'record_statuses','id', 'CASCADE', 'CASADE');

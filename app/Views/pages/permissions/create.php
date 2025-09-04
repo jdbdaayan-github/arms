@@ -22,8 +22,8 @@ Permissions
             <?php $errors = session()->getFlashdata('errors') ?? []; ?>
 
             <form action="<?= base_url('permissions/store') ?>" method="POST">
+                <?= csrf_field() ?>
                 <div class="card-body">
-
                     <div class="form-group">
                         <label for="permission_name">Permission Name</label>
                         <input
@@ -31,7 +31,7 @@ Permissions
                             class="form-control <?= isset($errors['permission_name']) ? 'is-invalid' : '' ?>"
                             id="permission_name"
                             name="permission_name"
-                            value="<?= old('permission_name') ?>"
+                            value="<?= set_value('permission_name') ?>"
                             placeholder="Enter permission name">
                         <?php if (isset($errors['permission_name'])): ?>
                             <div class="invalid-feedback">
@@ -47,7 +47,7 @@ Permissions
                             id="description"
                             name="description"
                             rows="4"
-                            placeholder="Enter permission description"><?= old('description') ?></textarea>
+                            placeholder="Enter permission description"><?= set_value('description') ?></textarea>
                         <?php if (isset($errors['description'])): ?>
                             <div class="invalid-feedback">
                                 <?= $errors['description'] ?>

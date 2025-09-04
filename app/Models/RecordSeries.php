@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RecordIndex extends Model
+class RecordSeries extends Model
 {
-    protected $table            = 'record_indexes';
+    protected $table            = 'record_series';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'type', 'length'];
+    protected $allowedFields    = ['code', 'name','classification_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,7 +21,7 @@ class RecordIndex extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -44,27 +44,10 @@ class RecordIndex extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getIndexesList()
+    public function getSeries()
     {
-        return $this->findAll();
-    }
-
-    public function getRecordIndexByID($id)
-    {
-        return $this->find($id);
-    }
-
-    public function saveRecIndex($data)
-    {
-        return $this->insert($data);
-    }
-
-    public function getSeriesIndexesById($id)
-    {
-        return $this->select('record_indexes.*')
-            ->join('record_series_indexes si', 'si.record_index_id = record_indexes.id')
-            ->join('record_series rs', 'rs.id = si.record_series_id')
-            ->where('si.record_series_id', $id)
-            ->findAll();
+        return $this->select('record_series.id, record_series.code, record_series.name, classification_id, rc.name as classification')
+                    ->join('record_classifications rc','rc.id = record_series.classification_id')
+                    ->findAll();
     }
 }

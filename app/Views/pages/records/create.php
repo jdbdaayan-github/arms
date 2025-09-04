@@ -60,13 +60,13 @@ Add Record
 
                             <!-- Document Type / Category -->
                             <div class="form-group">
-                                <label for="category" class="text-sm font-weight-medium">
-                                    DOCUMENT TYPE <span class="text-danger">*</span>
+                                <label for="series" class="text-sm font-weight-medium">
+                                    SERIES TITLE<span class="text-danger">*</span>
                                 </label>
-                                <select class="form-control form-control-sm select2bs4" id="category" name="category" required>
+                                <select class="form-control form-control-sm select2bs4" id="series" name="series" required>
                                     <option class="text-sm" value="">-- Select --</option>
-                                    <?php foreach ($categories as $category): ?>
-                                        <option class="text-sm" value="<?= $category->id ?>"><?= esc($category->name) ?></option>
+                                    <?php foreach ($series as $ser): ?>
+                                        <option class="text-sm" value="<?= $ser->id ?>"><?= esc($ser->name) ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
@@ -130,18 +130,18 @@ $(document).ready(function () {
     });
 
     // Detect change (Select2 safe)
-    $('#category').on('select2:select select2:clear change', function (e) {
-        let categoryId = $(this).val();
+    $('#series').on('select2:select select2:clear change', function (e) {
+        let seriesId = $(this).val();
         let indexInputs = $('#dynamic_indexes');
 
-        if (!categoryId) {
+        if (!seriesId) {
             indexInputs.html('');
             return;
         }
 
         // AJAX call to controller
         $.ajax({
-            url: `/records/getIndexes/${categoryId}`,
+            url: `/records/getIndexes/${seriesId}`,
             method: 'GET',
             dataType: 'json',
             success: function (indexes) {

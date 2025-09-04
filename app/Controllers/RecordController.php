@@ -4,20 +4,20 @@ namespace App\Controllers;
 
 use App\Models\Record;
 use App\Models\RecordIndex;
-use App\Models\RecordCategory;
 use App\Controllers\BaseController;
+use App\Models\RecordSeries;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class RecordController extends BaseController
 {
     protected $record_model;
-    protected $record_category_model;
+    protected $record_series_model;
     protected $record_index_model;
 
     public function __construct()
     {
         $this->record_model = new Record();
-        $this->record_category_model = new RecordCategory();
+        $this->record_series_model = new RecordSeries();
         $this->record_index_model = new RecordIndex();
     }
     public function index()
@@ -27,13 +27,13 @@ class RecordController extends BaseController
 
     public function create()
     {
-        $categories = $this->record_category_model->getCategories();
-        return view('pages/records/create', ['categories' => $categories]);
+        $series = $this->record_series_model->getSeries();
+        return view('pages/records/create', ['series' => $series]);
     }
 
     public function getIndexes($category_id)
     {
-        $indexes = $this->record_index_model->getCategoryIndexesById($category_id);
+        $indexes = $this->record_index_model->getSeriesIndexesById($category_id);
 
         return $this->response->setJSON($indexes);
     }

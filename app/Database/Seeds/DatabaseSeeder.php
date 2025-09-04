@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
         $this->call(UserStatusSeeder::class);
         $this->call(SuperAdminSeeder::class);
         $this->call(RecordClassificationSeeder::class);
-        $this->call(RecordCategorySeeder::class);
+        $this->call(RecordSeriesSeeder::class);
         $this->call(RecordIndexSeeder::class);
-        $this->call(RecordCategoryIndexSeeder::class);
+        $this->call(RecordSeriesIndexSeeder::class);
         $this->call(RecordStatusSeeder::class);
         $this->call(SettingsSeeder::class);
         $this->call(UserTesterSeeder::class);

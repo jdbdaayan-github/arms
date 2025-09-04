@@ -161,8 +161,12 @@
     <!-- Dual List Box -->
     <script src="<?= base_url('assets/template/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') ?>"></script>
 
-    <!-- Custom Scripts -->
+    <!-- Custom Pages Scripts  -->
     <?= $this->renderSection('scripts') ?>
+    
+    <!-- Index.js -->
+    <script src="<?= base_url('assets/js/index.js')?>"></script>
+
 
 </body>
 

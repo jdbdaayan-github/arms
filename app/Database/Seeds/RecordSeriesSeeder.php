@@ -4,7 +4,7 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class RecordCategorySeeder extends Seeder
+class RecordSeriesSeeder extends Seeder
 {
     public function run()
     {
@@ -82,6 +82,6 @@ class RecordCategorySeeder extends Seeder
                 'updated_at'=> date('Y-m-d H:i:s'),
             ]
         ];
-        $this->db->table('record_categories')->insertBatch($data);
+        $this->db->table('record_series')->insertBatch($data);
     }
 }

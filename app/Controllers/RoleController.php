@@ -40,18 +40,14 @@ class RoleController extends BaseController
 
     public function rolePermissions($id)
     {
-        // Get the role object
         $role = $this->role_model->getRoleById($id);
 
-        // Get all permissions
         $allPermissions = $this->permission_model->findAll();
 
-        // Get assigned permissions IDs
         $assignedPermissions = $this->role_permission_model
             ->where('role_id', $id)
-            ->findColumn('permission_id'); // returns array of IDs
+            ->findColumn('permission_id');
 
-        // Mark assigned permissions
         foreach ($allPermissions as $key => $perm) {
             $allPermissions[$key]->assigned = in_array($perm->id, $assignedPermissions);
         }
@@ -63,24 +59,21 @@ class RoleController extends BaseController
     }
 
     public function savePermissions($roleId)
-{
+    {
 
-    // Get selected permissions from POST
-    $selectedPermissions = $this->request->getPost('permissions') ?? [];
+        $selectedPermissions = $this->request->getPost('permissions') ?? [];
 
-    // Remove all existing permissions for this role
-    $this->role_permission_model->where('role_id', $roleId)->delete();
+        $this->role_permission_model->where('role_id', $roleId)->delete();
 
-    // Insert new permissions
-    foreach ($selectedPermissions as $permId) {
-        $this->role_permission_model->insert([
-            'role_id' => $roleId,
-            'permission_id' => $permId
-        ]);
+        foreach ($selectedPermissions as $permId) {
+            $this->role_permission_model->insert([
+                'role_id' => $roleId,
+                'permission_id' => $permId
+            ]);
+        }
+
+        return redirect()->to('roles/permissions/' . $roleId)->with('success', 'Permissions updated successfully!');
     }
-
-    return redirect()->to('roles/permissions/'.$roleId)->with('success', 'Permissions updated successfully!');
-}
 
     public function ajaxRolePermissionData($id)
     {

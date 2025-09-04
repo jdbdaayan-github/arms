@@ -54,4 +54,16 @@ class User extends Model
         return $this->select('roles.role_name')->join('roles','roles.id = users.role_id')->where('users.id', $id)
         ->first();
     }
+
+    public function getUsersData()
+    {
+        return $this->select('users.id,CONCAT_WS(" ", firstname, middlename, lastname, extension) as Fullname, email,username, password, status_id,verified, login_attempts ,user_statuses.name as status')
+                    ->join('user_statuses', 'user_statuses.id = users.status_id')
+                    ->findAll();
+    }
+
+    public function updateStatus($id,$data)
+    {
+        return $this->update($id, $data);
+    }
 }
