@@ -25,7 +25,7 @@ Permissions
                 <?= csrf_field() ?>
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="permission_name">Permission Name</label>
+                        <label for="permission_name">Permission Name <span class="text-danger">*</span></label>
                         <input
                             type="text"
                             class="form-control <?= isset($errors['permission_name']) ? 'is-invalid' : '' ?>"

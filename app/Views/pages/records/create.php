@@ -106,10 +106,7 @@ Add Record
 
                 <!-- Card Footer -->
                 <div class="card-footer">
-                    <a href="<?= base_url('records') ?>" class="btn btn-secondary btn-sm">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </a>
-                    <button type="submit" class="btn btn-primary btn-sm float-right">
+                    <button type="submit" class="btn btn-primary btn-sm float-right btn-flat">
                         <i class="fas fa-save"></i> Save Record
                     </button>
                 </div>

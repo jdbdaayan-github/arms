@@ -16,7 +16,7 @@ Record Series
         <div class="card-header">
             <h3 class="card-title"><i class="fas fa-th-list mr-2"></i>Record Series List</h3>
             <div class="card-tools">
-                <a href="<?= base_url('classifications/create') ?>" class="btn btn-info btn-flat btn-sm">
+                <a href="<?= base_url('series/create') ?>" class="btn btn-info btn-flat btn-sm">
                     <i class="fas fa-plus"></i> Add Record Series
                 </a>
             </div>

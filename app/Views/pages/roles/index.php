@@ -117,4 +117,26 @@ Roles
         });
     });
 </script>
+
+<?php if(session()->has('success')): ?>
+    <script>
+        Swal.fire({
+            title: "Success!",
+            text: "<?= session('success') ?>",
+            icon: "success",
+            confirmButtonText: "OK"
+        });
+    </script>
+<?php endif; ?>
+
+<?php if(session()->has('error')): ?>
+    <script>
+        Swal.fire({
+            title: "Error!",
+            text: "<?= session('error') ?>",
+            icon: "error",
+            confirmButtonText: "OK"
+        });
+    </script>
+<?php endif; ?>
 <?= $this->endSection() ?>

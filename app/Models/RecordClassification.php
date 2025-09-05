@@ -53,4 +53,14 @@ class RecordClassification extends Model
     {
         return $this->select('id,code,name')->find($id);
     }
+
+    public function saveClassification($data):int
+    {
+        return $this->insert($data);
+    }
+
+    public function updateClassification($id, $data)
+    {
+        return $this->update($id, $data);
+    }
 }

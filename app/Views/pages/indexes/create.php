@@ -16,7 +16,7 @@ Record Indexes
 
         <div class="card card-outline card-secondary">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-plus mr-2"></i>Create Classification</h3>
+                <h3 class="card-title"><i class="fas fa-plus mr-2"></i>Create Record Indexes</h3>
             </div>
 
             <?php $errors = session()->getFlashdata('errors') ?? []; ?>
@@ -80,7 +80,7 @@ Record Indexes
                 </div>
 
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-info">
+                    <button type="submit" class="btn btn-primary btn-flat">
                         <i class="fas fa-save mr-1"></i>Save
                     </button>
                 </div>

@@ -21,11 +21,11 @@ Classifications
 
             <?php $errors = session()->getFlashdata('errors') ?? []; ?>
 
-            <form action="<?= base_url('permissions/store') ?>" method="POST">
+            <form action="<?= base_url('classifications/store') ?>" method="POST">
                 <?= csrf_field() ?>
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="permission_name">Classification Code</label>
+                        <label for="permission_name">Classification Code <span class="text-danger">*</span></label>
                         <input
                             type="text"
                             class="form-control <?= isset($errors['code']) ? 'is-invalid' : '' ?>"
@@ -41,7 +41,7 @@ Classifications
                     </div>
 
                     <div class="form-group">
-                        <label for="name">Classification Name</label>
+                        <label for="name">Classification Name <span class="text-danger">*</span></label>
                         <input
                             type="text"
                             class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
@@ -59,7 +59,7 @@ Classifications
                 </div>
 
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-info">
+                    <button type="submit" class="btn btn-primary btn-flat">
                         <i class="fas fa-save mr-1"></i>Save
                     </button>
                 </div>

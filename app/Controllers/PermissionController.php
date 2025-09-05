@@ -36,8 +36,20 @@ class PermissionController extends BaseController
     public function store()
     {
         $rules = [
-            'permission_name' => 'required|max_length[100]|is_unique[permissions.permission_name]',
-            'description' => 'permit_empty|max_length[255]'
+            'permission_name' => [
+                'rules'  => "required|max_length[15]|is_unique[permissions.permission_name]",
+                'errors' => [
+                    'required'   => 'Permission Name is required.',
+                    'max_length' => 'Permission Name cannot exceed 15 characters.',
+                    'is_unique'  => 'This Permission Name already exists.',
+                ],
+            ],
+            'description' => [
+                'rules'  => 'permit_empty|max_length[100]',
+                'errors' => [
+                    'max_length' => 'Description cannot exceed 100 characters.',
+                ],
+            ],
         ];
 
         if(!$this->validate($rules))
@@ -61,5 +73,42 @@ class PermissionController extends BaseController
         $permission = $this->permission_model->getPermissionById($id);
 
         return view('pages/permissions/edit',['permission' => $permission]);
+    }
+
+    public function update($id)
+    {
+        $rules = [
+            'permission_name' => [
+                'rules'  => "required|max_length[50]|is_unique[permissions.permission_name,id,{$id}]",
+                'errors' => [
+                    'required'   => 'Permission Name is required.',
+                    'max_length' => 'Permission Name cannot exceed 50 characters.',
+                    'is_unique'  => 'This Permission Name already exists.',
+                ],
+            ],
+            'description' => [
+                'rules'  => 'permit_empty|max_length[100]',
+                'errors' => [
+                    'max_length' => 'Description cannot exceed 100 characters.',
+                ],
+            ],
+        ];
+
+        if(!$this->validate($rules))
+        {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'permission_name' => $this->request->getPost('permission_name'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        if(!$this->permission_model->updatePermission($id, $data))
+        {
+            return redirect()->to('permissions')->with('error', 'An unexpected error occurred. Please try again later.');
+        }
+
+        return redirect()->to('permissions')->with('success', 'Permission updated successfully!');
     }
 }

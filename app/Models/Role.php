@@ -48,16 +48,13 @@ class Role extends Model
     {
         $userRole = session()->get('role');
 
-        // Get all roles first
         $roles = $this->findAll();
 
-        // Filter if user is not Super Admin
         if ($userRole !== 'Superadmin') {
             $roles = array_filter($roles, function ($role) {
-                // Adjust property access depending on result type (array vs object)
                 return $role->role_name !== 'Superadmin';
             });
-            $roles = array_values($roles); // reindex array
+            $roles = array_values($roles);
         }
 
         return $roles;
@@ -66,5 +63,17 @@ class Role extends Model
     public function getRoleById($id)
     {
         return $this->find($id);
+    }
+
+    public function saveRole($data):int
+    {
+        $roleID = $this->insert($data); //put inserted Id in variable for logs
+
+        return $roleID;
+    }
+
+    public function updateRole($id, $data)
+    {
+        return $this->update($id, $data);
     }
 }

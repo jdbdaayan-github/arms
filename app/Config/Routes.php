@@ -55,6 +55,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->group('roles', function ($routes) {
         $routes->get('', 'RoleController::index');
         $routes->get('create', 'RoleController::create');
+        $routes->post('store', [RoleController::class, 'store']);
+        $routes->get('edit/(:num)', [RoleController::class, 'edit']);
+        $routes->post('update/(:num)', [RoleController::class, 'update']);
         $routes->get('ajaxRolesData', [RoleController::class, 'ajaxRolesData']);
         $routes->get('permissions/(:num)', [RoleController::class, 'rolePermissions']);
         $routes->post('savePermissions/(:num)', [RoleController::class, 'savePermissions']);
@@ -68,6 +71,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('ajaxPermissionsData', [PermissionController::class, 'ajaxPermissionsData']);
         $routes->post('store', [PermissionController::class, 'store']);
         $routes->get('edit/(:num)', [PermissionController::class, 'edit']);
+        $routes->post('update/(:num)', [PermissionController::class, 'update']);
     });
 
     #Classifications
@@ -84,6 +88,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->group('series', function ($routes) {
         $routes->get('', [RecordSeriesController::class, 'index']);
         $routes->get('ajaxRecordSeriesData', [RecordSeriesController::class, 'ajaxRecordSeriesData']);
+        $routes->get('create', [RecordSeriesController::class, 'create']);
+
     });
 
     #Record Indexes

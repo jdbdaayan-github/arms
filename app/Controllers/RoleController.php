@@ -38,6 +38,82 @@ class RoleController extends BaseController
         return view('pages/roles/create');
     }
 
+    public function store()
+    {
+        $rules = [
+            'role_name' => [
+                'rules'  => 'required|max_length[20]|is_unique[roles.role_name]',
+                'errors' => [
+                    'required'   => 'Role Name is required.',
+                    'max_length' => 'Role Name cannot exceed 20 characters.',
+                    'is_unique'  => 'This Role Name already exists.',
+                ],
+            ],
+            'description' => [
+                'rules'  => 'permit_empty|max_length[100]',
+                'errors' => [
+                    'max_length' => 'Description cannot exceed 100 characters.',
+                ],
+            ],
+        ];
+
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'role_name' => $this->request->getPost('role_name'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        $insertedId = $this->role_model->saveRole($data);
+
+        return redirect()->to('roles')->with('success', 'Role created successfully!');
+    }
+
+    public function edit($id)
+    {
+        $role = $this->role_model->getRoleById($id);
+
+        return view('pages/roles/edit', ['role' => $role]);
+    }
+
+    public function update($id)
+    {
+        $rules = [
+            'role_name' => [
+                'rules'  => "required|max_length[15]|is_unique[roles.role_name,id,{$id}]",
+                'errors' => [
+                    'required'   => 'Role Name is required.',
+                    'max_length' => 'Role Name cannot exceed 15 characters.',
+                    'is_unique'  => 'This Role Name already exists.',
+                ],
+            ],
+            'description' => [
+                'rules'  => 'permit_empty|max_length[100]',
+                'errors' => [
+                    'max_length' => 'Description cannot exceed 100 characters.',
+                ],
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'role_name' => $this->request->getPost('role_name'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        if (!$this->role_model->updateRole($id, $data)) {
+            return redirect()->to('roles')->with('error', 'An unexpected error occurred. Please try again later.');
+        }
+        
+        return redirect()->to('roles')->with('success', 'Role updated successfully!');
+    }
+
     public function rolePermissions($id)
     {
         $role = $this->role_model->getRoleById($id);
@@ -58,6 +134,7 @@ class RoleController extends BaseController
         ]);
     }
 
+    //Assigning Permissions to Role
     public function savePermissions($roleId)
     {
 
