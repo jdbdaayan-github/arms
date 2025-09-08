@@ -21,13 +21,16 @@ class CreateRecordsTable extends Migration
             ],
             'series_id'=> [
                 'type'=> 'INT',
-                'constrain' => 11,
+                'constraint' => 11,
                 'unsigned' => true,
             ],
             'confidential' => [
-                'type'=> 'BOOLEAN',
-                'null' => false,
-                'default' => FALSE,
+                'type'=> 'VARCHAR',
+                'constraint' => 11,
+            ],
+            'record_date' => [
+                'type'=> 'DATETIME',
+                'null'=> true,
             ],
             'status_id'=> [
                 'type'=> 'INT',
@@ -60,7 +63,7 @@ class CreateRecordsTable extends Migration
         $this->forge->addForeignKey('series_id', 'record_series', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('deleted_by', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('created_by', 'users','id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('status_id', 'record_statuses','id', 'CASCADE', 'CASADE');
+        $this->forge->addForeignKey('status_id', 'record_statuses','id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('records');
     }
 

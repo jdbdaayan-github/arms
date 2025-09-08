@@ -1,3 +1,7 @@
+<?php
+$errors = session()->getFlashdata('errors') ?? [];
+?>
+
 <?= $this->extend('layouts/app'); ?>
 
 <?= $this->section('content-header') ?>
@@ -20,6 +24,7 @@ Add Record
             </div>
 
             <form action="<?= base_url('records/store') ?>" method="post" enctype="multipart/form-data">
+                <?= csrf_field() ?>
                 <div class="card-body">
                     <div class="row">
 
@@ -28,12 +33,12 @@ Add Record
 
                             <!-- File Upload -->
                             <div class="form-group">
-                                <label for="document_file" class="text-sm font-weight-medium">
+                                <label for="record_file" class="text-sm font-weight-medium">
                                     UPLOAD PDF <span class="text-danger">*</span>
                                 </label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="document_file" name="document_file" accept="application/pdf" required>
-                                    <label class="custom-file-label" for="document_file">Choose PDF file</label>
+                                    <input type="file" class="custom-file-input" id="record_file" name="record_file" accept="application/pdf" required>
+                                    <label class="custom-file-label" for="record_file">Choose PDF file</label>
                                 </div>
                             </div>
 
@@ -42,7 +47,12 @@ Add Record
                                 <label for="title" class="text-sm font-weight-medium">
                                     TITLE <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control form-control-sm" id="title" name="title" placeholder="Enter document title" required>
+                                <input type="text" class="form-control form-control-sm" id="title" name="title" placeholder="Enter document title" value="<?= set_value('title') ?>" required>
+                                <?php if (isset($errors['title'])): ?>
+                                    <div class="invalid-feedback">
+                                        <?= $errors['title'] ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
 
                             <!-- Confidentiality -->
@@ -51,10 +61,8 @@ Add Record
                                     CONFIDENTIALITY <span class="text-danger">*</span>
                                 </label>
                                 <select class="form-control form-control-sm select2bs4" id="confidentiality" name="confidentiality" required>
-                                    <option value="">-- Select --</option>
-                                    <option value="Public">PUBLIC</option>
-                                    <option value="Restricted">Restricted</option>
-                                    <option value="Confidential">Confidential</option>
+                                    <option value="0" <?= set_value('confidentiality')=="0"? "selected":"" ?>>Public</option>
+                                    <option value="1" <?= set_value('confidentiality')=="1"? "selected":"" ?>>Confidential</option>
                                 </select>
                             </div>
 
@@ -66,17 +74,17 @@ Add Record
                                 <select class="form-control form-control-sm select2bs4" id="series" name="series" required>
                                     <option class="text-sm" value="">-- Select --</option>
                                     <?php foreach ($series as $ser): ?>
-                                        <option class="text-sm" value="<?= $ser->id ?>"><?= esc($ser->name) ?></option>
+                                        <option class="text-sm" value="<?= $ser->id ?>" <?= set_value('series')== $ser->id? "selected":"" ?>><?= esc($ser->name) ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
 
                             <!-- Document Date -->
                             <div class="form-group mb-4">
-                                <label for="document_date" class="text-sm font-weight-medium">
+                                <label for="record_date" class="text-sm font-weight-medium">
                                     DOCUMENT DATE <span class="text-danger">*</span>
                                 </label>
-                                <input type="date" class="form-control form-control-sm" id="document_date" name="document_date" required>
+                                <input type="date" class="form-control form-control-sm" id="record_date" name="record_date">
                             </div>
 
                             <div class="card card-sm">
@@ -119,32 +127,32 @@ Add Record
 
 <?= $this->section('scripts') ?>
 <script>
-$(document).ready(function () {
-    // Init Select2
-    $('#category').select2({
-        placeholder: "-- Select Category --",
-        allowClear: true
-    });
+    $(document).ready(function() {
+        // Init Select2
+        $('#category').select2({
+            placeholder: "-- Select Category --",
+            allowClear: true
+        });
 
-    // Detect change (Select2 safe)
-    $('#series').on('select2:select select2:clear change', function (e) {
-        let seriesId = $(this).val();
-        let indexInputs = $('#dynamic_indexes');
+        // Detect change (Select2 safe)
+        $('#series').on('select2:select select2:clear change', function(e) {
+            let seriesId = $(this).val();
+            let indexInputs = $('#dynamic_indexes');
 
-        if (!seriesId) {
-            indexInputs.html('');
-            return;
-        }
+            if (!seriesId) {
+                indexInputs.html('');
+                return;
+            }
 
-        // AJAX call to controller
-        $.ajax({
-            url: `/records/getIndexes/${seriesId}`,
-            method: 'GET',
-            dataType: 'json',
-            success: function (indexes) {
-                let html = '';
-                indexes.forEach(idx => {
-                    html += `
+            // AJAX call to controller
+            $.ajax({
+                url: `/records/getIndexes/${seriesId}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(indexes) {
+                    let html = '';
+                    indexes.forEach(idx => {
+                        html += `
                         <div class="form-group mb-2">
                             <label class="text-sm mb-0">${idx.name}</label>
                             <input type="${idx.type}" 
@@ -153,15 +161,15 @@ $(document).ready(function () {
                                    placeholder="${idx.placeholder ?? ''}">
                         </div>
                     `;
-                });
-                indexInputs.html(html);
-            },
-            error: function (xhr) {
-                console.error("Error loading indexes", xhr);
-            }
+                    });
+                    indexInputs.html(html);
+                },
+                error: function(xhr) {
+                    console.error("Error loading indexes", xhr);
+                }
+            });
         });
     });
-});
 </script>
 <script>
     $(function() {
@@ -172,7 +180,7 @@ $(document).ready(function () {
         });
 
         // Auto-preview PDF on file selection
-        $('#document_file').on('change', function() {
+        $('#record_file').on('change', function() {
             let file = this.files[0];
             let preview = $('#pdfPreview');
             let placeholder = $('#pdfPlaceholder');

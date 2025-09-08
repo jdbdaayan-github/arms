@@ -70,11 +70,26 @@
         {
             padding-bottom: 15px !important;
         }
-        
+        table tr td i{
+            font-size: 12px !important;
+        }
+        table tr td .btn{
+            padding: 4px;
+            height: auto !important;
+            line-height: 1 !important;
+            border-radius: 0;
+        }
+        .nav-item .nav-link i.nav-icon{
+            font-size: 14px !important;
+        }
+        input[type="text"], select, input[type="date"]
+        {
+            border-radius: 0 !important;
+        }
     </style>
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed nav-compact">
+<body class="hold-transition sidebar-mini layout-fixed text-sm layout-navbar-fixed nav-compact">
     <div class="wrapper">
 
         <!-- Navbar -->

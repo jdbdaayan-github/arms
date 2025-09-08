@@ -3,6 +3,7 @@
 use App\Controllers\AuthController;
 use App\Controllers\RoleController;
 use App\Controllers\UserController;
+use App\Controllers\RecordController;
 use App\Controllers\SystemController;
 use CodeIgniter\Router\RouteCollection;
 use App\Controllers\PermissionController;
@@ -38,7 +39,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->group('records', function ($routes) {
         $routes->get('', 'RecordController::index');
         $routes->get('create', 'RecordController::create');
-        $routes->get('view', 'Home::view');
+        $routes->post('store', 'RecordController::store');
+        $routes->get('show/(:num)', [RecordController::class,'show']);
         $routes->get('getIndexes/(:num)', 'RecordController::getIndexes/$1');
     });
 

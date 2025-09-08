@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RecordSeries extends Model
+class RecordFileVersion extends Model
 {
-    protected $table            = 'record_series';
+    protected $table            = 'record_file_versions';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['code', 'name','classification_id'];
+    protected $allowedFields    = ['record_id', 'user_id', 'filename', 'randomfilename', 'version', 'note'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,7 +21,7 @@ class RecordSeries extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = TRUE;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -44,10 +44,15 @@ class RecordSeries extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getSeries()
+    public function insertRecordFileVersion($data)
     {
-        return $this->select('record_series.id, record_series.code, record_series.name, classification_id, rc.name as classification')
-                    ->join('record_classifications rc','rc.id = record_series.classification_id')
-                    ->findAll();
+        return $this->insert($data);
+    }
+
+    public function getVersionByRecordId($id)
+    {
+        return $this->select('filename, version, randomfilename, CONCAT_WS(" ",users.firstname, users.middlename, users.lastname, users.extension) as user_name')
+                    ->join('users', 'users.id = record_file_versions.user_id')
+                    ->where('record_id', $id)->findAll();
     }
 }

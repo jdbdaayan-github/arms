@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RecordSeries extends Model
+class RecordSeriesIndex extends Model
 {
-    protected $table            = 'record_series';
+    protected $table            = 'record_index_values';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['code', 'name','classification_id'];
+    protected $allowedFields    = ['record_series_id', 'record_index_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,7 +21,7 @@ class RecordSeries extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = TRUE;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -43,11 +43,4 @@ class RecordSeries extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function getSeries()
-    {
-        return $this->select('record_series.id, record_series.code, record_series.name, classification_id, rc.name as classification')
-                    ->join('record_classifications rc','rc.id = record_series.classification_id')
-                    ->findAll();
-    }
 }
