@@ -13,24 +13,63 @@ Records
 <section class="content">
     <div class="container-fluid">
         <div class="card card-outline card-secondary">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center py-2">
                 <h3 class="card-title"><i class="fas fa-folder-open mr-2"></i>Record Details</h3>
+
+                <!-- Record-level action buttons -->
+                <div class="ml-auto">
+                    <!-- Print -->
+                    <a href="<?= base_url('records/print/' . $record->id) ?>"
+                        target="_blank" class="btn btn-primary btn-sm btn-flat">
+                        <i class="fas fa-print"></i> Print
+                    </a>
+
+                    <!-- Download -->
+                    <a href="<?= base_url('records/download/' . $record->id) ?>"
+                        class="btn btn-success btn-sm btn-flat">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+
+                    <!-- Bookmark -->
+                    <a href="<?= base_url('records/bookmark/' . $record->id) ?>"
+                        class="btn btn-warning btn-sm btn-flat">
+                        <i class="fas fa-bookmark"></i> Bookmark
+                    </a>
+
+                    <!-- Archive -->
+                    <a href="<?= base_url('records/archive/' . $record->id) ?>"
+                        class="btn btn-info btn-sm btn-flat">
+                        <i class="fas fa-file-archive"></i> Archive
+                    </a>
+
+                    <!-- Delete -->
+                    <button data-id="<?= $record->id ?>"
+                        class="btn btn-danger btn-sm btn-flat btn-delete-record">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+
+                    <!-- Purge -->
+                    <button data-id="<?= $record->id ?>"
+                        class="btn btn-dark btn-sm btn-flat btn-purge-record">
+                        <i class="fas fa-times"></i> Purge
+                    </button>
+                </div>
             </div>
 
             <div class="card-body">
                 <!-- Record Info -->
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <p><strong>Title: </strong><?= esc($record->title)?></p>
-                        <p><strong>Confidential: </strong><?= esc($record->confidential==0?'No':'Yes')?></p>
-                        <p><strong>Date: </strong><?= esc($record->record_date='0000-00-00 00:00:00' || $record->record_date=null?"":date('F d, Y', strtotime($record->record_date)))?></p>
-                        <p><strong>Title: </strong><?= esc($record->series)?></p>
+                        <p><strong>Title: </strong><?= esc($record->title) ?></p>
+                        <p><strong>Confidential: </strong><?= esc($record->confidential == 0 ? 'No' : 'Yes') ?></p>
+                        <p><strong>Date: </strong><?= esc($record->record_date == '0000-00-00 00:00:00' || $record->record_date == null ? "" : date('F j, Y', strtotime($record->record_date))) ?></p>
+                        <p><strong>Series Title: </strong><?= esc($record->series) ?></p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Created By:</strong> <?= esc($record->user_name)?></p>
-                        <p><strong>Status: </strong><?= esc($record->status)?></p>
-                        <p><strong>File Name: </strong><?= esc($record->filename .' v['.$record->version.']')?></p>
-                        <p><strong>Creation Date: </strong><?= esc(date('F j, Y', strtotime($record->created_at)))?></p>
+                        <p><strong>Created By:</strong> <?= esc($record->user_name) ?></p>
+                        <p><strong>Status: </strong><?= esc($record->status) ?></p>
+                        <p><strong>File Name: </strong><?= esc($record->filename . ' v[' . $record->version . ']') ?></p>
+                        <p><strong>Creation Date: </strong><?= esc(date('F j, Y', strtotime($record->created_at))) ?></p>
                     </div>
                 </div>
 
@@ -80,16 +119,38 @@ Records
                                             <th>File Name</th>
                                             <th>Uploaded By</th>
                                             <th>Date</th>
+                                            <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($versions as $version): ?>
-                                        <tr>
-                                            <td>Version <?= esc($version->version)?></td>
-                                            <td><?= esc($version->filename)?></td>
-                                            <td><?= esc($version->user_name)?></td>
-                                            <td><?= esc(date('F j, Y', strtotime($version->created_at)))?></td>
-                                        </tr>
+                                        <?php foreach ($versions as $version): ?>
+                                            <tr>
+                                                <td>Version <?= esc($version->version) ?></td>
+                                                <td><?= esc($version->filename) ?></td>
+                                                <td><?= esc($version->user_name) ?></td>
+                                                <td><?= esc(date('F j, Y', strtotime($version->created_at))) ?></td>
+                                                <td class="text-center">
+                                                    <!-- View -->
+                                                    <a href="<?= base_url('records/view_version/' . $version->record_id) ?>"
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-info" title="View">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+
+                                                    <!-- Download -->
+                                                    <a href="<?= base_url('records/download_version/' . $version->record_id) ?>"
+                                                        class="btn btn-sm btn-success" title="Download">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
+
+                                                    <!-- Delete -->
+                                                    <button class="btn btn-sm btn-danger btn-delete-version"
+                                                        data-id="<?= $version->record_id ?>"
+                                                        title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         <?php endforeach ?>
                                     </tbody>
                                 </table>
@@ -105,11 +166,11 @@ Records
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($indexes as $index): ?>
-                                        <tr>
-                                            <td><?= esc($index->index_name)?></td>
-                                            <td><?= esc($index->value)?></td>
-                                        </tr>
+                                        <?php foreach ($indexes as $index): ?>
+                                            <tr>
+                                                <td><?= esc($index->index_name) ?></td>
+                                                <td><?= esc($index->value) ?></td>
+                                            </tr>
                                         <?php endforeach ?>
                                     </tbody>
                                 </table>

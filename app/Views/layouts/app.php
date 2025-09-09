@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>ARMS</title>
+
+    <link rel="shortcut icon" href="<?= base_url('assets/images/dswd_logo.png')?>" type="image/png">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Font Awesome (AdminLTE icons) -->

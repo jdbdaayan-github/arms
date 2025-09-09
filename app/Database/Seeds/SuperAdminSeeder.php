@@ -18,6 +18,7 @@ class SuperAdminSeeder extends Seeder
                 'password' => password_hash('daayan1996', PASSWORD_DEFAULT),
                 'status_id' => 2,
                 'role_id' => 1,
+                'is_super' => 1,
                 'verified' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
         ],

@@ -12,7 +12,7 @@
     </ul>
 
     <!-- Right navbar links (User dropdown) -->
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto mr-1">
         <!-- User Dropdown Menu -->
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle d-flex pr-0 align-items-center" data-toggle="dropdown">

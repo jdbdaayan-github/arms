@@ -84,21 +84,22 @@ class AuthController extends BaseController
             'user_email' => $user->email,
             'role'     => $role->role_name,
             'permissions' => $permission,
+            'is_super' => $user->is_super,
             'logged_in' => TRUE,
         ]);
 
         // Remove generated Captcha
         $session->remove(['captcha_word', 'captcha_filename']);
 
-        if ($role->role_name == 'Super Admin') {
-            return redirect()->to('/')->with('success', 'Welcome! ' . $user->firstname);
+        if ($role->role_name === 'Superadmin') {
+            return redirect()->to('/dashboard')->with('login', 'Welcome! ' . $user->firstname);
         }
 
-        if ($role->role_name == 'Administrator') {
-            return redirect()->to('dashboard/a')->with('success', 'Welcome! ' . $user->firstname);
+        if ($role->role_name === 'Administrator') {
+            return redirect()->to('dashboard/a')->with('login', 'Welcome! ' . $user->firstname);
         }
 
-        return redirect()->to('dashboard/b')->with('success', 'Welcome! ' . $user->firstname);
+        return redirect()->to('dashboard/b')->with('login', 'Welcome! ' . $user->firstname);
     }
 
     public function register()

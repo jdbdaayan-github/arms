@@ -12,20 +12,23 @@ Records
 <section class="content">
     <div class="container-fluid">
         <div class="card card-outline card-secondary">
-            <div class="card-header">
+            <div class="card-header d-flex align-items-center justify-content-between py-1">
                 <h3 class="card-title"><i class="fas fa-folder-open mr-2"></i>Records List</h3>
-                <div class="card-tools">
-                    <a href="<?= base_url('records/create') ?>" class="btn btn-primary btn-flat btn-sm" style="font-size:12px;">
-                        <i class="fas fa-plus"></i> Add Record
-                    </a>
-                </div>
+                    <!-- records.create permission -->
+                    <?php if( hasRole('Superadmin') || hasPermission('records.create')): ?>
+                        <div class="card-tools  ml-auto mr-0">
+                            <a href="<?= base_url('records/create') ?>" class="btn btn-primary btn-flat btn-sm" style="font-size:12px;">
+                                <i class="fas fa-plus"></i> Add Record
+                            </a>
+                        </div>
+                    <?php endif ?>
             </div>
 
             <div class="card-body">
                 <!-- Search + Per Page -->
                 <form method="get" class="mb-2 d-flex justify-content-between">
                     <select name="per_page" class="form-control form-control-sm mr-2" style="width:55px;" onchange="this.form.submit()">
-                        <?php foreach ([5,10,25,50] as $num): ?>
+                        <?php foreach ([5, 10, 25, 50] as $num): ?>
                             <option value="<?= $num ?>" <?= ($perPage == $num) ? 'selected' : '' ?>><?= $num ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -57,15 +60,21 @@ Records
                                         <td class="text-center"><input type="checkbox"></td>
                                         <td><?= esc($record->title) ?></td>
                                         <td class="text-center">
+                                            <?php if(hasPermission('records.view')): ?>
                                             <a href="<?= base_url('records/show/' . $record->id) ?>" class="btn btn-info btn-sm">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="<?= base_url('records/edit/' . $record->id) ?>" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                            <?php endif ?>
+                                            <?php if(hasRole('Superadmin') || hasPermission('records.edit')): ?>
+                                                <a href="<?= base_url('records/edit/' . $record->id) ?>" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            <?php endif ?>
+                                            <?php if (hasRole('Superadmin') || hasPermission('RecordsDeleteModule')): ?>
                                             <button class="btn btn-danger btn-sm">
                                                 <i class="fas fa-trash"></i>
                                             </button>
+                                            <?php endif ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -82,12 +91,12 @@ Records
                 <div class="d-flex justify-content-between align-items-center text-sm">
                     <div>
                         <?php
-                            $currentPage = $pager->getCurrentPage();
-                            $perPage     = $pager->getPerPage();
-                            $total       = $pager->getTotal();
+                        $currentPage = $pager->getCurrentPage();
+                        $perPage     = $pager->getPerPage();
+                        $total       = $pager->getTotal();
 
-                            $start = ($total > 0) ? (($currentPage - 1) * $perPage) + 1 : 0;
-                            $end   = ($start + count($records) - 1);
+                        $start = ($total > 0) ? (($currentPage - 1) * $perPage) + 1 : 0;
+                        $end   = ($start + count($records) - 1);
                         ?>
                         Showing <?= $start ?> to <?= $end ?> of <?= $total ?> results
                     </div>
@@ -101,4 +110,28 @@ Records
         </div>
     </div>
 </section>
+<?= $this->endSection() ?>
+<?= $this->section('scripts') ?>
+<?php if (session()->get('success')): ?>
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: 'Record has been created successfully.',
+            icon: 'success',
+            showCancelButton: false,
+            showDenyButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'View Details',
+            denyButtonText: 'Upload New',
+            cancelButtonText: 'Close',
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "<?= base_url('records/show/') ?>" + "<?= session()->get('success') ?>";
+            } else if (result.isDenied) {
+                window.location.href = "<?= base_url('records/create') ?>";
+            }
+        });
+    </script>
+<?php endif; ?>
 <?= $this->endSection() ?>

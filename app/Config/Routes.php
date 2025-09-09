@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Controllers\DashboardController;
 use App\Controllers\RoleController;
 use App\Controllers\UserController;
 use App\Controllers\RecordController;
@@ -17,6 +18,7 @@ use App\Controllers\RecordClassificationController;
 
 
 $routes->get('/', function () {
+    session()->destroy();
     return redirect()->to('auth/login');
 });
 
@@ -33,7 +35,10 @@ $routes->group('auth', function ($routes) {
 
 $routes->group('', ['filter' => 'auth'], function ($routes) {
 
-    $routes->get('dashboard', 'Home::index');
+    #Dashboards
+    $routes->group('dashboard', function ($routes) {
+        $routes->get('', [DashboardController::class, 'superadminDashboard']);
+    });
 
     #Records
     $routes->group('records', function ($routes) {

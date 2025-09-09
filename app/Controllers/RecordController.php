@@ -135,7 +135,7 @@ class RecordController extends BaseController
             }
         }
 
-        return redirect()->to('/records')->with('success', 'Record saved successfully!');
+        return redirect()->to('/records')->with('success', $record_id);
     }
 
     public function show($id)

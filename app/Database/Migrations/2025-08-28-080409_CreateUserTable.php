@@ -18,12 +18,13 @@ class CreateUserTable extends Migration
             'username'    => ['type' => 'VARCHAR', 'constraint' => '100', 'unique' => true],
             'password'    => ['type' => 'VARCHAR', 'constraint' => '255'],
             'status_id'   => ['type' => 'INT', 'unsigned' => true, 'default' => 1],
+            'is_super'    =>  [ 'type' => 'INT', 'default' => 0],
             'role_id'     => ['type' => 'INT', 'unsigned' => true],
             'verified'    => ['type' => 'BOOLEAN', 'default' => FALSE],
             'login_attempts' => ['type' => 'INT', 'default' => 0],
             'created_at'  => ['type' => 'DATETIME'],
             'updated_at'  => ['type' => 'DATETIME'],
-            'deleted_at'  => ['type' => 'DATETIME', null => 'true'],
+            'deleted_at'  => ['type' => 'DATETIME', 'null' => 'true'],
         ]);
 
         $this->forge->addPrimaryKey('id');

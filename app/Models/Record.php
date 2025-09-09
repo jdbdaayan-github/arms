@@ -117,4 +117,9 @@ class Record extends Model
         return $this->insert($data);
     }
 
+    public function getRecentRecords()
+    {
+        return $this->findAll(5);
+    }
+
 }
