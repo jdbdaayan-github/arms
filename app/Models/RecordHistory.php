@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RecordIndexValue extends Model
+class RecordHistory extends Model
 {
-    protected $table            = 'record_index_values';
+    protected $table            = 'record_history';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['record_id', 'index_id', 'value'];
+    protected $allowedFields    = ['record_id', 'user_id', 'action', 'old_data', 'new_data', 'description'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -24,8 +24,8 @@ class RecordIndexValue extends Model
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+    protected $updatedField  = '';
+    protected $deletedField  = '';
 
     // Validation
     protected $validationRules      = [];
@@ -43,16 +43,4 @@ class RecordIndexValue extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function getRecordIndexValues($record_id)
-    {
-        return $this->select('record_index_values.id, record_id, index_id, value, ri.name as index_name')
-                    ->join('record_indexes ri', 'ri.id = record_index_values.index_id')
-                    ->where('record_id', $record_id)->findAll();
-    }
-    
-    public function insertRecordIndexValue($data)
-    {
-        return $this->insert($data);
-    }
 }

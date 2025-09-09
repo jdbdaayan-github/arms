@@ -17,6 +17,7 @@ class CreateRecordFileVersionTable extends Migration
             "version" => ["type"=> "VARCHAR", "constraint" => 10, "default"=> "1.0"],
             "note" => ["type" => "TEXT", "constraint" => 100,"null"=> true],
             'created_at'  => ['type' => 'DATETIME', 'null' => true],
+            'updated_at'  => ['type' => 'DATETIME', 'null' => true],
             'deleted_at'    => ['type' => 'DATETIME', 'null' => true],
             ]);
             $this->forge->addKey('id', true);

@@ -51,7 +51,7 @@ class RecordFileVersion extends Model
 
     public function getVersionByRecordId($id)
     {
-        return $this->select('filename, version, randomfilename, CONCAT_WS(" ",users.firstname, users.middlename, users.lastname, users.extension) as user_name')
+        return $this->select('record_file_versions.created_at,record_id,filename, version, randomfilename, CONCAT_WS(" ",users.firstname, users.middlename, users.lastname, users.extension) as user_name')
                     ->join('users', 'users.id = record_file_versions.user_id')
                     ->where('record_id', $id)->findAll();
     }

@@ -39,7 +39,7 @@ Records
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             <li class="nav-item"><a class="nav-link active" href="#history" data-toggle="tab">History</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#versions" data-toggle="tab">Version List</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#versions" data-toggle="tab">Versions</a></li>
                             <li class="nav-item"><a class="nav-link" href="#indexes" data-toggle="tab">Indexes</a></li>
                             <li class="nav-item"><a class="nav-link" href="#notes" data-toggle="tab">Notes</a></li>
                         </ul>
@@ -105,14 +105,12 @@ Records
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php foreach($indexes as $index): ?>
                                         <tr>
-                                            <td>Department</td>
-                                            <td>Finance</td>
+                                            <td><?= esc($index->index_name)?></td>
+                                            <td><?= esc($index->value)?></td>
                                         </tr>
-                                        <tr>
-                                            <td>Category</td>
-                                            <td>Budget</td>
-                                        </tr>
+                                        <?php endforeach ?>
                                     </tbody>
                                 </table>
                             </div>

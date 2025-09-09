@@ -37,13 +37,65 @@ class Record extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
+    protected $afterInsert    = ['logInsert'];
+    protected $beforeUpdate   = ['storeOldData'];
+    protected $afterUpdate    = ['logUpdate'];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $afterDelete    = ['logDelete'];
+
+    protected $oldData = null;
+
+    public function storeOldData(array $data)
+    {
+        if (!empty($data['id'])) {
+            $this->oldData = $this->find($data['id'][0]);
+        }
+        return $data;
+    }
+
+    // Log insert
+    protected function logInsert(array $data)
+    {
+        $history = new RecordHistory();
+        $history->insert([
+            'record_id' => $data['id'],
+            'action'      => 'created',
+            'old_data'    => null,
+            'new_data'    => json_encode($data['data']),
+            'user_id'     => session()->get('user_id'),
+        ]);
+        return $data;
+    }
+
+    // Log update
+    protected function logUpdate(array $data)
+    {
+        $history = new RecordHistory();
+        $history->insert([
+            'record_id' => $data['id'][0],
+            'action'      => 'updated',
+            'old_data'    => json_encode($this->oldData),
+            'new_data'    => json_encode($data['data']),
+            'user_id'     => session()->get('user_id'),
+        ]);
+        return $data;
+    }
+
+    // Log delete
+    protected function logDelete(array $data)
+    {
+        $history = new RecordHistory();
+        $history->insert([
+            'record_id' => $data['id'][0],
+            'action'      => 'deleted',
+            'old_data'    => json_encode($this->find($data['id'][0])),
+            'new_data'    => null,
+            'user_id'     => session()->get('user_id'),
+        ]);
+        return $data;
+    }
 
     public function getRecords()
     {

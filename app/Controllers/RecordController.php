@@ -140,9 +140,10 @@ class RecordController extends BaseController
 
     public function show($id)
     {
+        $indexes = $this->record_index_value->getRecordIndexValues($id);
         $record = $this->record_model->getRecordById($id);
         $versions = $this->record_file_version_model->getVersionByRecordId($id);
 
-        return view('pages/records/view', ['record' => $record, 'versions' => $versions]);
+        return view('pages/records/view', ['record' => $record, 'versions' => $versions, 'indexes' => $indexes]);
     }
 }

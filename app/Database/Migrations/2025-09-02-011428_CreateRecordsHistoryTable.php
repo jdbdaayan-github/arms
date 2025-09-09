@@ -29,6 +29,14 @@ class CreateRecordsHistoryTable extends Migration
                 'constraint' => '50',
                 'null'       => false,
             ],
+            'old_data' => [
+                'type' => 'JSON',
+                'null' => true,
+            ],
+            'new_data' => [
+                'type' => 'JSON',
+                'null' => true,
+            ],
             'description' => [
                 'type'       => 'TEXT',
                 'null'       => false,
@@ -41,9 +49,9 @@ class CreateRecordsHistoryTable extends Migration
         ]);
 
         $this->forge->addKey('id');
-        $this->forge->addForeignKey('user_id','users','id','CASCADE','CASCADE');
-        $this->forge->addForeignKey('record_id','records','id','CASCADE','CASCADE');
- 
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('record_id', 'records', 'id', 'CASCADE', 'CASCADE');
+
         $this->forge->createTable('record_history');
     }
 
