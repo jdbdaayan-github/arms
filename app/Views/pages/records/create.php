@@ -13,21 +13,6 @@ Add Record
 <li class="breadcrumb-item active">Add Record</li>
 <?= $this->endSection() ?>
 
-<?php 
-$errors = session()->getFlashdata('errors') ?? []; 
-?>
-
-<?= $this->extend('layouts/app'); ?>
-
-<?= $this->section('content-header') ?>
-CREATE RECORD
-<?= $this->endSection() ?>
-
-<?= $this->section('content-breadcrumbs') ?>
-<li class="breadcrumb-item"><a href="<?= base_url('records') ?>">Records</a></li>
-<li class="breadcrumb-item active">Create</li>
-<?= $this->endSection() ?>
-
 <?= $this->section('content') ?>
 <section class="content">
     <div class="container-fluid">
@@ -149,7 +134,7 @@ CREATE RECORD
                 <!-- FOOTER -->
                 <div class="card-footer">
                     <button type="submit" class="btn btn-info btn-flat float-right">
-                        <i class="fas fa-save mr-1"></i> Save
+                        <i class="fas fa-save mr-1"></i> Save Record
                     </button>
                 </div>
             </form>
