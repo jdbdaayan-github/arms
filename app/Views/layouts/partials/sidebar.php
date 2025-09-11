@@ -81,12 +81,15 @@ function isMenuOpen($segment1Expected)
                                 <p>List</p>
                             </a>
                         </li>
+                        <!-- records.create permission -->
+                    <?php if( hasRole('Superadmin') || hasPermission('records.create')): ?>
                         <li class="nav-item">
                             <a href="<?= base_url('records/create') ?>" class="nav-link <?= isActive('records', 'create') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create</p>
                             </a>
                         </li>
+                        <?php endif ?>
                     </ul>
                 </li>
 

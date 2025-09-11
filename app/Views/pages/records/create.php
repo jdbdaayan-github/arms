@@ -203,6 +203,25 @@ Add Record
     }
 });
 </script>
+
+<script>
+$(function () {
+    const form = $('form');
+    const btnSave = form.find('button[type="submit"]');
+
+    form.on('submit', function () {
+        // Disable the button
+        btnSave.prop('disabled', true);
+
+        // Change button text to "Saving..." with spinner
+        btnSave.html(
+            `<span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
+             Saving...`
+        );
+    });
+});
+</script>
+
 <script>
     $(function() {
         // Initialize Select2

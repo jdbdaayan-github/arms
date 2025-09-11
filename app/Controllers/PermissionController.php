@@ -62,7 +62,9 @@ class PermissionController extends BaseController
             'description' => $this->request->getPost('description'),
         ];
 
-        $this->permission_model->addPermission($data);
+        $record_id = $this->permission_model->addPermission($data);
+
+        audit_log('CREATE' , 'permissions', $record_id, null, $data);
 
         return redirect()->to('permissions')->with('success', 'Permission created successfully!');
     }
@@ -77,6 +79,8 @@ class PermissionController extends BaseController
 
     public function update($id)
     {
+        $oldData = $this->permission_model->select('permissions.permission_name, permissions.description')->find($id);
+
         $rules = [
             'permission_name' => [
                 'rules'  => "required|max_length[50]|is_unique[permissions.permission_name,id,{$id}]",
@@ -108,6 +112,8 @@ class PermissionController extends BaseController
         {
             return redirect()->to('permissions')->with('error', 'An unexpected error occurred. Please try again later.');
         }
+
+        audit_log('UPDATE','permissions', $id, $oldData, $data);
 
         return redirect()->to('permissions')->with('success', 'Permission updated successfully!');
     }

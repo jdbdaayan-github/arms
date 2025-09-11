@@ -110,6 +110,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('logs/access', [SystemController::class, 'access']);
     $routes->get('logs/audit', [SystemController::class, 'audit']);
+    $routes->get('audit/ajaxLogs', [SystemController::class, 'ajaxLogs']);
+    $routes->get('audit/view/(:num)', [SystemController::class, 'audit_view']);
     $routes->get('settings/profile', [SystemController::class, 'profile']);
     $routes->get('settings/preferences', [SystemController::class, 'preferences']);
+    
 });

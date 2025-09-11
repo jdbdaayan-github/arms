@@ -37,13 +37,13 @@ class Record extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = ['logInsert'];
-    protected $beforeUpdate   = ['storeOldData'];
-    protected $afterUpdate    = ['logUpdate'];
+    protected $afterInsert    = [];
+    protected $beforeUpdate   = [];
+    protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
-    protected $afterDelete    = ['logDelete'];
+    protected $afterDelete    = [];
 
     protected $oldData = null;
 

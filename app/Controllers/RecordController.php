@@ -81,7 +81,7 @@ class RecordController extends BaseController
             'title'          => 'required',
             'confidentiality' => 'permit_empty',
             'series'         => 'required',
-            'record_date'  => 'permit_empty', // make sure your form input is named document_date
+            'record_date'    => 'permit_empty',
         ];
 
         if (! $this->validate($rules)) {
@@ -90,7 +90,13 @@ class RecordController extends BaseController
 
         $uploadPath = WRITEPATH . 'uploads/records/';
         if (! is_dir($uploadPath)) {
-            mkdir($uploadPath, 0777, true);
+            if (! mkdir($uploadPath, 0777, true) && ! is_dir($uploadPath)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadPath));
+            }
+        }
+
+        if (! is_writable($uploadPath)) {
+            throw new \RuntimeException(sprintf('Directory "%s" is not writable', $uploadPath));
         }
 
         $file = $this->request->getFile('record_file');
@@ -102,25 +108,26 @@ class RecordController extends BaseController
         }
 
         $record_data = [
-            'title'          => $this->request->getPost('title'),
+            'title'        => $this->request->getPost('title'),
             'confidential' => $this->request->getPost('confidentiality'),
-            'series_id'       => $this->request->getPost('series'),
+            'series_id'    => $this->request->getPost('series'),
             'record_date'  => $this->request->getPost('record_date'),
-            'created_by' => session()->get('user_id'),
+            'created_by'   => session()->get('user_id'),
         ];
 
         $record_id = $this->record_model->insertRecord($record_data);
 
         if ($record_id) {
+            // save file version
             $record_version_data = [
                 'record_id'      => $record_id,
                 'user_id'        => session()->get('user_id'),
                 'filename'       => $file->getClientName(), // original uploaded filename
                 'randomfilename' => $newName,               // stored filename
             ];
-
             $this->record_file_version_model->insertRecordFileVersion($record_version_data);
 
+            // save indexes
             $indexes = $this->request->getPost('indexes');
             if ($indexes && is_array($indexes)) {
                 foreach ($indexes as $indexId => $value) {
@@ -129,14 +136,29 @@ class RecordController extends BaseController
                         'index_id'  => $indexId,
                         'value'     => $value,
                     ];
-
                     $this->record_index_value->insertRecordIndexValue($index_values);
                 }
             }
+
+            $log_data = [
+                'record'       => $record_data,
+                'file_version' => $record_version_data,
+                'indexes'      => $indexes ?? [],
+            ];
+
+            audit_log(
+                'CREATE',                // action
+                'records',               // module/table name
+                $record_id,              // primary id
+                null,                    // no old data on create
+                $log_data,               // full new data
+                session()->get('user_id') // actor
+            );
         }
 
         return redirect()->to('/records')->with('success', $record_id);
     }
+
 
     public function show($id)
     {

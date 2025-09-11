@@ -21,7 +21,7 @@ if (! function_exists('hasRole')) {
 
         $roleRow = $db->table('roles')
             ->select('role_name')
-            ->where('id', $user['role_id'])
+            ->where('role_name', $user['role'])
             ->get()
             ->getRow();
 
@@ -36,7 +36,7 @@ if (! function_exists('hasRole')) {
 if (! function_exists('hasPermission')) {
     function hasPermission(string $permission): bool
     {
-        $user = session()->get(); // all session data
+        $user = session()->get();
         if (!$user || empty($user['logged_in'])) {
             return false;
         }
@@ -53,7 +53,8 @@ if (! function_exists('hasPermission')) {
             $builder = $db->table('permissions p')
                 ->select('p.permission_name')
                 ->join('role_permissions rp', 'rp.permission_id = p.id')
-                ->where('rp.role_id', $user['role_id']);
+                ->join('roles r', 'r.id = rp.role_id')
+                ->where('r.role_name', $user['role']);
 
             $permissions = array_column($builder->get()->getResultArray(), 'permission_name');
             session()->set('permissions', $permissions);
