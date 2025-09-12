@@ -18,6 +18,7 @@ class AuditLog extends Model
         'record_id',
         'old_data',
         'new_data',
+        'description',
         'ip_address',
         'user_agent'
     ];
@@ -25,4 +26,9 @@ class AuditLog extends Model
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'timestamp';
     protected $updatedField = '';
+
+    public function getRecentActivity()
+    {
+        return $this->orderBy('timestamp', 'desc')->findAll(5);
+    }
 }

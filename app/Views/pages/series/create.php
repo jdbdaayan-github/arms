@@ -25,18 +25,18 @@ Record Series
                 <?= csrf_field() ?>
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="name">Series Code <span class="text-danger">*</span></label>
+                        <label for="code">Series Code <span class="text-danger">*</span></label>
                         <input
                             type="text"
-                            class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
-                            id="name"
-                            name="name"
-                            value="<?= set_value('name') ?>"
-                            placeholder="Enter index name"
+                            class="form-control <?= isset($errors['code']) ? 'is-invalid' : '' ?>"
+                            id="code"
+                            name="code"
+                            value="<?= set_value('code') ?>"
+                            placeholder="Enter record series code"
                             required>
-                        <?php if (isset($errors['name'])): ?>
+                        <?php if (isset($errors['code'])): ?>
                             <div class="invalid-feedback">
-                                <?= $errors['name'] ?>
+                                <?= $errors['code'] ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -62,8 +62,8 @@ Record Series
                         <label for="type">Classification <span class="text-danger">*</span></label>
                         <select
                             class="form-control <?= isset($errors['classification_id']) ? 'is-invalid' : '' ?>"
-                            id="type"
-                            name="type"
+                            id="classification_id"
+                            name="classification_id"
                             required>
                             <option value="">-- Select Type --</option>
                             <?php foreach($classifications as $class):?>

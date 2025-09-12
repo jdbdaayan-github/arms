@@ -8,7 +8,9 @@ use App\Models\RecordSeries;
 use App\Models\RecordFileVersion;
 use App\Models\RecordSeriesIndex;
 use App\Controllers\BaseController;
+use App\Models\RecordHistory;
 use App\Models\RecordIndexValue;
+use App\Models\Settings;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class RecordController extends BaseController
@@ -70,13 +72,17 @@ class RecordController extends BaseController
 
     public function store()
     {
+        $settings_model = new Settings();
+
+        $validSize = $settings_model->getValidFileSize('maxfilesize');
+
         $rules = [
             'record_file' => [
                 'label' => 'Record File',
                 'rules' => 'uploaded[record_file]'
                     . '|ext_in[record_file,pdf]'
                     . '|mime_in[record_file,application/pdf]'
-                    . '|max_size[record_file,10240]', // 10MB
+                    . `|max_size[record_file,{$validSize}]`,
             ],
             'title'          => 'required',
             'confidentiality' => 'permit_empty',
@@ -146,14 +152,8 @@ class RecordController extends BaseController
                 'indexes'      => $indexes ?? [],
             ];
 
-            audit_log(
-                'CREATE',                // action
-                'records',               // module/table name
-                $record_id,              // primary id
-                null,                    // no old data on create
-                $log_data,               // full new data
-                session()->get('user_id') // actor
-            );
+            audit_log('CREATE', 'records', $record_id, null, $log_data, 'create record '.$record_data['title']);
+            record_hisory_log('CREATED', $record_id, 'Record created and submitted for approval');
         }
 
         return redirect()->to('/records')->with('success', $record_id);
@@ -162,10 +162,12 @@ class RecordController extends BaseController
 
     public function show($id)
     {
-        $indexes = $this->record_index_value->getRecordIndexValues($id);
-        $record = $this->record_model->getRecordById($id);
-        $versions = $this->record_file_version_model->getVersionByRecordId($id);
+        $history_model = new RecordHistory();
+        $data['histories'] = $history_model->getHistoryByRecordId($id);
+        $data['indexes'] = $this->record_index_value->getRecordIndexValues($id);
+        $data['record'] = $this->record_model->getRecordById($id);
+        $data['versions'] = $this->record_file_version_model->getVersionByRecordId($id);
 
-        return view('pages/records/view', ['record' => $record, 'versions' => $versions, 'indexes' => $indexes]);
+        return view('pages/records/view', $data);
     }
 }

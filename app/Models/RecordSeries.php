@@ -50,4 +50,19 @@ class RecordSeries extends Model
                     ->join('record_classifications rc','rc.id = record_series.classification_id')
                     ->findAll();
     }
+
+    public function insertSeries($data)
+    {
+        return $this->insert($data);
+    }
+
+    public function getSeriesById($id)
+    {
+        return $this->find($id);
+    }
+
+    public function updateSeries($id, $data)
+    {
+        return $this->update($id, $data);
+    }
 }

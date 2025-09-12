@@ -92,9 +92,9 @@ Dashboard
                             <?php if (!empty($recentActivities)): ?>
                                 <?php foreach ($recentActivities as $activity): ?>
                                     <li class="list-group-item text-sm">
-                                        <i class="fas fa-circle text-<?= $activity['color'] ?? 'secondary' ?> mr-2"></i>
-                                        <?= esc($activity['description']) ?>
-                                        <span class="float-right text-muted text-xs"><?= esc($activity['time']) ?></span>
+                                        <i class="fas fa-circle text-secondary' ?> mr-2"></i>
+                                        <?= esc($activity->description) ?>
+                                        <span class="float-right text-muted text-xs" id="time"><?= esc($activity->time_ago) ?></span>
                                     </li>
                                 <?php endforeach; ?>
                             <?php else: ?>

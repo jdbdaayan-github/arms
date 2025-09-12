@@ -39,7 +39,7 @@ class SettingsSeeder extends Seeder
             ],
             [
                 "key"=> "maxfilesize",
-                "value"=> "10",
+                "value"=> "20480",
             ],
             [
                 "key" =>"allowedfiletype",

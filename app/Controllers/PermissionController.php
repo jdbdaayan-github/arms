@@ -106,7 +106,6 @@ class PermissionController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Determine only changed fields
         $updatedData = [];
         $oldDataForAudit = [];
         foreach ($postedData as $key => $value) {

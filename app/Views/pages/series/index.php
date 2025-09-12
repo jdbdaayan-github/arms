@@ -72,10 +72,10 @@ $(document).ready(function() {
                 className: "text-center",
                 render: function(data, type, row) {
                     return `
-                        <a href="<?= base_url('classifications/edit/') ?>${data}" class="btn btn-primary btn-sm">
+                        <a href="<?= base_url('series/edit/') ?>${data}" class="btn btn-primary btn-sm">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a href="<?= base_url('classifications/index/') ?>${data}" class="btn btn-info btn-sm">
+                        <a href="<?= base_url('series/index/') ?>${data}" class="btn btn-info btn-sm">
                             <i class="fas fa-list"></i>
                         </a>
                         <button class="btn btn-danger btn-sm delete-permission" data-id="${data}">

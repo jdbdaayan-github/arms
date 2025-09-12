@@ -2,20 +2,24 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
-use App\Models\Record;
 use App\Models\User;
+use App\Models\Record;
+use App\Models\AuditLog;
+use CodeIgniter\I18n\Time;
+use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class DashboardController extends BaseController
 {
     protected $record_model;
     protected $user_model;
+    protected $activity_model;
 
     public function __construct()
     {
         $this->record_model = new Record();
         $this->user_model = new User();
+        $this->activity_model = new AuditLog();
     }
 
     public function superadminDashboard()
@@ -24,6 +28,7 @@ class DashboardController extends BaseController
         $data['totalUsers'] = $this->user_model->countAllResults();
         $data['recentRecords'] = $this->record_model->getRecentRecords();
         $data['latestUsers'] = $this->user_model->getLatestUsers();
+        $activities = $this->activity_model->getRecentActivity();
 
           // Sample chart data (records per month)
         $builder = $this->record_model->select("MONTH(created_at) as month, COUNT(*) as total")
@@ -40,6 +45,14 @@ class DashboardController extends BaseController
 
         $data['chartLabels'] = $labels;
         $data['chartData']   = $values;
+
+        foreach($activities as $activity)
+        {
+            $activity->time_ago = Time::parse($activity->timestamp)->humanize();
+        }
+
+        $data['recentActivities'] = $activities;
+        
 
         return view('dashboards/sadashboard', $data);
     }

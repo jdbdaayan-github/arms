@@ -29,7 +29,7 @@ class UserTesterSeeder extends Seeder
                 'email' => 'contributor@email.com',
                 'password' => password_hash('contributor1234', PASSWORD_DEFAULT),
                 'status_id' => 2,
-                'role_id' => 4,
+                'role_id' => 5,
                 'verified' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
         ],

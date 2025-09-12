@@ -90,22 +90,15 @@ Records
                                 <table class="table table-sm table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>User</th>
-                                            <th>Action</th>
+                                            <th>Record History</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>2025-09-01</td>
-                                            <td>John Doe</td>
-                                            <td>Created Record</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2025-09-05</td>
-                                            <td>Jane Smith</td>
-                                            <td>Updated Title</td>
-                                        </tr>
+                                        <?php foreach ($histories as $his): ?>
+                                            <tr>
+                                                <td class="d-flex ">[ <b class="mx-1"><?= date('Y-m-d H:i', strtotime($his->created_at)) ?></b> ] <p class="m-0 text-primary mx-1"><?= esc($his->user) ?></p> <?= esc($his->action) ?> <p class="text-success m-0 ml-1"> <?= esc($his->description) ?></p>.</td>
+                                            </tr>
+                                        <?php endforeach ?>
                                     </tbody>
                                 </table>
                             </div>

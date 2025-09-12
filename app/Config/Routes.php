@@ -96,7 +96,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('', [RecordSeriesController::class, 'index']);
         $routes->get('ajaxRecordSeriesData', [RecordSeriesController::class, 'ajaxRecordSeriesData']);
         $routes->get('create', [RecordSeriesController::class, 'create']);
-
+        $routes->post('store', [RecordSeriesController::class, 'store']);
+        $routes->get('edit/(:num)', [RecordSeriesController::class, 'edit']);
+        $routes->post('update/(:num)', [RecordSeriesController::class, 'update']);
     });
 
     #Record Indexes
@@ -111,7 +113,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('logs/access', [SystemController::class, 'access']);
     $routes->get('logs/audit', [SystemController::class, 'audit']);
     $routes->get('audit/ajaxLogs', [SystemController::class, 'ajaxLogs']);
-    $routes->get('audit/view/(:num)', [SystemController::class, 'audit_view']);
+    $routes->get('logs/audit/view/(:num)', [SystemController::class, 'audit_view']);
     $routes->get('settings/profile', [SystemController::class, 'profile']);
     $routes->get('settings/preferences', [SystemController::class, 'preferences']);
     

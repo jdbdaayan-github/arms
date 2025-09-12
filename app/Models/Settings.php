@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RecordHistory extends Model
+class Settings extends Model
 {
-    protected $table            = 'record_history';
+    protected $table            = 'settings';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'object';
+    protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['record_id', 'user_id', 'action', 'description'];
+    protected $allowedFields    = [];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,11 +21,11 @@ class RecordHistory extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = '';
-    protected $deletedField  = '';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
 
     // Validation
     protected $validationRules      = [];
@@ -44,12 +44,8 @@ class RecordHistory extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getHistoryByRecordId($record_id)
+    public function getValidFileSize($key)
     {
-        return $this->select('record_history.*, CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as user')
-                    ->join('users', 'users.id = record_history.user_id')
-                    ->where('record_history.record_id', $record_id)
-                    ->orderBy('created_at', 'desc')
-                    ->findAll();
+        return $this->where('key', $key)->first()['value'] ?? null;
     }
 }

@@ -66,7 +66,7 @@ $(document).ready(function() {
                 searchable: false, 
                 className: "text-center",
                 render: function(data) {
-                    return `<a href="<?= site_url('audit/view/') ?>${data}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>`;
+                    return `<a href="<?= site_url('logs/audit/view/') ?>${data}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>`;
                 }
             }
         ],

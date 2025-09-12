@@ -65,7 +65,7 @@ class SystemController extends BaseController
     public function audit_view($id)
     {
         $model = new AuditLog();
-        $log = $model->select('activities.*, users.username')
+        $log = $model->select('activities.*, CONCAT_WS(" ",users.firstname, users.middlename, users.lastname, users.extension) as username')
             ->join('users', 'users.id = activities.user_id', 'left')
             ->where('activities.id', $id)
             ->first();

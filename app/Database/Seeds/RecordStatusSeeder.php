@@ -11,16 +11,12 @@ class RecordStatusSeeder extends Seeder
         $now = date('Y-m-d H:i:s');
 
         $data = [
-            ['id' => 1, 'name' => 'Uploaded',           'created_at' => $now, 'updated_at' => $now],
-            ['id' => 2, 'name' => 'Pending Review',     'created_at' => $now, 'updated_at' => $now],
-            ['id' => 3, 'name' => 'For Classification', 'created_at' => $now, 'updated_at' => $now],
-            ['id' => 4, 'name' => 'Active',             'created_at' => $now, 'updated_at' => $now],
-            ['id' => 5, 'name' => 'Archived',           'created_at' => $now, 'updated_at' => $now],
-            ['id' => 6, 'name' => 'Superseded',         'created_at' => $now, 'updated_at' => $now],
-            ['id' => 7, 'name' => 'Withdrawn',          'created_at' => $now, 'updated_at' => $now],
-            ['id' => 8, 'name' => 'Deleted',            'created_at' => $now, 'updated_at' => $now],
-            ['id' => 9, 'name' => 'For Disposal',       'created_at' => $now, 'updated_at' => $now],
-            ['id' => 10, 'name' => 'Disposed',          'created_at' => $now, 'updated_at' => $now],
+            ['id' => 1, 'name' => 'Pending Approval', 'created_at' => $now, 'updated_at' => $now],
+            ['id' => 2, 'name' => 'Approved',         'created_at' => $now, 'updated_at' => $now],
+            ['id' => 3, 'name' => 'Rejected',         'created_at' => $now, 'updated_at' => $now],
+            ['id' => 4, 'name' => 'Archived',         'created_at' => $now, 'updated_at' => $now],
+            ['id' => 5, 'name' => 'Superseded',       'created_at' => $now, 'updated_at' => $now],
+            ['id' => 6, 'name' => 'Disposed',         'created_at' => $now, 'updated_at' => $now],
         ];
 
         $this->db->table('record_statuses')->insertBatch($data);
