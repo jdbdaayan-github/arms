@@ -28,9 +28,6 @@ Audit Logs
               <th style="width: 150px;">Action</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- Loaded via AJAX -->
-          </tbody>
         </table>
       </div>
     </div>
@@ -41,43 +38,49 @@ Audit Logs
 <?= $this->section('scripts') ?>
 <script>
 $(document).ready(function() {
-
-    let auditTable = $('#auditLogsTable').DataTable({
-        ajax: {
-            url: "<?= site_url('audit/ajaxLogs') ?>",
-            dataSrc: ""
-        },
+    $('#auditLogsTable').DataTable({
+        serverSide: true,
+        ajax: "<?= base_url('audit/ajaxLogs') ?>",
         columns: [
             { data: "id", className: "text-center" },
-            { data: "action", className: "text-center" },
+            { data: "action", className: "text-center",
+              render: function(data) {
+                  let color = 'secondary';
+                  switch(data.toUpperCase()) {
+                      case 'CREATE': color='success'; break;
+                      case 'UPDATE': color='primary'; break;
+                      case 'DELETE': color='danger'; break;
+                      case 'LOGIN': color='info'; break;
+                      case 'LOGOUT': color='warning'; break;
+                  }
+                  return `<span class="badge badge-${color}">${data}</span>`;
+              }
+            },
             { data: "module" },
             { data: "record_id", className: "text-center" },
-            { 
-                data: "username",
-                className: "text-center",
-                render: function(data) { return data ? data : ''; }
-            },
+            { data: "username", className: "text-center" },
             { data: "timestamp", className: "text-center" },
-            {
-                data: "id",
-                orderable: false,
-                searchable: false,
+            { 
+                data: "id", 
+                orderable: false, 
+                searchable: false, 
                 className: "text-center",
                 render: function(data) {
-                    return `
-                        <a href="<?= site_url('audit/view/') ?>${data}" 
-                           class="btn btn-sm btn-info" title="View Details">
-                           <i class="fas fa-eye"></i>
-                        </a>
-                    `;
+                    return `<a href="<?= site_url('audit/view/') ?>${data}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>`;
                 }
             }
         ],
         order: [[0, "desc"]],
         processing: true,
-        responsive: true
+        responsive: true,
+        language: {
+                processing: `
+                    <div class="overlay">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                    </div>
+                `
+            },
     });
-
 });
 </script>
 <?= $this->endSection() ?>

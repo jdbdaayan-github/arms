@@ -52,8 +52,7 @@ class PermissionController extends BaseController
             ],
         ];
 
-        if(!$this->validate($rules))
-        {
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -64,7 +63,7 @@ class PermissionController extends BaseController
 
         $record_id = $this->permission_model->addPermission($data);
 
-        audit_log('CREATE' , 'permissions', $record_id, null, $data);
+        audit_log('CREATE', 'permissions', $record_id, null, $data);
 
         return redirect()->to('permissions')->with('success', 'Permission created successfully!');
     }
@@ -74,12 +73,17 @@ class PermissionController extends BaseController
 
         $permission = $this->permission_model->getPermissionById($id);
 
-        return view('pages/permissions/edit',['permission' => $permission]);
+        return view('pages/permissions/edit', ['permission' => $permission]);
     }
 
     public function update($id)
     {
-        $oldData = $this->permission_model->select('permissions.permission_name, permissions.description')->find($id);
+        // Get old data
+        $oldData = $this->permission_model->select('permission_name, description')->find($id); // full row
+        $postedData = [
+            'permission_name' => $this->request->getPost('permission_name'),
+            'description' => $this->request->getPost('description'),
+        ];
 
         $rules = [
             'permission_name' => [
@@ -98,22 +102,31 @@ class PermissionController extends BaseController
             ],
         ];
 
-        if(!$this->validate($rules))
-        {
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $data = [
-            'permission_name' => $this->request->getPost('permission_name'),
-            'description' => $this->request->getPost('description'),
-        ];
+        // Determine only changed fields
+        $updatedData = [];
+        $oldDataForAudit = [];
+        foreach ($postedData as $key => $value) {
+            if (isset($oldData->$key) && $oldData->$key != $value) {
+                $updatedData[$key] = $value;
+                $oldDataForAudit[$key] = $oldData->$key;
+            }
+        }
 
-        if(!$this->permission_model->updatePermission($id, $data))
-        {
+        if (empty($updatedData)) {
+            return redirect()->to('permissions')->with('info', 'No changes detected.');
+        }
+
+        // Update only changed fields
+        if (!$this->permission_model->update($id, $updatedData)) {
             return redirect()->to('permissions')->with('error', 'An unexpected error occurred. Please try again later.');
         }
 
-        audit_log('UPDATE','permissions', $id, $oldData, $data);
+        // Audit only changed fields
+        audit_log('UPDATE', 'permissions', $id, $oldDataForAudit, $updatedData);
 
         return redirect()->to('permissions')->with('success', 'Permission updated successfully!');
     }

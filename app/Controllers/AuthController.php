@@ -91,6 +91,8 @@ class AuthController extends BaseController
         // Remove generated Captcha
         $session->remove(['captcha_word', 'captcha_filename']);
 
+        audit_log('LOGIN', 'auth', null, null, null);   
+
         if ($role->role_name === 'Superadmin') {
             return redirect()->to('/dashboard')->with('login', 'Welcome! ' . $user->firstname);
         }
