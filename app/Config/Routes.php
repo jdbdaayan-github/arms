@@ -99,6 +99,10 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', [RecordSeriesController::class, 'store']);
         $routes->get('edit/(:num)', [RecordSeriesController::class, 'edit']);
         $routes->post('update/(:num)', [RecordSeriesController::class, 'update']);
+        $routes->get('index/(:num)', [RecordSeriesController::class, 'indexes']);
+        $routes->get('indexesData/(:num)', [RecordSeriesController::class, 'indexesData']);
+        $routes->post('addIndex/(:num)', [RecordSeriesController::class, 'addIndex']);
+        $routes->post('deleteIndex/(:num)', [RecordSeriesController::class, 'removeIndex']);
     });
 
     #Record Indexes

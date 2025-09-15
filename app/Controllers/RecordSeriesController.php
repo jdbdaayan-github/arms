@@ -4,18 +4,24 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\RecordClassification;
+use App\Models\RecordIndex;
 use App\Models\RecordSeries;
+use App\Models\RecordSeriesIndex;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class RecordSeriesController extends BaseController
 {
     protected $rec_series_model;
     protected $rec_class_model;
+    protected $rec_index_model;
+    protected $rec_series_index_model;
 
     public function __construct()
     {
         $this->rec_series_model = new RecordSeries();
         $this->rec_class_model = new RecordClassification();
+        $this->rec_index_model = new RecordIndex();
+        $this->rec_series_index_model = new RecordSeriesIndex();
     }
 
     public function index()
@@ -127,5 +133,54 @@ class RecordSeriesController extends BaseController
     public function destroy($id)
     {
         //
+    }
+
+    public function indexes($id)
+    {
+        $data['series'] = $this->rec_series_model->getSeriesById($id);
+        //indexes list
+        $indexes = $this->rec_series_model->getSeriesIndexesBySeriesId($id);
+        //dd($indexes);
+
+        $assignedIndexes = array_column($indexes, 'record_index_id');
+        //dd($assignedIndexes);
+
+        $data['availableIndexes'] = $this->rec_index_model->whereNotIn('id', $assignedIndexes ?: [0])->get()->getResult();
+
+
+        return view('pages/series/series_indexes', $data);
+    }
+
+    public function indexesData($id)
+    {
+        $indexes = $this->rec_series_model->getSeriesIndexesBySeriesId($id);
+
+        return $this->response->setJSON($indexes);
+    }
+
+    public function addIndex($id)
+    {
+        $data = [
+            'record_series_id' => $id,
+            'record_index_id' => $this->request->getPost('record_index_id'),
+        ];
+        //dd($data);
+
+        $this->rec_series_index_model->addIndexToSeries($data);
+
+        return redirect()->to('series/index/' . $id)->with('success', 'Added new index successfully!');
+    }
+
+    public function removeIndex($series_id)
+    {
+        $index_id = $this->request->getPost('index_id');
+        //dd($index_id);
+        $deleted = $this->rec_series_index_model->removeIndexToSeries($series_id, $index_id);
+
+        if ($deleted) {
+            return $this->response->setJSON(['status' => 'success']);
+        } else {
+            return $this->response->setJSON(['status' => 'error']);
+        }
     }
 }

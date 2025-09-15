@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class RecordSeriesIndex extends Model
 {
-    protected $table            = 'record_index_values';
+    protected $table            = 'record_series_indexes';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
@@ -21,7 +21,7 @@ class RecordSeriesIndex extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -43,4 +43,14 @@ class RecordSeriesIndex extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function addIndexToSeries($data)
+    {
+        return $this->insert($data);
+    }
+
+    public function removeIndexToSeries($record_series_id, $record_index_id)
+    {
+        return $this->where('record_series_id', $record_series_id)->where('record_index_id', $record_index_id)->delete();
+    }
 }

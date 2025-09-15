@@ -38,7 +38,8 @@ Add Record
                             <div class="form-group">
                                 <label for="record_file">Upload PDF <span class="text-danger">*</span></label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input <?= isset($errors['record_file']) ? 'is-invalid' : '' ?>" 
+                                    <input type="file" 
+                                           class="custom-file-input <?= isset($errors['record_file']) ? 'is-invalid' : '' ?>" 
                                            id="record_file" 
                                            name="record_file" 
                                            accept="application/pdf">
@@ -46,6 +47,14 @@ Add Record
                                     <?php if (isset($errors['record_file'])): ?>
                                         <div class="invalid-feedback"><?= $errors['record_file'] ?></div>
                                     <?php endif; ?>
+                                </div>
+
+                                <!-- Filename + Copy -->
+                                <div id="fileNameWrapper" class="mt-2" style="display:none;">
+                                    <input type="text" id="fileNameText" class="form-control form-control-sm bg-light" readonly>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary mt-1" id="copyFileName">
+                                        <i class="fas fa-copy"></i> Copy File Name
+                                    </button>
                                 </div>
                             </div>
 
@@ -146,7 +155,7 @@ Add Record
 
 <?= $this->section('scripts') ?>
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
     // Init Select2
     $('#series').select2({
         theme: 'bootstrap4',
@@ -168,7 +177,6 @@ Add Record
             success: function(indexes) {
                 let html = '';
                 indexes.forEach(idx => {
-                    // check if there's an old value from set_value
                     let oldValue = <?= json_encode(old('indexes') ?? []) ?>;
                     let value = oldValue[idx.id] ?? '';
 
@@ -191,12 +199,10 @@ Add Record
         });
     }
 
-    // Event listener for dropdown change
     $('#series').on('select2:select select2:clear change', function() {
         loadIndexes($(this).val());
     });
 
-    // 🔥 Auto-load indexes if user already selected a series before validation error
     let preselectedSeries = $('#series').val();
     if (preselectedSeries) {
         loadIndexes(preselectedSeries);
@@ -210,10 +216,7 @@ $(function () {
     const btnSave = form.find('button[type="submit"]');
 
     form.on('submit', function () {
-        // Disable the button
         btnSave.prop('disabled', true);
-
-        // Change button text to "Saving..." with spinner
         btnSave.html(
             `<span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
              Saving...`
@@ -223,38 +226,59 @@ $(function () {
 </script>
 
 <script>
-    $(function() {
-        // Initialize Select2
-        $('.select2bs4').select2({
-            theme: 'bootstrap4',
-            width: '100%'
-        });
+$(function() {
+    // File input change
+    $('#record_file').on('change', function() {
+        let file = this.files[0];
+        let preview = $('#pdfPreview');
+        let placeholder = $('#pdfPlaceholder');
+        let fileNameWrapper = $('#fileNameWrapper');
+        let fileNameText = $('#fileNameText');
 
-        // Auto-preview PDF on file selection
-        $('#record_file').on('change', function() {
-            let file = this.files[0];
-            let preview = $('#pdfPreview');
-            let placeholder = $('#pdfPlaceholder');
+        if (file) {
+            $(this).next('.custom-file-label').html(file.name);
 
-            if (file) {
-                $(this).next('.custom-file-label').html(file.name);
+            // remove .pdf for display
+            let displayName = file.name.replace(/\.pdf$/i, "");
 
-                if (file.type === "application/pdf") {
-                    let fileURL = URL.createObjectURL(file);
-                    preview.attr('src', fileURL).show();
-                    placeholder.hide();
-                } else {
-                    Swal.fire("Invalid File", "Only PDF files are allowed.", "error");
-                    $(this).val("");
-                    $(this).next('.custom-file-label').html("Choose PDF file");
-                    preview.hide().attr('src', '');
-                    placeholder.show();
-                }
+            fileNameText.val(displayName);
+            fileNameWrapper.show();
+
+            if (file.type === "application/pdf") {
+                let fileURL = URL.createObjectURL(file);
+                preview.attr('src', fileURL).show();
+                placeholder.hide();
             } else {
+                Swal.fire("Invalid File", "Only PDF files are allowed.", "error");
+                $(this).val("");
+                $(this).next('.custom-file-label').html("Choose PDF file");
                 preview.hide().attr('src', '');
                 placeholder.show();
+                fileNameWrapper.hide();
             }
+        } else {
+            preview.hide().attr('src', '');
+            placeholder.show();
+            fileNameWrapper.hide();
+        }
+    });
+
+    // Copy file name
+    $('#copyFileName').on('click', function() {
+        let fileNameText = document.getElementById('fileNameText');
+        fileNameText.select();
+        fileNameText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Filename copied!',
+            showConfirmButton: false,
+            timer: 1500
         });
     });
+});
 </script>
 <?= $this->endSection() ?>

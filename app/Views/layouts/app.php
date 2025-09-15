@@ -74,7 +74,7 @@
             font-size: 12px !important;
         }
         table tr td .btn {
-            padding: 4px;
+            padding: 6px;
             height: auto !important;
             line-height: 1 !important;
             border-radius: 0;

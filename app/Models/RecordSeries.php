@@ -65,4 +65,13 @@ class RecordSeries extends Model
     {
         return $this->update($id, $data);
     }
+
+    public function getSeriesIndexesBySeriesId($id)
+    {
+        return $this->select('record_series.*, ri.name as index_name,ri.id as index_id, rsi.*')
+                    ->join('record_series_indexes rsi', 'rsi.record_series_id = record_series.id', 'left')
+                    ->join('record_indexes ri', 'ri.id = rsi.record_index_id')
+                    ->where('record_series.id', $id)
+                    ->findAll();
+    }
 }
