@@ -21,6 +21,7 @@ Role Permissions
             </div>
 
             <form action="<?= base_url('roles/savePermissions/'.$role->id) ?>" method="POST">
+                <?= csrf_field() ?>
                 <div class="card-body">
                     <select multiple="multiple" size="10" name="permissions[]" id="permissions-duallistbox" style="display:none">
                         <?php foreach($permissions as $perm): ?>

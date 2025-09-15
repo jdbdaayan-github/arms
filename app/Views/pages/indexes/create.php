@@ -76,9 +76,38 @@ Record Indexes
                             </div>
                         <?php endif; ?>
                     </div>
-
+                    <div class="form-group">
+                        <label for="name">Placeholder<span class="text-danger"></span></label>
+                        <input
+                            type="text"
+                            class="form-control <?= isset($errors['placeholder']) ? 'is-invalid' : '' ?>"
+                            id="placeholder"
+                            name="placeholder"
+                            value="<?= set_value('placeholder') ?>"
+                            placeholder="Enter index placeholder">
+                        <?php if (isset($errors['placeholder'])): ?>
+                            <div class="invalid-feedback">
+                                <?= $errors['placeholder'] ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="required">Required <span class="text-danger">*</span></label>
+                        <select
+                            class="form-control <?= isset($errors['type']) ? 'is-invalid' : '' ?>"
+                            id="type"
+                            name="required"
+                            required>
+                            <option value="1" <?= set_value('required') === '1' ? 'selected' : '' ?>>Yes</option>
+                            <option value="0" <?= set_value('required') === '0' ? 'selected' : '' ?>>No</option>
+                        </select>
+                        <?php if (isset($errors['required'])): ?>
+                            <div class="invalid-feedback">
+                                <?= $errors['required'] ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
-
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary btn-flat">
                         <i class="fas fa-save mr-1"></i>Save

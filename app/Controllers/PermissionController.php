@@ -18,6 +18,10 @@ class PermissionController extends BaseController
 
     public function index()
     {
+        if (!hasPermission('permissions.view')) {
+            return redirect()->to('/forbidden'); // or show 403 page
+        }
+
         return view('pages/permissions/index');
     }
 
@@ -30,6 +34,9 @@ class PermissionController extends BaseController
 
     public function create()
     {
+         if (!hasPermission('permissions.create')) {
+            return redirect()->to('/forbidden'); // or show 403 page
+        }
         return view('pages/permissions/create');
     }
 
@@ -70,6 +77,9 @@ class PermissionController extends BaseController
 
     public function edit($id)
     {
+         if (!hasPermission('permissions.edit')) {
+            return redirect()->to('/forbidden'); // or show 403 page
+        }
 
         $permission = $this->permission_model->getPermissionById($id);
 

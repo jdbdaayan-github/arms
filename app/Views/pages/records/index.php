@@ -50,7 +50,7 @@ Records
                             <tr>
                                 <th style="width:30px;">#</th>
                                 <th>Title</th>
-                                <th style="width:120px;">Actions</th>
+                                <th style="width:20%;" class="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,6 +68,11 @@ Records
                                             <?php if(hasRole('Superadmin') || hasPermission('records.edit')): ?>
                                                 <a href="<?= base_url('records/edit/' . $record->id) ?>" class="btn btn-warning btn-sm">
                                                     <i class="fas fa-edit"></i>
+                                                </a>
+                                            <?php endif ?>
+                                            <?php if(hasRole('Superadmin') || hasPermission('records.edit')): ?>
+                                                <a href="<?= base_url('records/workflow/' . $record->id) ?>" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-map-marked-alt"></i>
                                                 </a>
                                             <?php endif ?>
                                             <?php if (hasRole('Superadmin') || hasPermission('RecordsDeleteModule')): ?>

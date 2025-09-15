@@ -57,8 +57,9 @@ class User extends Model
 
     public function getUsersData()
     {
-        return $this->select('users.id,CONCAT_WS(" ", firstname, middlename, lastname, extension) as Fullname, email,username, password, status_id,verified, login_attempts ,user_statuses.name as status')
+        return $this->select('users.id,CONCAT_WS(" ", firstname, middlename, lastname, extension) as Fullname, email,username, password, status_id,verified, login_attempts ,user_statuses.name as status, roles.role_name as role_name')
                     ->join('user_statuses', 'user_statuses.id = users.status_id')
+                    ->join('roles', 'roles.id = users.role_id')
                     ->findAll();
     }
 
@@ -73,5 +74,10 @@ class User extends Model
         return $this->select('users.email,users.created_at, users.id,CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as name, roles.role_name as role_name')
                     ->join('roles', 'roles.id = users.role_id')
                     ->findAll(5);
+    }
+
+    public function resetAttempts($id, $data)
+    {
+        return $this->update($id, $data);
     }
 }

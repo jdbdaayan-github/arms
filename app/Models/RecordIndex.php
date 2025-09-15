@@ -12,7 +12,7 @@ class RecordIndex extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'type', 'length'];
+    protected $allowedFields    = ['name', 'type', 'length', 'placeholder', 'required'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

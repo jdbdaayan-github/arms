@@ -47,6 +47,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'RecordController::store');
         $routes->get('show/(:num)', [RecordController::class,'show']);
         $routes->get('getIndexes/(:num)', 'RecordController::getIndexes/$1');
+        $routes->get('workflow/(:num)', [RecordController::class, 'workflow']);
     });
 
     #Users
@@ -56,6 +57,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->post('toggleVerify/(:num)', [UserController::class, 'toggleVerify']);
         $routes->get('create', 'UserController::create');
         $routes->get('profile/(:num)', 'UserController::profile/$1');
+        $routes->post('resetAttempts/(:num)', [UserController::class, 'resetAttempts']);
     });
 
     #Roles
@@ -120,5 +122,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('logs/audit/view/(:num)', [SystemController::class, 'audit_view']);
     $routes->get('settings/profile', [SystemController::class, 'profile']);
     $routes->get('settings/preferences', [SystemController::class, 'preferences']);
+    $routes->get('system/checkSession', [SystemController::class, 'checkSession']);
     
 });

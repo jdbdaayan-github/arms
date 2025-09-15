@@ -113,16 +113,20 @@ function isMenuOpen($segment1Expected)
                                 <p>List</p>
                             </a>
                         </li>
+                        <!-- user.create permission -->
+                    <?php if( hasRole('Superadmin') || hasPermission('users.create')): ?>
                         <li class="nav-item">
                             <a href="<?= base_url('users/create') ?>" class="nav-link <?= isActive('users', 'create') ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Create</p>
                             </a>
                         </li>
+                        <?php endif ?>
                     </ul>
                 </li>
 
                 <!-- Roles -->
+                 <?php if( hasRole('Superadmin') || hasPermission('roles.view')): ?>
                 <li class="nav-item has-treeview <?= isMenuOpen('roles') ?>">
                     <a href="#" class="nav-link <?= isActive('roles') ?>">
                         <i class="nav-icon fas fa-user-shield"></i>
@@ -146,8 +150,10 @@ function isMenuOpen($segment1Expected)
                         </li>
                     </ul>
                 </li>
+                <?php endif ?>
 
                 <!-- Permissions -->
+                 <?php if( hasRole('Superadmin') || hasPermission('permissions.view')): ?>
                 <li class="nav-item has-treeview <?= isMenuOpen('permissions') ?>">
                     <a href="#" class="nav-link <?= isActive('permissions') ?>">
                         <i class="nav-icon fas fa-key"></i>
@@ -171,6 +177,7 @@ function isMenuOpen($segment1Expected)
                         </li>
                     </ul>
                 </li>
+                <?php endif ?>
 
                 <!-- LIBRARIES -->
                 <li class="nav-header">LIBRARIES</li>

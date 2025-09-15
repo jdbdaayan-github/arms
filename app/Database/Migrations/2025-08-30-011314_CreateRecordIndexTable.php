@@ -13,6 +13,8 @@ class CreateRecordIndexTable extends Migration
             'name'          => ['type' => 'VARCHAR', 'constraint' => 50],
             'type'          => ['type'=> 'VARCHAR', 'constraint' => 50],
             'length'        => ['type' => 'INT', 'constraint' => 100],
+            'placeholder'   => ['type' => 'VARCHAR', 'constraint' => 100],
+            'required'      => ['type' => 'BOOLEAN', 'default' => false],
             'created_at'    => ['type' => 'DATETIME', 'null' => true],
             'updated_at'    => ['type' => 'DATETIME', 'null' => true],
             'deleted_at'    => ['type' => 'DATETIME', 'null' => true],

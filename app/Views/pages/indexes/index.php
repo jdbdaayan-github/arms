@@ -31,6 +31,8 @@ Record Indexes
                         <th>Index Name</th>
                         <th>Index Type</th>
                         <th>Index Length</th>
+                        <th>Required</th>
+                        <th>Placeholder</th>
                         <th style="width:200px;">ACTIONS</th>
                     </tr>
                 </thead>
@@ -66,6 +68,13 @@ $(document).ready(function() {
             { data: "name" },
             { data: "type" },
             { data: "length" },
+            { data: "required",
+                render: function(data, type, row){
+                    let required = data == 1 ? "Yes": "No";
+                    return required;
+                }
+            },
+            { data: "placeholder"},
             {
                 data: "id",
                 orderable: false,

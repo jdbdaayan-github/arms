@@ -170,4 +170,9 @@ class RecordController extends BaseController
 
         return view('pages/records/view', $data);
     }
+
+    public function workflow($id)
+    {
+        return view('pages/records/workflow');
+    }
 }

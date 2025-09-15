@@ -18,48 +18,48 @@ class SystemController extends BaseController
         return view('system/audit_logs');
     }
 
-   public function ajaxLogs()
-{
-    $request = $this->request;
-    $start   = intval($request->getPost('start') ?? 0);
-    $length  = intval($request->getPost('length') ?? 10);
-    $search  = $request->getPost('search')['value'] ?? null;
-    $draw    = intval($request->getPost('draw') ?? 1);
+    public function ajaxLogs()
+    {
+        $request = $this->request;
+        $start   = intval($request->getPost('start') ?? 0);
+        $length  = intval($request->getPost('length') ?? 10);
+        $search  = $request->getPost('search')['value'] ?? null;
+        $draw    = intval($request->getPost('draw') ?? 1);
 
-    $model = new AuditLog();
-    $builder = $model->select('activities.id, activities.timestamp, users.username, activities.action, activities.module, activities.record_id')
-                     ->join('users', 'users.id = activities.user_id', 'left');
+        $model = new AuditLog();
+        $builder = $model->select('activities.id, activities.timestamp, users.username, activities.action, activities.module, activities.record_id')
+            ->join('users', 'users.id = activities.user_id', 'left');
 
-    // total records (without filtering)
-    $recordsTotal = $model->countAll();
+        // total records (without filtering)
+        $recordsTotal = $model->countAll();
 
-    // apply search
-    if ($search) {
-        $builder->groupStart()
+        // apply search
+        if ($search) {
+            $builder->groupStart()
                 ->like('activities.action', $search)
                 ->orLike('activities.module', $search)
                 ->orLike('users.username', $search)
                 ->groupEnd();
+        }
+
+        // filtered count
+        $recordsFiltered = $builder->countAllResults(false);
+
+        // limit & offset
+        if ($length != -1) {
+            $builder->limit($length, $start);
+        }
+
+        // get data
+        $logs = $builder->orderBy('activities.id', 'DESC')->get()->getResultArray();
+
+        return $this->response->setJSON([
+            "draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $logs
+        ]);
     }
-
-    // filtered count
-    $recordsFiltered = $builder->countAllResults(false);
-
-    // limit & offset
-    if ($length != -1) {
-        $builder->limit($length, $start);
-    }
-
-    // get data
-    $logs = $builder->orderBy('activities.id', 'DESC')->get()->getResultArray();
-
-    return $this->response->setJSON([
-        "draw" => $draw,
-        "recordsTotal" => $recordsTotal,
-        "recordsFiltered" => $recordsFiltered,
-        "data" => $logs
-    ]);
-}
 
 
     public function audit_view($id)
@@ -89,5 +89,13 @@ class SystemController extends BaseController
     public function profile()
     {
         return view('system/profile');
+    }
+
+    public function checkSession() {
+        $session = session();
+        if (!$session->get('user_id')) {
+            return $this->response->setJSON(['status' => 'expired', 'message' => 'Session expired']);
+        }
+        return $this->response->setJSON(['status' => 'ok']);
     }
 }

@@ -6,7 +6,7 @@
     <title>ARMS</title>
 
     <link rel="shortcut icon" href="<?= asset('assets/images/dswd_logo.png') ?>" type="image/png">
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Font Awesome (AdminLTE icons) -->
@@ -67,22 +67,29 @@
         .content-wrapper {
             min-height: auto;
         }
+
         section.content {
             padding-bottom: 15px !important;
         }
+
         table tr td i {
             font-size: 12px !important;
         }
+
         table tr td .btn {
             padding: 6px;
             height: auto !important;
             line-height: 1 !important;
             border-radius: 0;
         }
+
         .nav-item .nav-link i.nav-icon {
             font-size: 14px !important;
         }
-        input[type="text"], select, input[type="date"] {
+
+        input[type="text"],
+        select,
+        input[type="date"] {
             border-radius: 0 !important;
         }
     </style>
@@ -177,9 +184,30 @@
 
     <!-- Custom Pages Scripts  -->
     <?= $this->renderSection('scripts') ?>
-    
+
     <!-- Index.js -->
     <script src="<?= asset('assets/js/index.js') ?>"></script>
 
+    <script>
+         const BASE_URL = "<?= base_url() ?>";
+
+    setInterval(() => {
+        console.log("check");
+        $.get(BASE_URL + 'system/checkSession', function(res) {
+            if (res.status === 'expired') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Session Expired',
+                    text: res.message,
+                    confirmButtonText: 'Login'
+                }).then(() => {
+                    window.location.href = BASE_URL + 'auth/login';
+                });
+            }
+        });
+    }, 60000); 
+    </script>
+
 </body>
+
 </html>

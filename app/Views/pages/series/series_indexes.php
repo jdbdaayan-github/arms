@@ -27,7 +27,7 @@ Manage Indexes - <?= esc($series->name) ?>
             <table class="table table-bordered table-hover table-sm text-sm" id="seriesinexTable">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th style="width:50px;">#</th>
                         <th>Name</th>
                         <th style="width:100px;">Action</th>
                     </tr>

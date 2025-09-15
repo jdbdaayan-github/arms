@@ -54,14 +54,26 @@ class UserController extends BaseController
             {
                 $status = "unverified";
             }
-
             return redirect()->to('users')->with('success', 'User '.$status.' successfully');
         }
     }
 
-    public function resetAttempts($id)
-    {
-        
+    public function resetAttempts($id) {
+        $data = [
+            'login_attempts' => 0,
+        ];
+
+        $this->user_model->resetAttempts($id, $data);
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'message' => 'User attempts reset successfully',
+            'redirect' => base_url('users') // controller decides redirect
+        ]);
     }
     
+    public function create()
+    {
+        return view('pages/users/create');
+    }
 }
