@@ -14,8 +14,11 @@ class PermissionSeeder extends Seeder
             ['permission_name' => 'records.create', 'description' => 'Create records', 'created_at' => date('Y-m-d H:i:s')],
             ['permission_name' => 'records.edit', 'description' => 'Edit records', 'created_at' => date('Y-m-d H:i:s')],
             ['permission_name' => 'records.delete', 'description' => 'Delete records', 'created_at' => date('Y-m-d H:i:s')],
+            ['permission_name' => 'records.retrieve', 'description' => 'Retreive deleted records', 'created_at' => date('Y-m-d H:i:s')],
             ['permission_name' => 'records.archive', 'description' => 'Archive records', 'created_at' => date('Y-m-d H:i:s')],
+            ['permission_name' => 'records.approve', 'description' => 'Approve records', 'created_at' => date('Y-m-d H:i:s')],
             ['permission_name' => 'records.purge', 'description' => 'Purge records', 'created_at' => date('Y-m-d H:i:s')],
+            ['permission_name' => 'records.download', 'description' => 'Download records', 'created_at' => date('Y-m-d H:i:s')],
             ['permission_name' => 'records.version.delete', 'description' => 'Delete record versions', 'created_at' => date('Y-m-d H:i:s')],
 
             // Roles

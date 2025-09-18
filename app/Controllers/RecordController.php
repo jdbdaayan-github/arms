@@ -3,14 +3,15 @@
 namespace App\Controllers;
 
 use App\Models\Record;
+use App\Models\Settings;
 use App\Models\RecordIndex;
+use App\Models\RecordBorrow;
 use App\Models\RecordSeries;
+use App\Models\RecordHistory;
+use App\Models\RecordIndexValue;
 use App\Models\RecordFileVersion;
 use App\Models\RecordSeriesIndex;
 use App\Controllers\BaseController;
-use App\Models\RecordHistory;
-use App\Models\RecordIndexValue;
-use App\Models\Settings;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class RecordController extends BaseController
@@ -45,6 +46,11 @@ class RecordController extends BaseController
             $builder = $builder->like('title', $search);
         }
 
+        if(hasRole('Contributor'))
+        {
+            $builder = $builder->where('created_by',session()->get('user_id'));
+        }
+
         // Get paginated results
         $records = $builder->paginate($perPage, 'default', $page);
         $pager   = $builder->pager;
@@ -56,6 +62,68 @@ class RecordController extends BaseController
             'perPage' => $perPage,
         ]);
     }
+
+    public function approval()
+    {
+        $search  = $this->request->getGet('search');
+        $perPage = (int) $this->request->getGet('per_page') ?: 10;
+        $page    = (int) $this->request->getGet('page') ?: 1;
+
+        // Make sure getForApprovalData() returns a Builder object
+        $builder = $this->record_model->getForApprovalData(); // should return Builder
+        if ($search) {
+            $builder = $builder->like('title', $search);
+        }
+
+        $records = $builder->paginate($perPage, 'default', $page); // always array
+        $pager   = $builder->pager;
+
+        // Ensure $records is never null
+        $records = $records ?? [];
+
+        return view('pages/records/approval', [
+            'records' => $records,
+            'pager'   => $pager,
+            'search'  => $search,
+            'perPage' => $perPage,
+        ]);
+    }
+
+    public function archival()
+    {
+        $search  = $this->request->getGet('search');
+        $perPage = (int) $this->request->getGet('per_page') ?: 10;
+        $page    = (int) $this->request->getGet('page') ?: 1;
+
+        $pendingForArchival = $this->record_model->getForArchivalData();
+
+        $pendingForArchivalCount = $pendingForArchival->countAllResults();
+        // Make sure getForApprovalData() returns a Builder object
+        $builder = $pendingForArchival; // should return Builder
+        if ($search) {
+            $builder = $builder->like('title', $search);
+        }
+
+        $records = $builder->paginate($perPage, 'default', $page); // always array
+        $pager   = $builder->pager;
+
+        // Ensure $records is never null
+        $records = $records ?? [];
+
+        return view('pages/records/archive', [
+            'records' => $records,
+            'pager'   => $pager,
+            'search'  => $search,
+            'perPage' => $perPage,
+            'pendingForArchivalCount' => $pendingForArchivalCount,
+        ]);
+    }
+
+    public function borrow()
+    {
+        return view('pages/records/borrow');
+    }
+
 
     public function create()
     {
@@ -152,7 +220,7 @@ class RecordController extends BaseController
                 'indexes'      => $indexes ?? [],
             ];
 
-            audit_log('CREATE', 'records', $record_id, null, $log_data, 'create record '.$record_data['title']);
+            audit_log('CREATE', 'records', $record_id, null, $log_data, 'create record ' . $record_data['title']);
             record_hisory_log('CREATED', $record_id, 'Record created and submitted for approval');
         }
 
@@ -175,4 +243,39 @@ class RecordController extends BaseController
     {
         return view('pages/records/workflow');
     }
+
+    public function request($id)
+    {
+        $data['record'] = $this->record_model->getRecordById($id);
+        return view('pages/records/request', $data);
+    }
+
+    public function submitRequest($id)
+    {
+        $borrow_model = new RecordBorrow();
+        
+        $rules = [
+            'due_date' => 'permit_empty',
+            'remarks' => 'required',
+        ];
+
+        if(!$this->validate($rules))
+        {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'record_id' => $id,
+            'due_date' => $this->request->getPost('due_date'),
+            'remarks' => $this->request->getPost('remarks'),
+            'user_id' => session()->get('user_id'),
+        ];
+
+        $borrow_model->addRequest($data);
+
+        return redirect()->to('records')->with('success', 'Record requested successfully!');
+
+
+    }
 }
+ 

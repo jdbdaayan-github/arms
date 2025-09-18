@@ -11,7 +11,7 @@ Dashboard
 <?= $this->section('content') ?>
 <section class="content">
     <div class="container-fluid">
-        
+
         <!-- Top Stats -->
         <div class="row">
             <div class="col-lg-3 col-6">
@@ -26,7 +26,7 @@ Dashboard
                     <a href="<?= base_url('users') ?>" class="small-box-footer">Manage Users <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            
+
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-success">
                     <div class="inner">
@@ -39,30 +39,30 @@ Dashboard
                     <a href="<?= base_url('records') ?>" class="small-box-footer">View Records <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            
+
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3><?= $archivedRecords ?? 0 ?></h3>
+                        <p>Archived Records</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-archive"></i>
+                    </div>
+                    <a href="<?= base_url('records/archived') ?>" class="small-box-footer">View Archives <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3><?= $totalRoles ?? 0 ?></h3>
-                        <p>User Roles</p>
+                        <h3><?= $recentLogins ?? 12 ?></h3> <!-- static or dynamic -->
+                        <p>Recent Logins</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-user-shield"></i>
+                        <i class="fas fa-sign-in-alt"></i>
                     </div>
-                    <a href="<?= base_url('roles') ?>" class="small-box-footer">Manage Roles <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-6">
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3><?= $totalOffices ?? 0 ?></h3>
-                        <p>Offices/Departments</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <a href="<?= base_url('offices') ?>" class="small-box-footer">Manage Offices <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('logs/logins') ?>" class="small-box-footer">View Logins <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@ Dashboard
                         <h3 class="card-title"><i class="fas fa-chart-bar mr-2"></i>Records Overview</h3>
                     </div>
                     <div class="card-body">
-                        <canvas id="recordsChart" style="min-height:250px;"></canvas>
+                        <canvas id="recordsChart" style="min-height:300px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -92,9 +92,9 @@ Dashboard
                             <?php if (!empty($recentActivities)): ?>
                                 <?php foreach ($recentActivities as $activity): ?>
                                     <li class="list-group-item text-sm">
-                                        <i class="fas fa-circle text-secondary' ?> mr-2"></i>
+                                        <i class="fas fa-circle text-secondary mr-2"></i>
                                         <?= esc($activity->description) ?>
-                                        <span class="float-right text-muted text-xs" id="time"><?= esc($activity->time_ago) ?></span>
+                                        <span class="float-right text-muted text-xs"><?= esc($activity->time_ago) ?></span>
                                     </li>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -164,12 +164,20 @@ Dashboard
             datasets: [{
                 label: 'Records',
                 data: <?= json_encode($chartData ?? [5,10,7,12]) ?>,
-                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(40, 167, 69, 0.7)',
+                    'rgba(255, 193, 7, 0.7)',
+                    'rgba(220, 53, 69, 0.7)'
+                ],
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            }
         }
     });
 </script>

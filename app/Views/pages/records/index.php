@@ -14,14 +14,14 @@ Records
         <div class="card card-outline card-secondary">
             <div class="card-header d-flex align-items-center justify-content-between py-1">
                 <h3 class="card-title"><i class="fas fa-folder-open mr-2"></i>Records List</h3>
-                    <!-- records.create permission -->
-                    <?php if( hasRole('Superadmin') || hasPermission('records.create')): ?>
-                        <div class="card-tools  ml-auto mr-0">
-                            <a href="<?= base_url('records/create') ?>" class="btn btn-primary btn-flat btn-sm" style="font-size:12px;">
-                                <i class="fas fa-plus"></i> Add Record
-                            </a>
-                        </div>
-                    <?php endif ?>
+                <!-- records.create permission -->
+                <?php if (hasRole('Superadmin') || hasPermission('records.create')): ?>
+                    <div class="card-tools  ml-auto mr-0">
+                        <a href="<?= base_url('records/create') ?>" class="btn btn-primary btn-flat btn-sm" style="font-size:12px;">
+                            <i class="fas fa-plus"></i> Add Record
+                        </a>
+                    </div>
+                <?php endif ?>
             </div>
 
             <div class="card-body">
@@ -60,25 +60,43 @@ Records
                                         <td class="text-center"><input type="checkbox"></td>
                                         <td><?= esc($record->title) ?></td>
                                         <td class="text-center">
-                                            <?php if(hasPermission('records.view')): ?>
-                                            <a href="<?= base_url('records/show/' . $record->id) ?>" class="btn btn-info btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <?php endif ?>
-                                            <?php if(hasRole('Superadmin') || hasPermission('records.edit')): ?>
-                                                <a href="<?= base_url('records/edit/' . $record->id) ?>" class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-edit"></i>
+                                            <!-- VIEW BUTTON -->
+                                            <?php if (hasPermission('records.view')): ?>
+                                                <a href="<?= $record->status_id == 4 && !hasRole('Superadmin') ? '#' : base_url('records/show/' . $record->id) ?>"
+                                                    class="btn btn-info btn-sm <?= $record->status_id == 4 && !hasRole('Superadmin') ? 'disabled' : '' ?>"
+                                                    <?= $record->status_id == 4 && !hasRole('Superadmin') ? 'aria-disabled="true" tabindex="-1"' : '' ?>>
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
                                             <?php endif ?>
-                                            <?php if(hasRole('Superadmin') || hasPermission('records.edit')): ?>
+
+                                            <!-- EDIT BUTTON -->
+                                            <?php $enabled = hasRole('Superadmin') || (hasPermission('records.edit') && $record->status_id != 4); ?>
+                                            <a href="<?= $enabled ? base_url('records/edit/' . $record->id) : '#' ?>"
+                                                class="btn btn-warning btn-sm <?= $enabled ? '' : 'disabled' ?>"
+                                                <?= $enabled ? '' : 'aria-disabled="true" tabindex="-1"' ?>>
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            <!-- WORKFLOW BUTTON -->
+                                            <?php if (hasRole('Superadmin') || hasPermission('records.workflow')): ?>
                                                 <a href="<?= base_url('records/workflow/' . $record->id) ?>" class="btn btn-primary btn-sm">
                                                     <i class="fas fa-map-marked-alt"></i>
                                                 </a>
                                             <?php endif ?>
-                                            <?php if (hasRole('Superadmin') || hasPermission('RecordsDeleteModule')): ?>
-                                            <button class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+
+                                            <!-- DELETE BUTTON -->
+                                            <?php if (hasRole('Superadmin') || hasPermission('records.delete')): ?>
+                                                <button class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            <?php endif ?>
+
+                                            <!-- BORROW / REQUEST BUTTON FOR CONTRIBUTORS -->
+                                            <?php if (hasRole('Superadmin') || $record->status_id == 4 && hasRole('Contributor')): ?>
+                                                <a href="<?= base_url('records/request/' . $record->id) ?>"
+                                                    class="btn btn-secondary btn-sm">
+                                                    <i class="fas fa-book-reader"></i>
+                                                </a>
                                             <?php endif ?>
                                         </td>
                                     </tr>

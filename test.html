@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Records Summary Report</title>
+<style>
+    /* A4 page setup */
+    @page { size: A4; margin: 20mm; }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        color: #333;
+        background: #fff;
+    }
+
+    .container {
+        width: 210mm;
+        max-width: 210mm;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* Header */
+    .report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+    }
+
+    .report-header .logo {
+        width: 80px;
+        height: 80px;
+        background-color: #ccc;
+        display: inline-block;
+        border-radius: 6px;
+    }
+
+    .report-header .info {
+        flex-grow: 1;
+        margin-left: 15px;
+    }
+
+    .report-header h1 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .report-header .subtitle {
+        font-size: 14px;
+        color: #555;
+        margin: 2px 0;
+    }
+
+    .report-header .date {
+        text-align: right;
+        font-size: 12px;
+        color: #555;
+    }
+
+    /* Summary Metrics */
+    .summary-section {
+        margin-bottom: 30px;
+    }
+
+    .summary-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 5px;
+    }
+
+    .summary-metrics {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .metric-box {
+        width: 18%;
+        min-width: 100px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 12px;
+        text-align: center;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .metric-box h2 {
+        margin: 0;
+        font-size: 20px;
+        color: #000;
+    }
+
+    .metric-box p {
+        margin: 5px 0 0;
+        font-size: 12px;
+        color: #555;
+    }
+
+    .metric-box span {
+        display: block;
+        font-size: 10px;
+        color: #777;
+    }
+
+    /* Records Table */
+    .records-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        font-size: 12px;
+    }
+
+    .records-table th,
+    .records-table td {
+        border: 1px solid #000;
+        padding: 6px;
+        text-align: left;
+    }
+
+    .records-table th {
+        background-color: #f2f2f2;
+    }
+
+    .records-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .records-table tfoot td {
+        font-weight: bold;
+    }
+
+    /* Footer */
+    .footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+    }
+
+    @media print {
+        body { width: 210mm; height: 297mm; }
+        .metric-box { width: 30%; margin-bottom: 15px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="report-header">
+        <div class="logo"></div>
+        <div class="info">
+            <h1>Organization Name</h1>
+            <div class="subtitle">Records Management System</div>
+            <div class="subtitle">Reporting Period: September 1 – 18, 2025</div>
+            <div class="subtitle">Report ID: RPT-2025-09-18</div>
+        </div>
+        <div class="date">
+            Generated: September 18, 2025
+        </div>
+    </div>
+
+    <!-- Summary Metrics -->
+    <div class="summary-section">
+        <div class="summary-title">Summary Metrics</div>
+        <div class="summary-metrics">
+            <div class="metric-box">
+                <h2>90</h2>
+                <p>Archived</p>
+                <span>45%</span>
+            </div>
+            <div class="metric-box">
+                <h2>35</h2>
+                <p>Returned</p>
+                <span>17%</span>
+            </div>
+            <div class="metric-box">
+                <h2>25</h2>
+                <p>Borrowed</p>
+                <span>12%</span>
+            </div>
+            <div class="metric-box">
+                <h2>15</h2>
+                <p>Digitized</p>
+                <span>7%</span>
+            </div>
+            <div class="metric-box">
+                <h2>8</h2>
+                <p>Pending</p>
+                <span>4%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Records Table -->
+    <div class="summary-section">
+        <div class="summary-title">Detailed Records</div>
+        <table class="records-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Record Title</th>
+                    <th>Office</th>
+                    <th>Assigned To</th>
+                    <th>Status</th>
+                    <th>Date Created</th>
+                    <th>Date Returned</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>Employee Files</td>
+                    <td>HR</td>
+                    <td>Jane Doe</td>
+                    <td>Archived</td>
+                    <td>2025-09-02</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>Financial Reports</td>
+                    <td>Finance</td>
+                    <td>John Smith</td>
+                    <td>Returned</td>
+                    <td>2025-09-05</td>
+                    <td>2025-09-12</td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>Project Records</td>
+                    <td>IT</td>
+                    <td>Alice Lee</td>
+                    <td>Borrowed</td>
+                    <td>2025-09-08</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>004</td>
+                    <td>Contracts</td>
+                    <td>Legal</td>
+                    <td>Michael Tan</td>
+                    <td>Digitized</td>
+                    <td>2025-09-10</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>005</td>
+                    <td>Invoices</td>
+                    <td>Finance</td>
+                    <td>Susan Cruz</td>
+                    <td>Pending</td>
+                    <td>2025-09-15</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">Total Records</td>
+                    <td>173</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Generated by ERMS | Page 1
+    </div>
+
+</div>
+
+</body>
+</html>

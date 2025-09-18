@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use Config\Services;
 use App\Models\Permission;
 use App\Controllers\BaseController;
 use App\Controllers\CaptchaController;
@@ -20,9 +21,18 @@ class AuthController extends BaseController
 
     public function authenticate()
     {
-        helper('form');
 
         $session = session();
+
+        $rules = [
+            'email' => 'required|max_length[30]|valid_email',
+            'password' => 'required|max_length[255]|min_length[8]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
         $captcha_word = $session->get('captcha_word');
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
@@ -41,13 +51,13 @@ class AuthController extends BaseController
 
         // Verify the user’s account
         if ($user->verified == 0) {
-            return redirect()->to('/auth/login')->with('error', 'Your account has not been verified. Contact the administrator.');
+            return redirect()->to('/auth/login')->with('error', 'Your account has not been verified. Contact the administrator.')->withInput();
         }
 
         // Check the CAPTCHA input
         if ($captcha_input !== $captcha_word) {
             $newAttempts = $user->login_attempts + 1;
-            return redirect()->to('/auth/login')->with('error', 'Incorrect CAPTCHA. Please try again.');
+            return redirect()->to('/auth/login')->with('error', 'Incorrect CAPTCHA. Please try again.')->withInput();
         }
 
         // Verify password
@@ -57,10 +67,10 @@ class AuthController extends BaseController
 
             if ($newAttempts >= 5) {
                 $user_model->update($user->id, ['status_id' => 4]);
-                return redirect()->to('/auth/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.');
+                return redirect()->to('/auth/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.')->withInput();
             }
 
-            return redirect()->to('/auth/login')->with('error', 'Invalid username or password.');
+            return redirect()->to('/auth/login')->with('error', 'Invalid username or password.')->withInput();
         }
 
 
@@ -91,17 +101,36 @@ class AuthController extends BaseController
         // Remove generated Captcha
         $session->remove(['captcha_word', 'captcha_filename']);
 
-        audit_log('LOGIN', 'auth', null, null, null, 'Logged in'); 
+        audit_log('LOGIN', 'auth', null, null, null, 'Logged in');
 
         if ($role->role_name === 'Superadmin') {
-            return redirect()->to('/dashboard')->with('login', 'Welcome! ' . $user->firstname);
+            return redirect()->to('/dashboard/superadmin')
+                ->with('login', 'Welcome! ' . $user->firstname);
         }
 
         if ($role->role_name === 'Administrator') {
-            return redirect()->to('dashboard/a')->with('login', 'Welcome! ' . $user->firstname);
+            return redirect()->to('/dashboard/admin')
+                ->with('login', 'Welcome! ' . $user->firstname);
         }
 
-        return redirect()->to('dashboard/b')->with('login', 'Welcome! ' . $user->firstname);
+        if ($role->role_name === 'Archivist') {
+            return redirect()->to('/dashboard/archivist')
+                ->with('login', 'Welcome! ' . $user->firstname);
+        }
+
+        if ($role->role_name === 'Records Officer') {
+            return redirect()->to('/dashboard/records-officer')
+                ->with('login', 'Welcome! ' . $user->firstname);
+        }
+
+        if ($role->role_name === 'Contributor') {
+            return redirect()->to('/dashboard/contributor')
+                ->with('login', 'Welcome! ' . $user->firstname);
+        }
+
+        // fallback kung may unknown role
+        return redirect()->to('/')
+            ->with('error', 'Unauthorized role');
     }
 
     public function register()
@@ -115,7 +144,7 @@ class AuthController extends BaseController
     public function logout()
     {
         session()->destroy();
-        audit_log('LOGOUT', 'auth', null, null, null, 'Logged out'); 
+        audit_log('LOGOUT', 'auth', null, null, null, 'Logged out');
         return redirect()->to('auth/login');
     }
 
@@ -124,7 +153,7 @@ class AuthController extends BaseController
         return view('auth/forgot_password');
     }
 
-    public function reset()
+    public function reset1()
     {
         return view('auth/reset_password');
     }
@@ -132,5 +161,37 @@ class AuthController extends BaseController
     public function terms()
     {
         return view('auth/terms');
+    }
+
+    public function reset()
+    {
+        $emailAddress = $this->request->getPost('email') ?? 'testuser@example.com';
+
+        // Fake token (normally from DB)
+        $token = bin2hex(random_bytes(16));
+        $resetLink = base_url('auth/resetPassword/' . $token);
+
+        // Send email
+        $email = Services::email();
+        $email->setFrom('noreply@erms.local', 'ERMS Support');
+        $email->setTo($emailAddress);
+        $email->setSubject('Password Reset Request');
+        $email->setMessage("
+            <h2>Password Reset</h2>
+            <p>Hello,</p>
+            <p>Click below to reset your password:</p>
+            <p><a href='{$resetLink}'>{$resetLink}</a></p>
+        ");
+
+        if ($email->send()) {
+            return "✅ Reset email sent! Check MailHog at <a href='http://localhost:8025'>http://localhost:8025</a>";
+        } else {
+            return "❌ Failed to send reset email.<br>" . $email->printDebugger(['headers']);
+        }
+    }
+
+    public function resetPassword($token)
+    {
+        return "🔑 This is where you'd show the reset form. Token: " . esc($token);
     }
 }

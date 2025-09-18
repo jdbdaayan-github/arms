@@ -1,8 +1,8 @@
 <?= $this->extend('layouts/guest'); ?>
 
-<?= $this->section('title')?>
-  Login
-<?= $this->endSection()?>
+<?= $this->section('title') ?>
+Login
+<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="login-box">
@@ -24,25 +24,45 @@
         </div>
       <?php endif; ?>
 
+      <?php $errors = session()->getFlashdata('errors') ?? []; ?>
+
       <form action="<?= base_url('auth/authenticate') ?>" method="post" autocomplete="off">
         <?= csrf_field() ?>
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control rounded-0" placeholder="Email"  autofocus value="<?= set_value('email')?>">
+          <input type="email"
+            name="email"
+            class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?> rounded-0"
+            placeholder="Email"
+            autofocus
+            value="<?= set_value('email') ?>">
+
           <div class="input-group-append">
             <div class="input-group-text rounded-0">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
+          <?php if (isset($errors['email'])): ?>
+            <div class="invalid-feedback">
+              <?= $errors['email'] ?>
+            </div>
+          <?php endif; ?>
         </div>
 
+
         <div class="input-group mb-1">
-          <input type="password" name="password" id="password" class="form-control rounded-0" placeholder="Password" >
+          <input type="password" name="password" id="password" class="form-control rounded-0 <?= isset($errors['password']) ? 'is-invalid' : '' ?>" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text rounded-0">
               <span class="fas fa-lock"></span>
             </div>
           </div>
+          <?php if (isset($errors['password'])): ?>
+          <div class="invalid-feedback">
+            <?= $errors['password'] ?>
+          </div>
+        <?php endif; ?>
         </div>
+        
 
         <div class="mb-3 text-right">
           <span id="togglePassword" class="text-info" style="cursor: pointer; user-select: none;">Show Password</span>
@@ -54,18 +74,18 @@
           <input type="text" name="captcha" class="form-control rounded-0" placeholder="Enter CAPTCHA" required>
         </div>
 
-        
-          <div class="mb-3">
-            <div class="icheck-info">
-              <input type="checkbox" id="remember" name="remember">
-              <label for="remember">Remember Me</label>
-            </div>
-          </div>
 
-          <div>
-            <button type="submit" class="btn btn-block btn-info btn-flat">Sign In</button>
+        <div class="mb-3">
+          <div class="icheck-info">
+            <input type="checkbox" id="remember" name="remember">
+            <label for="remember">Remember Me</label>
           </div>
-        
+        </div>
+
+        <div>
+          <button type="submit" class="btn btn-block btn-info btn-flat">Sign In</button>
+        </div>
+
       </form>
 
       <p class="mb-1 mt-3 text-center">
@@ -81,7 +101,7 @@
 
 <script>
   // Show/hide password toggle with "Show" / "Hide" text
-  document.getElementById('togglePassword').addEventListener('click', function () {
+  document.getElementById('togglePassword').addEventListener('click', function() {
     const passwordInput = document.getElementById('password');
     if (passwordInput.type === 'password') {
       passwordInput.type = 'text';

@@ -54,6 +54,26 @@ class DashboardController extends BaseController
         $data['recentActivities'] = $activities;
         
 
-        return view('dashboards/sadashboard', $data);
+        return view('dashboards/superadmin/dashboard', $data);
+    }
+
+    public function adminDashboard()
+    {
+        return view('dashboards/administrator/dashboard');
+    }
+
+    public function archivistDashboard()
+    {
+        return view('dashboards/archivist/dashboard');
+    }
+
+    public function recordsOfficerDashboard()
+    {
+        return view('dashboards/records_officer/dashboard');
+    }
+
+    public function contributorDashboard()
+    {
+        return view('dashboards/contributor/dashboard');
     }
 }

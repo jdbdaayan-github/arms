@@ -99,17 +99,26 @@ class Record extends Model
 
     public function getRecords()
     {
-        return $this->findAll();
+        $role = session()->get('role');
+    $user_id = session()->get('user_id');
+
+    if ($role === 'Contributor') {
+        // Contributor sees only their own records
+        return $this->where('created_by', $user_id)->findAll();
+    }
+
+    // Admins or other roles see all records
+    return $this->findAll();
     }
 
     public function getRecordById($id)
     {
         return $this->select('records.*, record_series.name as series, record_statuses.name as status, record_file_versions.filename as filename, record_file_versions.version as version , CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as user_name')
-                    ->join('record_series','record_series.id=records.series_id')
-                    ->join('record_statuses', 'record_statuses.id = records.status_id')
-                    ->join('record_file_versions', 'record_file_versions.record_id = records.id', 'left')
-                    ->join('users', 'users.id = records.created_by')
-                    ->find($id);
+            ->join('record_series', 'record_series.id=records.series_id')
+            ->join('record_statuses', 'record_statuses.id = records.status_id')
+            ->join('record_file_versions', 'record_file_versions.record_id = records.id', 'left')
+            ->join('users', 'users.id = records.created_by')
+            ->find($id);
     }
 
     public function insertRecord($data)
@@ -122,4 +131,23 @@ class Record extends Model
         return $this->findAll(5);
     }
 
+    public function getForApprovalData()
+    {
+        return $this->where('status_id', 1);
+    }
+
+    public function countPendingApproval(): int
+    {
+        return $this->getForApprovalData()->countAllResults();
+    }
+
+    public function getForArchivalData()
+    {
+        return $this->where('status_id', 3);
+    }
+
+    public function countPendingArchival(): int
+    {
+        return $this->getForArchivalData()->countAllResults();
+    }
 }

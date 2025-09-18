@@ -15,7 +15,7 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg mb-3">Enter your email to reset password</p>
 
-      <form action="<?= base_url('forgot_password/send') ?>" method="post">
+      <form action="<?= base_url('auth/reset') ?>" method="post">
         <?= csrf_field() ?>
 
         <div class="input-group mb-3">

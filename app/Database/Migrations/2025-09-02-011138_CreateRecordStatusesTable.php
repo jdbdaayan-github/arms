@@ -19,6 +19,10 @@ class CreateRecordStatusesTable extends Migration
                 'type'=> 'VARCHAR',
                 'constraint' => 50,
             ],
+            'description'=> [
+                'type'=> 'VARCHAR',
+                'constraint' => 100,
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true

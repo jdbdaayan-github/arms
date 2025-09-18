@@ -11,6 +11,7 @@ use App\Controllers\PermissionController;
 use App\Controllers\RecordIndexController;
 use App\Controllers\RecordSeriesController;
 use App\Controllers\RecordClassificationController;
+use App\Controllers\ReportController;
 
 /**
  * @var RouteCollection $routes
@@ -29,7 +30,7 @@ $routes->group('auth', function ($routes) {
     $routes->get('register', [AuthController::class, 'register']);
     $routes->get('logout', [AuthController::class, 'logout']);
     $routes->get('forgot', [AuthController::class, 'forgot']);
-    $routes->get('reset', [AuthController::class, 'reset']);
+    $routes->post('reset', [AuthController::class, 'reset']);
     $routes->get('terms', [AuthController::class, 'terms']);
 });
 
@@ -37,7 +38,11 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     #Dashboards
     $routes->group('dashboard', function ($routes) {
-        $routes->get('', [DashboardController::class, 'superadminDashboard']);
+        $routes->get('superadmin', [DashboardController::class, 'superadminDashboard']);
+        $routes->get('administrator', [DashboardController::class, 'adminDashboard']);
+        $routes->get('archivist', [DashboardController::class, 'archivistDashboard']);
+        $routes->get('records-officer', [DashboardController::class, 'recordsOfficerDashboard']);
+        $routes->get('contributor', [DashboardController::class, 'contributorDashboard']);
     });
 
     #Records
@@ -45,9 +50,15 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('', 'RecordController::index');
         $routes->get('create', 'RecordController::create');
         $routes->post('store', 'RecordController::store');
-        $routes->get('show/(:num)', [RecordController::class,'show']);
+        $routes->get('show/(:num)', [RecordController::class, 'show']);
         $routes->get('getIndexes/(:num)', 'RecordController::getIndexes/$1');
         $routes->get('workflow/(:num)', [RecordController::class, 'workflow']);
+        $routes->get('approval', [RecordController::class, 'approval']);
+        $routes->get('archival', [RecordController::class, 'archival']);
+        $routes->get('borrow', [RecordController::class, 'borrow']);
+        $routes->get('request/(:num)', [RecordController::class, 'request']);
+        $routes->post('submitRequest/(:num)', [RecordController::class, 'submitRequest']);
+
     });
 
     #Users
@@ -123,5 +134,12 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('settings/profile', [SystemController::class, 'profile']);
     $routes->get('settings/preferences', [SystemController::class, 'preferences']);
     $routes->get('system/checkSession', [SystemController::class, 'checkSession']);
-    
+
+    #Reports
+    $routes->group('reports', function ($routes) {
+        $routes->get('borrowed', [ReportController::class , 'borrowed']);
+        $routes->get('returned', [ReportController::class , 'returned']);
+        $routes->get('summary', [ReportController::class , 'summary']);
+        $routes->get('users', [ReportController::class , 'users']);
+    });
 });

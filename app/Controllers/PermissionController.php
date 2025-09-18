@@ -37,6 +37,7 @@ class PermissionController extends BaseController
          if (!hasPermission('permissions.create')) {
             return redirect()->to('/forbidden'); // or show 403 page
         }
+        
         return view('pages/permissions/create');
     }
 

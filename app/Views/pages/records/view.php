@@ -23,31 +23,32 @@ Records
                         target="_blank" class="btn btn-primary btn-sm btn-flat">
                         <i class="fas fa-print"></i> Print
                     </a>
-
-                    <!-- Download -->
-                    <a href="<?= base_url('records/download/' . $record->id) ?>"
-                        class="btn btn-success btn-sm btn-flat">
-                        <i class="fas fa-download"></i> Download
-                    </a>
-
+                    <?php if (hasRole('Superadmin') || hasRole('Archivist') || hasPermission('records.download')): ?>
+                        <!-- Download -->
+                        <a href="<?= base_url('records/download/' . $record->id) ?>"
+                            class="btn btn-success btn-sm btn-flat">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    <?php endif ?>
                     <!-- Bookmark -->
                     <a href="<?= base_url('records/bookmark/' . $record->id) ?>"
                         class="btn btn-warning btn-sm btn-flat">
                         <i class="fas fa-bookmark"></i> Bookmark
                     </a>
-
-                    <!-- Archive -->
-                    <a href="<?= base_url('records/archive/' . $record->id) ?>"
-                        class="btn btn-info btn-sm btn-flat">
-                        <i class="fas fa-file-archive"></i> Archive
-                    </a>
-
+                    <?php if (hasRole('Superadmin') || hasRole('Archivist') || hasPermission('records.archive')): ?>
+                        <!-- Archive -->
+                        <a href="<?= base_url('records/archive/' . $record->id) ?>"
+                            class="btn btn-info btn-sm btn-flat">
+                            <i class="fas fa-file-archive"></i> Archive
+                        </a>
+                    <?php endif ?>
+                    <?php if(hasRole('Superadmin')): ?>
                     <!-- Delete -->
                     <button data-id="<?= $record->id ?>"
                         class="btn btn-danger btn-sm btn-flat btn-delete-record">
                         <i class="fas fa-trash"></i> Delete
                     </button>
-
+                        <?php endif ?>
                     <!-- Purge -->
                     <button data-id="<?= $record->id ?>"
                         class="btn btn-dark btn-sm btn-flat btn-purge-record">

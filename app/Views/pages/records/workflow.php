@@ -19,82 +19,105 @@ Records
             </div>
 
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
+                <div class="timeline">
 
-                        <!-- Workflow Timeline -->
-                        <div class="timeline">
-
-                            <!-- Step 1 -->
-                            <div class="time-label">
-                                <span class="bg-primary">Start</span>
-                            </div>
-                            <div>
-                                <i class="fas fa-file-alt bg-primary"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">Document Created</h3>
-                                    <div class="timeline-body">
-                                        The record is created and stored in the system.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 2 -->
-                            <div>
-                                <i class="fas fa-user-check bg-info"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">Review & Verification</h3>
-                                    <div class="timeline-body">
-                                        Assigned personnel reviews the record for completeness and accuracy.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 3 -->
-                            <div>
-                                <i class="fas fa-check-circle bg-success"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">Approval</h3>
-                                    <div class="timeline-body">
-                                        Authorized official approves the document.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 4 -->
-                            <div>
-                                <i class="fas fa-archive bg-warning"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">Archiving</h3>
-                                    <div class="timeline-body">
-                                        Document is archived and stored permanently for reference.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 5 -->
-                            <div>
-                                <i class="fas fa-search bg-secondary"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">Tracking & Retrieval</h3>
-                                    <div class="timeline-body">
-                                        Archived records can be searched and retrieved when needed.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- End -->
-                            <div>
-                                <i class="fas fa-flag-checkered bg-dark"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">End of Workflow</h3>
-                                </div>
-                            </div>
-
-                        </div> <!-- end timeline -->
-
+                    <!-- Step 1 -->
+                    <div class="time-label">
+                        <span class="bg-primary">Step 1</span>
                     </div>
-                </div>
+                    <div>
+                        <i class="fas fa-file-alt bg-primary"></i>
+                        <div class="timeline-item">
+                            <h3 class="timeline-header">Document Created</h3>
+                            <div class="timeline-body">
+                                The record is created and stored in the system.
+                            </div>
+                            <div class="timeline-footer">
+                                <span class="badge badge-primary">Completed</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="time-label">
+                        <span class="bg-info">Step 2</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-user-check bg-info"></i>
+                        <div class="timeline-item">
+                            <h3 class="timeline-header">Review & Verification</h3>
+                            <div class="timeline-body">
+                                Assigned personnel reviews the record for completeness and accuracy.
+                            </div>
+                            <div class="timeline-footer">
+                                <span class="badge badge-warning">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="time-label">
+                        <span class="bg-success">Step 3</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-check-circle bg-success"></i>
+                        <div class="timeline-item">
+                            <h3 class="timeline-header">Approval</h3>
+                            <div class="timeline-body">
+                                Authorized official approves the document.
+                            </div>
+                            <div class="timeline-footer">
+                                <span class="badge badge-secondary">Not Started</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="time-label">
+                        <span class="bg-warning">Step 4</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-archive bg-warning"></i>
+                        <div class="timeline-item">
+                            <h3 class="timeline-header">Archiving</h3>
+                            <div class="timeline-body">
+                                Document is archived and stored permanently for reference.
+                            </div>
+                            <div class="timeline-footer">
+                                <span class="badge badge-secondary">Not Started</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="time-label">
+                        <span class="bg-secondary">Step 5</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-search bg-secondary"></i>
+                        <div class="timeline-item">
+                            <h3 class="timeline-header">Tracking & Retrieval</h3>
+                            <div class="timeline-body">
+                                Archived records can be searched and retrieved when needed.
+                            </div>
+                            <div class="timeline-footer">
+                                <span class="badge badge-secondary">Not Started</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End -->
+                    <div class="time-label">
+                        <span class="bg-dark">End</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-flag-checkered bg-dark"></i>
+                        <div class="timeline-item">
+                            <h3 class="timeline-header">End of Workflow</h3>
+                        </div>
+                    </div>
+
+                </div> <!-- end timeline -->
             </div>
         </div>
     </div>
