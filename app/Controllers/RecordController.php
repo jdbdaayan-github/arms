@@ -89,6 +89,13 @@ class RecordController extends BaseController
         ]);
     }
 
+    public function approveRecord($id)
+    {
+        $data = [
+            'status_id' => 3,
+        ];
+    }
+
     public function archival()
     {
         $search  = $this->request->getGet('search');

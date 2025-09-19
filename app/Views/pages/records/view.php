@@ -42,13 +42,13 @@ Records
                             <i class="fas fa-file-archive"></i> Archive
                         </a>
                     <?php endif ?>
-                    <?php if(hasRole('Superadmin')): ?>
-                    <!-- Delete -->
-                    <button data-id="<?= $record->id ?>"
-                        class="btn btn-danger btn-sm btn-flat btn-delete-record">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
-                        <?php endif ?>
+                    <?php if (hasRole('Superadmin')): ?>
+                        <!-- Delete -->
+                        <button data-id="<?= $record->id ?>"
+                            class="btn btn-danger btn-sm btn-flat btn-delete-record">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    <?php endif ?>
                     <!-- Purge -->
                     <button data-id="<?= $record->id ?>"
                         class="btn btn-dark btn-sm btn-flat btn-purge-record">
@@ -82,6 +82,7 @@ Records
                             <li class="nav-item"><a class="nav-link" href="#versions" data-toggle="tab">Versions</a></li>
                             <li class="nav-item"><a class="nav-link" href="#indexes" data-toggle="tab">Indexes</a></li>
                             <li class="nav-item"><a class="nav-link" href="#notes" data-toggle="tab">Notes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#permissions" data-toggle="tab">Permissions</a></li>
                         </ul>
                     </div>
                     <div class="card-body">
@@ -176,6 +177,41 @@ Records
                                     <li class="list-group-item">Initial record creation.</li>
                                     <li class="list-group-item">Updated title on 2025-09-05.</li>
                                 </ul>
+                            </div>
+                            <!-- Static Record Permissions Section -->
+                            <div class="tab-pane" id="permissions">
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-hover table-striped table-bordered">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>User Name</th>
+                                                <th class="text-center">Can View</th>
+                                                <th class="text-center">Can Edit</th>
+                                                <th class="text-center">Can Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>John Doe</td>
+                                                <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                                                <td class="text-center"><i class="fas fa-check text-warning"></i></td>
+                                                <td class="text-center"><i class="fas fa-check text-danger"></i></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jane Smith</td>
+                                                <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                                                <td class="text-center"><i class="fas fa-times text-secondary"></i></td>
+                                                <td class="text-center"><i class="fas fa-times text-secondary"></i></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Michael Cruz</td>
+                                                <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                                                <td class="text-center"><i class="fas fa-check text-warning"></i></td>
+                                                <td class="text-center"><i class="fas fa-times text-secondary"></i></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -89,7 +89,7 @@ function isMenuOpen($segment1Expected)
                                 <p>List</p>
                             </a>
                         </li>
-                        <?php if (hasRole('Superadmin') || hasPermission('records.approve')): ?>
+                        <?php if (hasRole('Superadmin') || hasRole('Records Officer') || hasPermission('records.approve')): ?>
                             <li class="nav-item">
                                 <a href="<?= base_url('records/approval') ?>" class="nav-link <?= isActive('records', 'approval') ?>">
                                     <i class="far fa-circle nav-icon"></i>

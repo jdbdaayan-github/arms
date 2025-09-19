@@ -109,7 +109,7 @@ class AuthController extends BaseController
         }
 
         if ($role->role_name === 'Administrator') {
-            return redirect()->to('/dashboard/admin')
+            return redirect()->to('/dashboard/administrator')
                 ->with('login', 'Welcome! ' . $user->firstname);
         }
 
@@ -167,31 +167,42 @@ class AuthController extends BaseController
     {
         $emailAddress = $this->request->getPost('email') ?? 'testuser@example.com';
 
-        // Fake token (normally from DB)
-        $token = bin2hex(random_bytes(16));
-        $resetLink = base_url('auth/resetPassword/' . $token);
+        $user_model = new User();
 
-        // Send email
-        $email = Services::email();
-        $email->setFrom('noreply@erms.local', 'ERMS Support');
+        $user = $user_model->getUserByEmail($emailAddress);
+
+        // Generate a random password (8 chars: letters + numbers)
+        $newPassword = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
+
+        // Hash the password before saving to DB (assuming "users" table)
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        $data = ['password' => $hashedPassword];
+
+        if($user->login_attempts > 4)
+        {
+            $data['login_attempts'] = 0;
+        }
+
+        $user_model->insertResetPassword($user->id, $data);
+
+        // Send email with new password
+        $email = \Config\Services::email();
+        $email->setFrom('noreply@erms.local', 'ARMS Support');
         $email->setTo($emailAddress);
-        $email->setSubject('Password Reset Request');
+        $email->setSubject('Your New Password');
         $email->setMessage("
-            <h2>Password Reset</h2>
-            <p>Hello,</p>
-            <p>Click below to reset your password:</p>
-            <p><a href='{$resetLink}'>{$resetLink}</a></p>
-        ");
+        <h2>Password Reset</h2>
+        <p>Hello,</p>
+        <p>Your new password is:</p>
+        <p><strong>{$newPassword}</strong></p>
+        <p>Please log in using this password and change it immediately for security.</p>
+    ");
 
         if ($email->send()) {
-            return "✅ Reset email sent! Check MailHog at <a href='http://localhost:8025'>http://localhost:8025</a>";
+            return "✅ New password sent. Please check your and return to <a href=" . base_url("auth/login") . "> Login </a>";
         } else {
             return "❌ Failed to send reset email.<br>" . $email->printDebugger(['headers']);
         }
-    }
-
-    public function resetPassword($token)
-    {
-        return "🔑 This is where you'd show the reset form. Token: " . esc($token);
     }
 }

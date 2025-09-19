@@ -61,7 +61,7 @@ Records
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             <?php endif ?>
-                                            <?php if(hasPermission('records.approve')): ?>
+                                            <?php if(hasRole('Records Officer') || hasPermission('records.approve')): ?>
                                                 <button class="btn btn-success btn-sm approve-btn" data-id="<?= $record->id ?>">
                                                     <i class="fas fa-check"></i>
                                                 </button>

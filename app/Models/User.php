@@ -80,4 +80,14 @@ class User extends Model
     {
         return $this->update($id, $data);
     }
+
+    public function getUserByEmail($email)
+    {
+        return $this->where('email', $email)->first();
+    }
+
+    public function insertResetPassword($id,$data)
+    {
+        return $this->update($id, $data);
+    }
 }
