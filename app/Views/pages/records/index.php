@@ -27,11 +27,18 @@ Records
             <div class="card-body">
                 <!-- Search + Per Page -->
                 <form method="get" class="mb-2 d-flex justify-content-between">
-                    <select name="per_page" class="form-control form-control-sm mr-2" style="width:55px;" onchange="this.form.submit()">
+                    <div class="d-flex"><select name="per_page" class="form-control form-control-sm mr-2" style="width:55px;" onchange="this.form.submit()">
                         <?php foreach ([5, 10, 25, 50] as $num): ?>
                             <option value="<?= $num ?>" <?= ($perPage == $num) ? 'selected' : '' ?>><?= $num ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <select name="status_id" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
+                        <option value="">All</option>
+                        <?php foreach ($statuses as $status): ?>
+                            <option value="<?= $status->id ?>" <?= ($status->id == $status_id) ? 'selected' : '' ?>><?= $status->name ?></option>
+                        <?php endforeach; ?>
+                    </select></div>
+                    
 
                     <div class="input-group input-group-sm" style="max-width: 300px;">
                         <input type="text" name="search" value="<?= esc($search ?? '') ?>" class="form-control" placeholder="Search Title...">

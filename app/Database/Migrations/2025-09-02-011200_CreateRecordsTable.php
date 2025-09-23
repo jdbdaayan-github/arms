@@ -41,6 +41,10 @@ class CreateRecordsTable extends Migration
                 'type'=> 'INT',
                 'unsigned' => TRUE,
             ],
+            'archived_by'=> [
+                'type'=> 'INT',
+                'unsigned' => TRUE,
+            ],
             'deleted_by' => [
                 'type'=> 'INT',
                 'unsigned' => true,
@@ -57,6 +61,10 @@ class CreateRecordsTable extends Migration
             'updated_at' => [
                 'type' => 'DATETIME',
                 'null' => true
+            ],
+            'archived_at' => [
+                'type'=> 'DATETIME',
+                'null'=> true,
             ],
         ]);
         $this->forge->addKey('id', true);

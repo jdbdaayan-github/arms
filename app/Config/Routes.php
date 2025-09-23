@@ -55,7 +55,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('workflow/(:num)', [RecordController::class, 'workflow']);
         $routes->get('approval', [RecordController::class, 'approval']);
         $routes->get('archival', [RecordController::class, 'archival']);
-        $routes->get('borrow', [RecordController::class, 'borrow']);
+        $routes->get('requests', [RecordController::class, 'requests']);
         $routes->get('request/(:num)', [RecordController::class, 'request']);
         $routes->post('submitRequest/(:num)', [RecordController::class, 'submitRequest']);
 

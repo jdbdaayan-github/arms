@@ -13,7 +13,7 @@ class CreateUserPermissionTable extends Migration
             'user_id' => ['type' => 'INT', 'unsigned' => true],
             'permission_id' => ['type' => 'INT', 'unsigned' => true],
         ]);
-
+        $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('permission_id', 'permissions', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('user_permissions');

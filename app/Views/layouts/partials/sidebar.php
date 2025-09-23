@@ -113,10 +113,10 @@ function isMenuOpen($segment1Expected)
                         <?php endif ?>
                         <?php if (hasRole('Superadmin') || hasRole('Archivist') || hasPermission('records.archival')): ?>
                             <li class="nav-item">
-                                <a href="<?= base_url('records/borrow') ?>" class="nav-link <?= isActive('records', 'borrow') ?>">
+                                <a href="<?= base_url('records/requests') ?>" class="nav-link <?= isActive('records', 'requests') ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>
-                                        Borrowed
+                                        Requests
                                         <span class="right badge badge-danger"><?= $pendingArchivalCount ?></span>
                                     </p>
                                 </a>

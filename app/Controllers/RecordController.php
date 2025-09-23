@@ -12,6 +12,8 @@ use App\Models\RecordIndexValue;
 use App\Models\RecordFileVersion;
 use App\Models\RecordSeriesIndex;
 use App\Controllers\BaseController;
+use App\Models\RecordRequest;
+use App\Models\RecordStatus;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class RecordController extends BaseController
@@ -21,6 +23,7 @@ class RecordController extends BaseController
     protected $record_index_model;
     protected $record_file_version_model;
     protected $record_index_value;
+    protected $record_request;
 
     public function __construct()
     {
@@ -29,13 +32,17 @@ class RecordController extends BaseController
         $this->record_index_model = new RecordIndex();
         $this->record_file_version_model = new RecordFileVersion();
         $this->record_index_value = new RecordIndexValue();
+        $this->record_request = new RecordRequest();
     }
 
     public function index()
     {
+        $status_model = new RecordStatus();
+        $statuses = $status_model->getAllStatus();
         $recordModel = new \App\Models\Record();
 
         // Get request params
+        $status_id = $this->request->getGet('status_id');
         $search     = $this->request->getGet('search');
         $perPage    = (int) $this->request->getGet('per_page') ?: 10; // default 10
         $page       = (int) $this->request->getGet('page') ?: 1;
@@ -46,9 +53,13 @@ class RecordController extends BaseController
             $builder = $builder->like('title', $search);
         }
 
-        if(hasRole('Contributor'))
-        {
-            $builder = $builder->where('created_by',session()->get('user_id'));
+        //dd($status_id == null)
+        if ($status_id) {
+            $builder = $builder->where('status_id', $status_id);
+        }
+
+        if (hasRole('Contributor')) {
+            $builder = $builder->where('created_by', session()->get('user_id'));
         }
 
         // Get paginated results
@@ -60,6 +71,8 @@ class RecordController extends BaseController
             'pager'   => $pager,
             'search'  => $search,
             'perPage' => $perPage,
+            'statuses' => $statuses,
+            'status_id' => $status_id
         ]);
     }
 
@@ -102,33 +115,35 @@ class RecordController extends BaseController
         $perPage = (int) $this->request->getGet('per_page') ?: 10;
         $page    = (int) $this->request->getGet('page') ?: 1;
 
-        $pendingForArchival = $this->record_model->getForArchivalData();
-
-        $pendingForArchivalCount = $pendingForArchival->countAllResults();
-        // Make sure getForApprovalData() returns a Builder object
-        $builder = $pendingForArchival; // should return Builder
+        // === ARCHIVED RECORDS ===
+        $builderArchived = $this->record_model->getArchivedData();
         if ($search) {
-            $builder = $builder->like('title', $search);
+            $builderArchived = $builderArchived->like('title', $search);
         }
 
-        $records = $builder->paginate($perPage, 'default', $page); // always array
-        $pager   = $builder->pager;
+        $recordsArchived = $builderArchived->paginate($perPage, 'archived', $page);
+        $pagerArchived   = $builderArchived->pager;
 
-        // Ensure $records is never null
-        $records = $records ?? [];
+        // === FOR ARCHIVAL RECORDS ===
+        $builderForArchival = $this->record_model->getForArchivalData();
+        if ($search) {
+            $builderForArchival = $builderForArchival->like('title', $search);
+        }
+
+        $recordsForArchival = $builderForArchival->paginate($perPage, 'for_archival', $page);
+        $pagerForArchival   = $builderForArchival->pager;
+
+        $pendingForArchivalCount = $this->record_model->countPendingArchival();
 
         return view('pages/records/archive', [
-            'records' => $records,
-            'pager'   => $pager,
-            'search'  => $search,
+            'recordsArchived' => $recordsArchived ?? [],
+            'recordsForArchival' => $recordsForArchival ?? [],
+            'pagerArchived' => $pagerArchived,
+            'pagerForArchival' => $pagerForArchival,
+            'search' => $search,
             'perPage' => $perPage,
             'pendingForArchivalCount' => $pendingForArchivalCount,
         ]);
-    }
-
-    public function borrow()
-    {
-        return view('pages/records/borrow');
     }
 
 
@@ -251,6 +266,32 @@ class RecordController extends BaseController
         return view('pages/records/workflow');
     }
 
+    public function requests()
+    {
+        $search     = $this->request->getGet('search');
+        $perPage    = (int) $this->request->getGet('per_page') ?: 10;
+        $page       = (int) $this->request->getGet('page') ?: 1;
+
+        // Make sure getForApprovalData() returns a Builder object
+        $builder = $this->record_request->getAllRequest();
+        if ($search) {
+            $builder = $builder->like('title', $search);
+        }
+
+        $records = $builder->paginate($perPage, 'default', $page); // always array
+        $pager   = $builder->pager;
+
+        // Ensure $records is never null
+        $records = $records ?? [];
+
+        return view('pages/records/requests', [
+            'records' => $records,
+            'pager'   => $pager,
+            'search'  => $search,
+            'perPage' => $perPage,
+        ]);
+    }
+
     public function request($id)
     {
         $data['record'] = $this->record_model->getRecordById($id);
@@ -260,14 +301,13 @@ class RecordController extends BaseController
     public function submitRequest($id)
     {
         $borrow_model = new RecordBorrow();
-        
+
         $rules = [
             'due_date' => 'permit_empty',
             'remarks' => 'required',
         ];
 
-        if(!$this->validate($rules))
-        {
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
@@ -281,8 +321,5 @@ class RecordController extends BaseController
         $borrow_model->addRequest($data);
 
         return redirect()->to('records')->with('success', 'Record requested successfully!');
-
-
     }
 }
- 

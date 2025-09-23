@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateRecordBorrowTransactionTable extends Migration
+class CreateRecordRequestTable extends Migration
 {
     public function up()
     {
@@ -39,9 +39,10 @@ class CreateRecordBorrowTransactionTable extends Migration
                 'constraint' => 255,
                 'null'       => true,
             ],
-            'status' => [                // Lifecycle status
-                'type'       => "ENUM('Requested','Borrowed','Returned')",
-                'default'    => 'Requested',
+            'request_id' => ['type' => 'INT', 'unsigned' => true],
+            'status' => [
+                'type'       => "ENUM('Pending','Borrowed','Returned','Done')",
+                'default'    => 'Pending',
             ],
             'created_at' => [
                 'type' => 'DATETIME',
@@ -56,12 +57,13 @@ class CreateRecordBorrowTransactionTable extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('record_id', 'records', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('request_id', 'record_request_types', 'id', 'CASCADE', 'CASCADE');
 
-        $this->forge->createTable('record_borrows', true);
+        $this->forge->createTable('record_requests', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('record_borrows', true);
+        $this->forge->dropTable('record_requests');
     }
 }
