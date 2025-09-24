@@ -240,9 +240,7 @@ Roles
                         success: function(response) {
                             if (response.status === 'success') {
                                 Swal.fire("Success", response.message, "success")
-                                    .then(() => {
-                                        window.location.href = response.redirect;
-                                    });
+                                userstable.ajax.reload(null, false);
                             } else {
                                 Swal.fire("Error", response.message, "error");
                             }

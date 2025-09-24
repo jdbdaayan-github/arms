@@ -54,6 +54,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('getIndexes/(:num)', 'RecordController::getIndexes/$1');
         $routes->get('workflow/(:num)', [RecordController::class, 'workflow']);
         $routes->get('approval', [RecordController::class, 'approval']);
+        $routes->get('approve/(:num)', [RecordController::class, 'approveRecord']);
         $routes->get('archival', [RecordController::class, 'archival']);
         $routes->get('requests', [RecordController::class, 'requests']);
         $routes->get('request/(:num)', [RecordController::class, 'request']);

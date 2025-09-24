@@ -65,7 +65,7 @@ Records
                                 <?php foreach ($records as $record): ?>
                                     <tr>
                                         <td class="text-center"><input type="checkbox"></td>
-                                        <td><?= esc($record->title) ?></td>
+                                        <td class="align-items-center"><?= esc($record->title) ?></td>
                                         <td class="text-center">
                                             <!-- VIEW BUTTON -->
                                             <?php if (hasPermission('records.view')): ?>
@@ -118,22 +118,51 @@ Records
                 </div>
 
                 <!-- Pagination Info -->
+                <?php
+                $currentPage = $pager->getCurrentPage();
+                $perPage     = $pager->getPerPage();
+                $total       = $pager->getTotal();
+
+                $totalPages = ceil($total / $perPage);
+                ?>
+
+                <!-- Pagination Info + Controls -->
                 <div class="d-flex justify-content-between align-items-center text-sm">
+                    <!-- Left: Showing info -->
                     <div>
                         <?php
-                        $currentPage = $pager->getCurrentPage();
-                        $perPage     = $pager->getPerPage();
-                        $total       = $pager->getTotal();
-
-                        $start = ($total > 0) ? (($currentPage - 1) * $perPage) + 1 : 0;
-                        $end   = ($start + count($records) - 1);
+                        if ($total > 0) {
+                            $start = (($currentPage - 1) * $perPage) + 1;
+                            $end   = min($start + $perPage - 1, $total);
+                        } else {
+                            $start = 0;
+                            $end   = 0;
+                        }
                         ?>
                         Showing <?= $start ?> to <?= $end ?> of <?= $total ?> results
                     </div>
 
-                    <div>
-                        <?= $pager->links('default', 'default_full') ?>
-                    </div>
+                    <!-- Right: Pagination -->
+                    <nav>
+                        <ul class="pagination pagination-sm m-0">
+                            <!-- Prev button -->
+                            <li class="page-item <?= ($currentPage <= 1) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $currentPage - 1 ?>">«</a>
+                            </li>
+
+                            <!-- Page numbers -->
+                            <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                <li class="page-item <?= ($page == $currentPage) ? 'active' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <!-- Next button -->
+                            <li class="page-item <?= ($currentPage >= $totalPages) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $currentPage + 1 ?>">»</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
 
             </div>

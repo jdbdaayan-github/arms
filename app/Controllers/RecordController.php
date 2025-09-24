@@ -39,7 +39,7 @@ class RecordController extends BaseController
     {
         $status_model = new RecordStatus();
         $statuses = $status_model->getAllStatus();
-        $recordModel = new \App\Models\Record();
+        $recordModel = new Record();
 
         // Get request params
         $status_id = $this->request->getGet('status_id');
@@ -47,20 +47,20 @@ class RecordController extends BaseController
         $perPage    = (int) $this->request->getGet('per_page') ?: 10; // default 10
         $page       = (int) $this->request->getGet('page') ?: 1;
 
-        // Build query
-        $builder = $recordModel;
+        $builder = $this->record_model->getRecords();
         if ($search) {
             $builder = $builder->like('title', $search);
         }
 
-        //dd($status_id == null)
+        //filter record per status
         if ($status_id) {
             $builder = $builder->where('status_id', $status_id);
         }
 
-        if (hasRole('Contributor')) {
+        /**Contributor can view his records created only
+        if (session()->get('role') == "Contributor") {
             $builder = $builder->where('created_by', session()->get('user_id'));
-        }
+        }*/
 
         // Get paginated results
         $records = $builder->paginate($perPage, 'default', $page);
@@ -107,6 +107,11 @@ class RecordController extends BaseController
         $data = [
             'status_id' => 3,
         ];
+
+        if($this->record_model->update($id, $data))
+        {
+            return redirect()->to('records/approval')->with('success', 'Records approved successfully!');
+        }
     }
 
     public function archival()
@@ -149,8 +154,16 @@ class RecordController extends BaseController
 
     public function create()
     {
-        $series = $this->record_series_model->getSeries();
-        return view('pages/records/create', ['series' => $series]);
+        if(hasRole('Administrator') || hasPermission('records.create'))
+        {
+            $series = $this->record_series_model->getSeries();
+            return view('pages/records/create', ['series' => $series]);
+        }
+        
+        return $this->response->setStatusCode(403)
+                      ->setBody(view('errors/html/error_403', [
+                          'message' => 'You do not have permission to access this page.'
+                      ]));
     }
 
     public function getIndexes($category_id)

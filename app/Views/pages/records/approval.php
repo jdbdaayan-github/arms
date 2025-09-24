@@ -56,12 +56,12 @@ Records
                                         </td>
                                         <td><?= esc($record->title) ?></td>
                                         <td class="text-center">
-                                            <?php if(hasPermission('records.view')): ?>
+                                            <?php if (hasPermission('records.view')): ?>
                                                 <a href="<?= base_url('records/show/' . $record->id) ?>" class="btn btn-info btn-sm">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             <?php endif ?>
-                                            <?php if(hasRole('Records Officer') || hasPermission('records.approve')): ?>
+                                            <?php if (hasRole('Records Officer') || hasPermission('records.approve')): ?>
                                                 <button class="btn btn-success btn-sm approve-btn" data-id="<?= $record->id ?>">
                                                     <i class="fas fa-check"></i>
                                                 </button>
@@ -92,24 +92,53 @@ Records
                 </div>
 
                 <!-- Pagination Info -->
+                <?php
+                $currentPage = $pager->getCurrentPage();
+                $perPage     = $pager->getPerPage();
+                $total       = $pager->getTotal();
+
+                $totalPages = ceil($total / $perPage);
+                ?>
+
+                <!-- Pagination Info + Controls -->
                 <div class="d-flex justify-content-between align-items-center text-sm">
+                    <!-- Left: Showing info -->
                     <div>
                         <?php
-                        $currentPage = $pager->getCurrentPage();
-                        $perPage     = $pager->getPerPage();
-                        $total       = $pager->getTotal();
-
-                        $start = ($total > 0) ? (($currentPage - 1) * $perPage) + 1 : 0;
-                        $end   = ($start + count($records) - 1);
+                        if ($total > 0) {
+                            $start = (($currentPage - 1) * $perPage) + 1;
+                            $end   = min($start + $perPage - 1, $total);
+                        } else {
+                            $start = 0;
+                            $end   = 0;
+                        }
                         ?>
                         Showing <?= $start ?> to <?= $end ?> of <?= $total ?> results
                     </div>
 
-                    <div>
-                        <?= $pager->links('default', 'default_full') ?>
-                    </div>
-                </div>
+                    <!-- Right: Pagination -->
+                    <nav>
+                        <ul class="pagination pagination-sm m-0">
+                            <!-- Prev button -->
+                            <li class="page-item <?= ($currentPage <= 1) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $currentPage - 1 ?>">«</a>
+                            </li>
 
+                            <!-- Page numbers -->
+                            <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                <li class="page-item <?= ($page == $currentPage) ? 'active' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <!-- Next button -->
+                            <li class="page-item <?= ($currentPage >= $totalPages) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="?page=<?= $currentPage + 1 ?>">»</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -129,7 +158,7 @@ Records
                 confirmButtonText: 'Yes, Approve',
                 cancelButtonText: 'Cancel'
             }).then((result) => {
-                if(result.isConfirmed){
+                if (result.isConfirmed) {
                     window.location.href = `<?= base_url('records/approve/') ?>${id}`;
                 }
             });
@@ -146,7 +175,7 @@ Records
                 confirmButtonText: 'Yes, Reject',
                 cancelButtonText: 'Cancel'
             }).then((result) => {
-                if(result.isConfirmed){
+                if (result.isConfirmed) {
                     window.location.href = `<?= base_url('records/reject/') ?>${id}`;
                 }
             });
@@ -175,9 +204,9 @@ Records
     // Bulk Approve
     bulkApproveBtn.addEventListener('click', () => {
         const selectedIds = Array.from(checkboxes)
-                                .filter(cb => cb.checked)
-                                .map(cb => cb.value);
-        if(selectedIds.length === 0) return;
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        if (selectedIds.length === 0) return;
 
         Swal.fire({
             title: 'Bulk Approve?',
@@ -187,7 +216,7 @@ Records
             confirmButtonText: 'Yes, Approve',
             cancelButtonText: 'Cancel'
         }).then((result) => {
-            if(result.isConfirmed){
+            if (result.isConfirmed) {
                 window.location.href = `<?= base_url('records/bulkApprove') ?>?ids=${selectedIds.join(',')}`;
             }
         });
@@ -196,9 +225,9 @@ Records
     // Bulk Reject
     bulkRejectBtn.addEventListener('click', () => {
         const selectedIds = Array.from(checkboxes)
-                                .filter(cb => cb.checked)
-                                .map(cb => cb.value);
-        if(selectedIds.length === 0) return;
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        if (selectedIds.length === 0) return;
 
         Swal.fire({
             title: 'Bulk Reject?',
@@ -208,10 +237,20 @@ Records
             confirmButtonText: 'Yes, Reject',
             cancelButtonText: 'Cancel'
         }).then((result) => {
-            if(result.isConfirmed){
+            if (result.isConfirmed) {
                 window.location.href = `<?= base_url('records/bulkReject') ?>?ids=${selectedIds.join(',')}`;
             }
         });
     });
 </script>
+<?php if (session()->has('success')): ?>
+    <script>
+        Swal.fire({
+            title: "Success!",
+            text: "<?= session('success') ?>",
+            icon: "success",
+            confirmButtonText: "OK"
+        });
+    </script>
+<?php endif; ?>
 <?= $this->endSection() ?>

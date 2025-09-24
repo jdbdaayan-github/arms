@@ -70,17 +70,17 @@ Records
                                                 <td class="text-center"><input type="checkbox" class="archived-checkbox" value="<?= $record->id ?>"></td>
                                                 <td><?= esc($record->title) ?></td>
                                                 <td class="text-center">
-                                                    <?php if(hasPermission('records.view')): ?>
+                                                    <?php if (hasPermission('records.view')): ?>
                                                         <a href="<?= base_url('records/show/' . $record->id) ?>" class="btn btn-info btn-sm">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
                                                     <?php endif ?>
-                                                    <?php if(hasPermission('records.restore')): ?>
+                                                    <?php if (hasPermission('records.restore')): ?>
                                                         <button class="btn btn-success btn-sm restore-btn" data-id="<?= $record->id ?>">
                                                             <i class="fas fa-undo"></i>
                                                         </button>
                                                     <?php endif ?>
-                                                    <?php if(hasPermission('records.delete')): ?>
+                                                    <?php if (hasPermission('records.delete')): ?>
                                                         <button class="btn btn-danger btn-sm delete-btn" data-id="<?= $record->id ?>">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
@@ -89,7 +89,9 @@ Records
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                        <tr><td colspan="3" class="text-center">No archived records found</td></tr>
+                                        <tr>
+                                            <td colspan="3" class="text-center">No archived records found</td>
+                                        </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
@@ -102,20 +104,53 @@ Records
                         </div>
 
                         <!-- Pagination Info -->
+                        <?php
+                        $currentPage = $pagerArchived->getCurrentPage('archived');
+                        $perPage     = $pagerArchived->getPerPage('archived');
+                        $total       = $pagerArchived->getTotal('archived');
+
+                        $totalPages = ceil($total / $perPage);
+                        ?>
+
+                        <!-- Pagination Info + Controls -->
                         <div class="d-flex justify-content-between align-items-center text-sm">
+                            <!-- Left: Showing info -->
                             <div>
                                 <?php
-                                $currentPage = $pagerArchived->getCurrentPage('archived');
-                                $perPage     = $pagerArchived->getPerPage('archived');
-                                $total       = $pagerArchived->getTotal('archived');
-
-                                $start = ($total > 0) ? (($currentPage - 1) * $perPage) + 1 : 0;
-                                $end   = ($start + count($recordsArchived) - 1);
+                                if ($total > 0) {
+                                    $start = (($currentPage - 1) * $perPage) + 1;
+                                    $end   = min($start + $perPage - 1, $total);
+                                } else {
+                                    $start = 0;
+                                    $end   = 0;
+                                }
                                 ?>
                                 Showing <?= $start ?> to <?= $end ?> of <?= $total ?> results
                             </div>
-                            <div><?= $pagerArchived->links('archived', 'default_full') ?></div>
+
+                            <!-- Right: Pagination -->
+                            <nav>
+                                <ul class="pagination pagination-sm m-0">
+                                    <!-- Prev button -->
+                                    <li class="page-item <?= ($currentPage <= 1) ? 'disabled' : '' ?>">
+                                        <a class="page-link" href="?page=<?= $currentPage - 1 ?>">«</a>
+                                    </li>
+
+                                    <!-- Page numbers -->
+                                    <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                        <li class="page-item <?= ($page == $currentPage) ? 'active' : '' ?>">
+                                            <a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+
+                                    <!-- Next button -->
+                                    <li class="page-item <?= ($currentPage >= $totalPages) ? 'disabled' : '' ?>">
+                                        <a class="page-link" href="?page=<?= $currentPage + 1 ?>">»</a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
+
                     </div>
 
                     <!-- For Archival Tab -->
@@ -136,12 +171,12 @@ Records
                                                 <td class="text-center"><input type="checkbox" class="for-archive-checkbox" value="<?= $record->id ?>"></td>
                                                 <td><?= esc($record->title) ?></td>
                                                 <td class="text-center">
-                                                    <?php if(hasPermission('records.view')): ?>
+                                                    <?php if (hasPermission('records.view')): ?>
                                                         <a href="<?= base_url('records/show/' . $record->id) ?>" class="btn btn-info btn-sm">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
                                                     <?php endif ?>
-                                                    <?php if(hasPermission('records.archive')): ?>
+                                                    <?php if (hasPermission('records.archive')): ?>
                                                         <button class="btn btn-warning btn-sm archive-btn" data-id="<?= $record->id ?>">
                                                             <i class="fas fa-archive"></i>
                                                         </button>
@@ -150,7 +185,9 @@ Records
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                        <tr><td colspan="3" class="text-center">No records ready for archival</td></tr>
+                                        <tr>
+                                            <td colspan="3" class="text-center">No records ready for archival</td>
+                                        </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
@@ -162,20 +199,54 @@ Records
                         </div>
 
                         <!-- Pagination Info -->
+                        <?php
+                        $currentPage = $pagerForArchival->getCurrentPage('for_archival');
+                        $perPage     = $pagerForArchival->getPerPage('for_archival');
+                        $total       = $pagerForArchival->getTotal('for_archival');
+
+                        $totalPages = ceil($total / $perPage);
+                        ?>
+
+                        <!-- Pagination Info + Controls -->
                         <div class="d-flex justify-content-between align-items-center text-sm">
+                            <!-- Left: Showing info -->
                             <div>
                                 <?php
-                                $currentPage = $pagerForArchival->getCurrentPage('for_archival');
-                                $perPage     = $pagerForArchival->getPerPage('for_archival');
-                                $total       = $pagerForArchival->getTotal('for_archival');
-
-                                $start = ($total > 0) ? (($currentPage - 1) * $perPage) + 1 : 0;
-                                $end   = ($start + count($recordsForArchival) - 1);
+                                if ($total > 0) {
+                                    $start = (($currentPage - 1) * $perPage) + 1;
+                                    $end   = min($start + $perPage - 1, $total);
+                                } else {
+                                    $start = 0;
+                                    $end   = 0;
+                                }
                                 ?>
                                 Showing <?= $start ?> to <?= $end ?> of <?= $total ?> results
                             </div>
-                            <div><?= $pagerForArchival->links('for_archival', 'default_full') ?></div>
+
+                            <!-- Right: Pagination -->
+                            <nav>
+                                <ul class="pagination pagination-sm m-0">
+                                    <!-- Prev button -->
+                                    <li class="page-item <?= ($currentPage <= 1) ? 'disabled' : '' ?>">
+                                        <a class="page-link" href="?page=<?= $currentPage - 1 ?>">«</a>
+                                    </li>
+
+                                    <!-- Page numbers -->
+                                    <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                                        <li class="page-item <?= ($page == $currentPage) ? 'active' : '' ?>">
+                                            <a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+
+                                    <!-- Next button -->
+                                    <li class="page-item <?= ($currentPage >= $totalPages) ? 'disabled' : '' ?>">
+                                        <a class="page-link" href="?page=<?= $currentPage + 1 ?>">»</a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -231,7 +302,7 @@ Records
                 showCancelButton: true,
                 confirmButtonText: 'Yes, Archive'
             }).then((result) => {
-                if(result.isConfirmed){
+                if (result.isConfirmed) {
                     window.location.href = `<?= base_url('records/archive/') ?>${id}`;
                 }
             });
@@ -247,7 +318,7 @@ Records
                 showCancelButton: true,
                 confirmButtonText: 'Yes, Restore'
             }).then((result) => {
-                if(result.isConfirmed){
+                if (result.isConfirmed) {
                     window.location.href = `<?= base_url('records/restore/') ?>${id}`;
                 }
             });
@@ -265,7 +336,7 @@ Records
                 confirmButtonText: 'Yes, Delete',
                 confirmButtonColor: '#d33'
             }).then((result) => {
-                if(result.isConfirmed){
+                if (result.isConfirmed) {
                     window.location.href = `<?= base_url('records/delete/') ?>${id}`;
                 }
             });
@@ -275,7 +346,7 @@ Records
     // ✅ Bulk Swal Actions
     bulkArchiveBtn.addEventListener('click', () => {
         const selectedIds = Array.from(forArchiveCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-        if(selectedIds.length === 0) return;
+        if (selectedIds.length === 0) return;
 
         Swal.fire({
             title: 'Bulk Archive?',
@@ -284,7 +355,7 @@ Records
             showCancelButton: true,
             confirmButtonText: 'Yes, Archive'
         }).then((result) => {
-            if(result.isConfirmed){
+            if (result.isConfirmed) {
                 window.location.href = `<?= base_url('records/bulkArchive') ?>?ids=${selectedIds.join(',')}`;
             }
         });
@@ -292,7 +363,7 @@ Records
 
     bulkRestoreBtn.addEventListener('click', () => {
         const selectedIds = Array.from(archivedCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-        if(selectedIds.length === 0) return;
+        if (selectedIds.length === 0) return;
 
         Swal.fire({
             title: 'Bulk Restore?',
@@ -301,7 +372,7 @@ Records
             showCancelButton: true,
             confirmButtonText: 'Yes, Restore'
         }).then((result) => {
-            if(result.isConfirmed){
+            if (result.isConfirmed) {
                 window.location.href = `<?= base_url('records/bulkRestore') ?>?ids=${selectedIds.join(',')}`;
             }
         });
@@ -309,7 +380,7 @@ Records
 
     bulkDeleteBtn.addEventListener('click', () => {
         const selectedIds = Array.from(archivedCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-        if(selectedIds.length === 0) return;
+        if (selectedIds.length === 0) return;
 
         Swal.fire({
             title: 'Bulk Delete?',
@@ -319,7 +390,7 @@ Records
             confirmButtonColor: '#d33',
             confirmButtonText: 'Yes, Delete'
         }).then((result) => {
-            if(result.isConfirmed){
+            if (result.isConfirmed) {
                 window.location.href = `<?= base_url('records/bulkDelete') ?>?ids=${selectedIds.join(',')}`;
             }
         });

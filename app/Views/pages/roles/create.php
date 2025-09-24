@@ -5,7 +5,7 @@
 <?= $this->extend('layouts/app'); ?>
 
 <?= $this->section('content-header') ?>
-CREATE ROLE
+Create Role
 <?= $this->endSection() ?>
 
 <?= $this->section('content-breadcrumbs') ?>
