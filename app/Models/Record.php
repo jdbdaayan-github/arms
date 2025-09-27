@@ -37,7 +37,7 @@ class Record extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = [];
+    protected $afterInsert    = ['generateRefNumber'];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
@@ -46,6 +46,12 @@ class Record extends Model
     protected $afterDelete    = [];
 
     protected $oldData = null;
+
+    protected function generateRefNumber(array $data)
+{
+    $data['data']['ref_number'] = 'REC-' . date('Ymd') . '-' . str_pad(uniqid(), 6, '0', STR_PAD_LEFT);
+    return $data;
+}
 
     public function getRecords()
     {

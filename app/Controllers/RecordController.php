@@ -7,13 +7,14 @@ use App\Models\Settings;
 use App\Models\RecordIndex;
 use App\Models\RecordBorrow;
 use App\Models\RecordSeries;
+use App\Models\RecordStatus;
 use App\Models\RecordHistory;
+use App\Models\RecordRequest;
 use App\Models\RecordIndexValue;
 use App\Models\RecordFileVersion;
+use App\Models\RecordRequestType;
 use App\Models\RecordSeriesIndex;
 use App\Controllers\BaseController;
-use App\Models\RecordRequest;
-use App\Models\RecordStatus;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class RecordController extends BaseController
@@ -24,6 +25,7 @@ class RecordController extends BaseController
     protected $record_file_version_model;
     protected $record_index_value;
     protected $record_request;
+    protected $record_request_type;
 
     public function __construct()
     {
@@ -33,6 +35,7 @@ class RecordController extends BaseController
         $this->record_file_version_model = new RecordFileVersion();
         $this->record_index_value = new RecordIndexValue();
         $this->record_request = new RecordRequest();
+        $this->record_request_type = new RecordRequestType();
     }
 
     public function index()
@@ -108,8 +111,7 @@ class RecordController extends BaseController
             'status_id' => 3,
         ];
 
-        if($this->record_model->update($id, $data))
-        {
+        if ($this->record_model->update($id, $data)) {
             return redirect()->to('records/approval')->with('success', 'Records approved successfully!');
         }
     }
@@ -151,19 +153,29 @@ class RecordController extends BaseController
         ]);
     }
 
+    public function archive($id)
+    {
+        $data = [
+            'status_id' => 4
+        ];
+
+        if ($this->record_model->update($id, $data)) {
+            return redirect()->to('records/archival')->with('success', 'Records archived successfully!');
+        }
+    }
+
 
     public function create()
     {
-        if(hasRole('Administrator') || hasPermission('records.create'))
-        {
+        if (hasRole('Administrator') || hasPermission('records.create')) {
             $series = $this->record_series_model->getSeries();
             return view('pages/records/create', ['series' => $series]);
         }
-        
+
         return $this->response->setStatusCode(403)
-                      ->setBody(view('errors/html/error_403', [
-                          'message' => 'You do not have permission to access this page.'
-                      ]));
+            ->setBody(view('errors/html/error_403', [
+                'message' => 'You do not have permission to access this page.'
+            ]));
     }
 
     public function getIndexes($category_id)
@@ -172,6 +184,7 @@ class RecordController extends BaseController
 
         return $this->response->setJSON($indexes);
     }
+
 
     public function store()
     {
@@ -216,17 +229,27 @@ class RecordController extends BaseController
             $file->move($uploadPath, $newName);
         }
 
+        //$refNumber = 'REC-' . date('Ymd') . '-' . str_pad(uniqid(), 10, '0', STR_PAD_LEFT);
+
         $record_data = [
             'title'        => $this->request->getPost('title'),
             'confidential' => $this->request->getPost('confidentiality'),
             'series_id'    => $this->request->getPost('series'),
             'record_date'  => $this->request->getPost('record_date'),
             'created_by'   => session()->get('user_id'),
+            //'ref_number' => $refNumber,
         ];
 
         $record_id = $this->record_model->insertRecord($record_data);
 
         if ($record_id) {
+
+            //save insert unique record ref_number
+           // $refNumber = 'REC-' . date('Ymd') . '-' . str_pad($record_id, 6, '0', STR_PAD_LEFT);
+           // $refData =  ['ref_number' => $refNumber];
+            //dd($refData);
+            //$this->record_model->update($record_id, $refData);
+
             // save file version
             $record_version_data = [
                 'record_id'      => $record_id,
@@ -307,6 +330,7 @@ class RecordController extends BaseController
 
     public function request($id)
     {
+        $data['req_type'] = $this->record_request_type->getAllRecordTypes();
         $data['record'] = $this->record_model->getRecordById($id);
         return view('pages/records/request', $data);
     }

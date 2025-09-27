@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RecordRequest extends Model
+class RecordRequestType extends Model
 {
-    protected $table            = 'record_requests';
+    protected $table            = 'record_request_types';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['record_id', 'user_id', 'request_date', 'request_id', 'remarks', 'status'];
+    protected $allowedFields    = [];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -44,8 +44,8 @@ class RecordRequest extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getAllRequest()
+    public function getAllRecordTypes()
     {
-        return $this->select('record_requests.*');
+        return $this->findAll();
     }
 }

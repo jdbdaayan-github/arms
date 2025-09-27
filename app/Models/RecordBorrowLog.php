@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RecordRequest extends Model
+class RecordBorrowLog extends Model
 {
-    protected $table            = 'record_requests';
+    protected $table            = 'record_borrow_logs';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['record_id', 'user_id', 'request_date', 'request_id', 'remarks', 'status'];
+    protected $allowedFields    = ['record_id', 'user_id', 'borrowed_at', 'returned_at', 'status'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,7 +21,7 @@ class RecordRequest extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -43,9 +43,4 @@ class RecordRequest extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function getAllRequest()
-    {
-        return $this->select('record_requests.*');
-    }
 }

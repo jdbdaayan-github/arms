@@ -56,10 +56,13 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('approval', [RecordController::class, 'approval']);
         $routes->get('approve/(:num)', [RecordController::class, 'approveRecord']);
         $routes->get('archival', [RecordController::class, 'archival']);
+        $routes->get('archive/(:num)', [RecordController::class, 'archive']);
         $routes->get('requests', [RecordController::class, 'requests']);
         $routes->get('request/(:num)', [RecordController::class, 'request']);
         $routes->post('submitRequest/(:num)', [RecordController::class, 'submitRequest']);
-
+        $routes->get('test', function () {
+            return view('pages/records/test');
+        });
     });
 
     #Users
@@ -138,9 +141,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     #Reports
     $routes->group('reports', function ($routes) {
-        $routes->get('borrowed', [ReportController::class , 'borrowed']);
-        $routes->get('returned', [ReportController::class , 'returned']);
-        $routes->get('summary', [ReportController::class , 'summary']);
-        $routes->get('users', [ReportController::class , 'users']);
+        $routes->get('borrowed', [ReportController::class, 'borrowed']);
+        $routes->get('returned', [ReportController::class, 'returned']);
+        $routes->get('summary', [ReportController::class, 'summary']);
+        $routes->get('users', [ReportController::class, 'users']);
     });
 });

@@ -22,26 +22,17 @@ class CreateRecordRequestTable extends Migration
                 'type'       => 'INT',
                 'unsigned'   => true,
             ],
-            'borrowed_at' => [           // When actually borrowed
-                'type'       => 'DATETIME',
-                'null'       => true,
-            ],
-            'expected_return_at' => [    // Optional due date
-                'type'       => 'DATETIME',
-                'null'       => true,
-            ],
-            'returned_at' => [           // When returned
-                'type'       => 'DATETIME',
-                'null'       => true,
+            'request_id' => [
+                'type'       => 'INT',
+                'unsigned'   => true,
             ],
             'remarks' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
                 'null'       => true,
             ],
-            'request_id' => ['type' => 'INT', 'unsigned' => true],
             'status' => [
-                'type'       => "ENUM('Pending','Borrowed','Returned','Done')",
+                'type'       => "ENUM('Pending', 'Approved', 'Ongoing','Completed')",
                 'default'    => 'Pending',
             ],
             'created_at' => [

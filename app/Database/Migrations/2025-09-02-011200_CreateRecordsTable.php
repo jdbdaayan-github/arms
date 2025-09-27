@@ -15,6 +15,12 @@ class CreateRecordsTable extends Migration
                 'unsigned' => true,
                 'auto_increment'=> true,
             ],
+            'ref_number' => [
+                'type' => 'VARCHAR',
+                'constraint' => 25,
+                'unique' => true,
+                'null' => true,
+            ],
             'title'=> [
                 'type'=> 'VARCHAR',
                 'constraint' => 255,
@@ -29,7 +35,7 @@ class CreateRecordsTable extends Migration
                 'constraint' => 11,
             ],
             'record_date' => [
-                'type'=> 'DATETIME',
+                'type'=> 'DATE',
                 'null'=> true,
             ],
             'status_id'=> [
