@@ -63,7 +63,7 @@ Records
                     <div class="col-md-6">
                         <p><strong>Title: </strong><?= esc($record->title) ?></p>
                         <p><strong>Confidential: </strong><?= esc($record->confidential == 0 ? 'No' : 'Yes') ?></p>
-                        <p><strong>Date: </strong><?= esc($record->record_date == '0000-00-00 00:00:00' || $record->record_date == null ? "" : date('F j, Y', strtotime($record->record_date))) ?></p>
+                        <p><strong>Date: </strong><?= esc($record->record_date == '0000-00-00' || $record->record_date == null ? "--" : date('F j, Y', strtotime($record->record_date))) ?></p>
                         <p><strong>Series Title: </strong><?= esc($record->series) ?></p>
                     </div>
                     <div class="col-md-6">

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use PhpParser\Node\Expr\FuncCall;
 
 class RecordRequest extends Model
 {
@@ -12,7 +13,7 @@ class RecordRequest extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['record_id', 'user_id', 'request_date', 'request_id', 'remarks', 'status'];
+    protected $allowedFields    = ['record_id', 'user_id', 'request_date', 'request_id', 'remarks', 'status', 'due_date'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -46,6 +47,18 @@ class RecordRequest extends Model
 
     public function getAllRequest()
     {
-        return $this->select('record_requests.*');
+        return $this->select('record_requests.*, records.*, CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as fullname')
+                    ->join('users', 'users.id = record_requests.user_id')
+                    ->join('records', 'records.id = record_requests.record_id');
+    }
+
+    public function addRequest($data)
+    {
+        return $this->insert($data);
+    }
+
+    public function updateRequest($id, $data)
+    {
+        return $this->update($id, $data);
     }
 }

@@ -6,10 +6,10 @@ use CodeIgniter\Model;
 
 class RecordUserPermission extends Model
 {
-    protected $table            = 'recorduserpermissions';
+    protected $table            = 'user_record_permission';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
+    protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [];
@@ -43,4 +43,5 @@ class RecordUserPermission extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
 }

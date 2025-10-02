@@ -26,13 +26,17 @@ class CreateRecordRequestTable extends Migration
                 'type'       => 'INT',
                 'unsigned'   => true,
             ],
+            'due_date' => [
+                'type' => 'DATE',
+                'null' => true
+            ],
             'remarks' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
                 'null'       => true,
             ],
             'status' => [
-                'type'       => "ENUM('Pending', 'Approved', 'Ongoing','Completed')",
+                'type'       => "ENUM('Pending', 'Approved', 'Disapproved', 'Ongoing' ,'Completed', 'Cancelled')",
                 'default'    => 'Pending',
             ],
             'created_at' => [

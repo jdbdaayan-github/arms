@@ -156,8 +156,11 @@ class RecordController extends BaseController
     public function archive($id)
     {
         $data = [
-            'status_id' => 4
+            'status_id' => 4,
+            'archived_by' => session()->get('user_id'),
+            'archived_at' => date('Y-m-d H:i:s'),
         ];
+        //dd($data);
 
         if ($this->record_model->update($id, $data)) {
             return redirect()->to('records/archival')->with('success', 'Records archived successfully!');
@@ -167,7 +170,7 @@ class RecordController extends BaseController
 
     public function create()
     {
-        if (hasRole('Administrator') || hasPermission('records.create')) {
+        if (hasRole('Administrator') || hasPermission('records.create') || hasRole('Contributor')) {
             $series = $this->record_series_model->getSeries();
             return view('pages/records/create', ['series' => $series]);
         }
@@ -230,23 +233,26 @@ class RecordController extends BaseController
         }
 
         //$refNumber = 'REC-' . date('Ymd') . '-' . str_pad(uniqid(), 10, '0', STR_PAD_LEFT);
-
+        $isDraft = (bool) $this->request->getPost('save_as_draft');
         $record_data = [
             'title'        => $this->request->getPost('title'),
             'confidential' => $this->request->getPost('confidentiality'),
             'series_id'    => $this->request->getPost('series'),
             'record_date'  => $this->request->getPost('record_date'),
             'created_by'   => session()->get('user_id'),
-            //'ref_number' => $refNumber,
         ];
+
+        if ($isDraft) {
+            $record_data['status_id'] = 1;
+        }
 
         $record_id = $this->record_model->insertRecord($record_data);
 
         if ($record_id) {
 
             //save insert unique record ref_number
-           // $refNumber = 'REC-' . date('Ymd') . '-' . str_pad($record_id, 6, '0', STR_PAD_LEFT);
-           // $refData =  ['ref_number' => $refNumber];
+            // $refNumber = 'REC-' . date('Ymd') . '-' . str_pad($record_id, 6, '0', STR_PAD_LEFT);
+            // $refData =  ['ref_number' => $refNumber];
             //dd($refData);
             //$this->record_model->update($record_id, $refData);
 
@@ -297,66 +303,76 @@ class RecordController extends BaseController
         return view('pages/records/view', $data);
     }
 
+    public function edit($id)
+    {
+        $record = $this->record_model->find($id);
+
+        // kunin lahat ng indexes ng series
+        $indexes = $this->record_index_model->getSeriesIndexesById($record->series_id);
+
+        // kunin yung saved values ng record na ito
+        $recordIndexes = $this->record_index_value->getRecordIndexValues($id);
+
+        // gawing associative array para madaling i-access sa view
+        $indexValues = [];
+        foreach ($recordIndexes as $ri) {
+            $indexValues[$ri->index_id] = $ri->value;
+        }
+
+        return view('pages/records/edit', [
+            'record' => $record,
+            'series' => $this->record_series_model->getSeries(),
+            'indexValues' => $indexValues, // ← importante
+            'errors' => session()->getFlashdata('errors')
+        ]);
+    }
+
+    public function update($id)
+    {
+        //
+    }
+
     public function workflow($id)
     {
         return view('pages/records/workflow');
     }
 
-    public function requests()
+    public function delete($id)
     {
-        $search     = $this->request->getGet('search');
-        $perPage    = (int) $this->request->getGet('per_page') ?: 10;
-        $page       = (int) $this->request->getGet('page') ?: 1;
-
-        // Make sure getForApprovalData() returns a Builder object
-        $builder = $this->record_request->getAllRequest();
-        if ($search) {
-            $builder = $builder->like('title', $search);
-        }
-
-        $records = $builder->paginate($perPage, 'default', $page); // always array
-        $pager   = $builder->pager;
-
-        // Ensure $records is never null
-        $records = $records ?? [];
-
-        return view('pages/records/requests', [
-            'records' => $records,
-            'pager'   => $pager,
-            'search'  => $search,
-            'perPage' => $perPage,
-        ]);
+        $this->record_model->delete($id);
+        return redirect()->to('records')->with('success', 'Record soft deleted, files remain.');
     }
 
-    public function request($id)
+    public function purge($id)
     {
-        $data['req_type'] = $this->record_request_type->getAllRecordTypes();
-        $data['record'] = $this->record_model->getRecordById($id);
-        return view('pages/records/request', $data);
-    }
+        $recordFiles = $this->record_file_version_model->getVersionByRecordId($id);
 
-    public function submitRequest($id)
-    {
-        $borrow_model = new RecordBorrow();
-
-        $rules = [
-            'due_date' => 'permit_empty',
-            'remarks' => 'required',
-        ];
-
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        if ($recordFiles) {
+            foreach ($recordFiles as $file) {
+                $filePath = WRITEPATH . 'uploads/records/' . $file['randomfilename'];
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
         }
 
-        $data = [
-            'record_id' => $id,
-            'due_date' => $this->request->getPost('due_date'),
-            'remarks' => $this->request->getPost('remarks'),
-            'user_id' => session()->get('user_id'),
-        ];
+        return redirect()->to('records')->with('success', 'Files deleted, data remains.');
+    }
 
-        $borrow_model->addRequest($data);
+    public function forceDelete($id)
+    {
 
-        return redirect()->to('records')->with('success', 'Record requested successfully!');
+        $recordFiles = $this->record_file_version_model->getVersionByRecordId($id);
+        if ($recordFiles) {
+            foreach ($recordFiles as $file) {
+                $filePath = WRITEPATH . 'uploads/records/' . $file['randomfilename'];
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+            $this->record_file_version_model->deleteFiles($id);
+            $this->record_model->forceDelete($id);
+        }
+        return redirect()->to('records')->with('success', 'Record deleted successfully!');
     }
 }

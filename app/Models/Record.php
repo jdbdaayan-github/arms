@@ -13,7 +13,7 @@ class Record extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['title', 'series_id', 'confidential', 'status_id', 'record_date', 'created_by', 'updated_by', 'deleted_by'];
+    protected $allowedFields    = ['title', 'series_id', 'confidential', 'status_id', 'record_date', 'created_by', 'updated_by', 'deleted_by', 'archived_by', 'archived_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -109,5 +109,10 @@ class Record extends Model
     public function getArchivedData()
     {
         return $this->where('status_id', 4);
+    }
+
+    public function forceDelete($id)
+    {
+        return $this->delete($id, true);
     }
 }

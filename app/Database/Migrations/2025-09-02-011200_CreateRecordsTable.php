@@ -41,7 +41,7 @@ class CreateRecordsTable extends Migration
             'status_id'=> [
                 'type'=> 'INT',
                 'unsigned'=> TRUE,
-                'default' => 1,
+                'default' => 2,
             ],
             'created_by'=> [
                 'type'=> 'INT',
@@ -50,6 +50,7 @@ class CreateRecordsTable extends Migration
             'archived_by'=> [
                 'type'=> 'INT',
                 'unsigned' => TRUE,
+                'null' => true
             ],
             'deleted_by' => [
                 'type'=> 'INT',

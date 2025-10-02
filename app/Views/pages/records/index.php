@@ -15,7 +15,7 @@ Records
             <div class="card-header d-flex align-items-center justify-content-between py-1">
                 <h3 class="card-title"><i class="fas fa-folder-open mr-2"></i>Records List</h3>
                 <!-- records.create permission -->
-                <?php if (hasRole('Superadmin') || hasPermission('records.create')): ?>
+                <?php if (hasRole('Superadmin') || hasPermission('records.create') || hasRole('Contributor')): ?>
                     <div class="card-tools  ml-auto mr-0">
                         <a href="<?= base_url('records/create') ?>" class="btn btn-primary btn-flat btn-sm" style="font-size:12px;">
                             <i class="fas fa-plus"></i> Add Record
@@ -28,17 +28,18 @@ Records
                 <!-- Search + Per Page -->
                 <form method="get" class="mb-2 d-flex justify-content-between">
                     <div class="d-flex"><select name="per_page" class="form-control form-control-sm mr-2" style="width:55px;" onchange="this.form.submit()">
-                        <?php foreach ([5, 10, 25, 50] as $num): ?>
-                            <option value="<?= $num ?>" <?= ($perPage == $num) ? 'selected' : '' ?>><?= $num ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <select name="status_id" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
-                        <option value="">All</option>
-                        <?php foreach ($statuses as $status): ?>
-                            <option value="<?= $status->id ?>" <?= ($status->id == $status_id) ? 'selected' : '' ?>><?= $status->name ?></option>
-                        <?php endforeach; ?>
-                    </select></div>
-                    
+                            <?php foreach ([5, 10, 25, 50] as $num): ?>
+                                <option value="<?= $num ?>" <?= ($perPage == $num) ? 'selected' : '' ?>><?= $num ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select name="status_id" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
+                            <option value="">All</option>
+                            <?php foreach ($statuses as $status): ?>
+                                <option value="<?= $status->id ?>" <?= ($status->id == $status_id) ? 'selected' : '' ?>><?= $status->name ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
 
                     <div class="input-group input-group-sm" style="max-width: 300px;">
                         <input type="text" name="search" value="<?= esc($search ?? '') ?>" class="form-control" placeholder="Search Title...">
@@ -77,7 +78,7 @@ Records
                                             <?php endif ?>
 
                                             <!-- EDIT BUTTON -->
-                                            <?php $enabled = hasRole('Superadmin') || (hasPermission('records.edit') && $record->status_id != 4); ?>
+                                            <?php $enabled = hasRole('Superadmin') || (hasPermission('records.edit') && $record->status_id == 1) || hasRecordPermission($record->id, 'edit'); ?>
                                             <a href="<?= $enabled ? base_url('records/edit/' . $record->id) : '#' ?>"
                                                 class="btn btn-warning btn-sm <?= $enabled ? '' : 'disabled' ?>"
                                                 <?= $enabled ? '' : 'aria-disabled="true" tabindex="-1"' ?>>
@@ -91,12 +92,21 @@ Records
                                                 </a>
                                             <?php endif ?>
 
-                                            <!-- DELETE BUTTON -->
-                                            <?php if (hasRole('Superadmin') || hasPermission('records.delete')): ?>
-                                                <button class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            <?php endif ?>
+                                            <!-- DELETE BUTTONS -->
+                                            <!-- Soft Delete Button -->
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Soft Delete">
+                                                <i class="fas fa-archive"></i>
+                                            </button>
+
+                                            <!-- Delete Files Button -->
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+
+                                            <!-- Force Delete Button -->
+                                            <button type="button" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Force Delete">
+                                                <i class="fas fa-skull-crossbones"></i>
+                                            </button>
 
                                             <!-- BORROW / REQUEST BUTTON FOR CONTRIBUTORS -->
                                             <?php if (hasRole('Superadmin') || $record->status_id == 4 && hasRole('Contributor')): ?>

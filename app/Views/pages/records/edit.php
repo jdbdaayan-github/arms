@@ -1,16 +1,16 @@
 <?php
-$errors = session()->getFlashdata('errors') ?? [];
+$errors = $errors ?? [];
 ?>
 
 <?= $this->extend('layouts/app'); ?>
 
 <?= $this->section('content-header') ?>
-Add Record
+Edit Record
 <?= $this->endSection() ?>
 
 <?= $this->section('content-breadcrumbs') ?>
 <li class="breadcrumb-item"><a href="<?= base_url('records') ?>">Records</a></li>
-<li class="breadcrumb-item active">Add Record</li>
+<li class="breadcrumb-item active">Edit Record</li>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -19,10 +19,10 @@ Add Record
 
         <div class="card card-outline card-secondary">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-folder-plus mr-2"></i>Create Record</h3>
+                <h3 class="card-title"><i class="fas fa-folder mr-2"></i>Edit Record</h3>
             </div>
 
-            <form action="<?= base_url('records/store') ?>" method="post" enctype="multipart/form-data">
+            <form action="<?= base_url('records/update/' . $record->id) ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field() ?>
                 <div class="card-body">
                     <div class="row">
@@ -44,6 +44,15 @@ Add Record
                                     <?php endif; ?>
                                 </div>
 
+                                <?php if (!empty($record->file_path)): ?>
+                                    <div class="mt-2">
+                                        <small class="text-muted">Current file:</small><br>
+                                        <a href="<?= base_url('uploads/' . $record->file_path) ?>" target="_blank">
+                                            <?= basename($record->file_path) ?>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+
                                 <!-- Filename + Copy -->
                                 <div id="fileNameWrapper" class="mt-2" style="display:none;">
                                     <input type="text" id="fileNameText" class="form-control form-control-sm bg-light" readonly>
@@ -53,14 +62,16 @@ Add Record
                                 </div>
                             </div>
 
+
                             <!-- Title -->
                             <div class="form-group">
                                 <label for="title">Title <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control <?= isset($errors['title']) ? 'is-invalid' : '' ?>"
+                                <input type="text"
+                                    class="form-control <?= isset($errors['title']) ? 'is-invalid' : '' ?>"
                                     id="title"
                                     name="title"
                                     placeholder="Enter title"
-                                    value="<?= set_value('title') ?>">
+                                    value="<?= esc(old('title', $record->title)) ?>">
                                 <?php if (isset($errors['title'])): ?>
                                     <div class="invalid-feedback"><?= $errors['title'] ?></div>
                                 <?php endif; ?>
@@ -68,12 +79,12 @@ Add Record
 
                             <!-- Confidentiality -->
                             <div class="form-group">
-                                <label for="confidentiality">Confidentiality </label>
+                                <label for="confidentiality">Confidentiality</label>
                                 <select class="form-control select2bs4 <?= isset($errors['confidentiality']) ? 'is-invalid' : '' ?>"
                                     id="confidentiality"
                                     name="confidentiality">
-                                    <option value="0" <?= set_value('confidentiality') == "0" ? 'selected' : '' ?>>Public</option>
-                                    <option value="1" <?= set_value('confidentiality') == "1" ? 'selected' : '' ?>>Confidential</option>
+                                    <option value="0" <?= old('confidentiality', $record->confidential) == "0" ? 'selected' : '' ?>>Public</option>
+                                    <option value="1" <?= old('confidentiality', $record->confidential) == "1" ? 'selected' : '' ?>>Confidential</option>
                                 </select>
                                 <?php if (isset($errors['confidentiality'])): ?>
                                     <div class="invalid-feedback"><?= $errors['confidentiality'] ?></div>
@@ -88,7 +99,8 @@ Add Record
                                     name="series">
                                     <option value="">-- Select --</option>
                                     <?php foreach ($series as $ser): ?>
-                                        <option value="<?= $ser->id ?>" <?= set_value('series') == $ser->id ? 'selected' : '' ?>>
+                                        <option value="<?= $ser->id ?>"
+                                            <?= old('series', $record->series_id) == $ser->id ? 'selected' : '' ?>>
                                             <?= esc($ser->name) ?>
                                         </option>
                                     <?php endforeach ?>
@@ -101,10 +113,11 @@ Add Record
                             <!-- Document Date -->
                             <div class="form-group">
                                 <label for="record_date">Document Date</label>
-                                <input type="date" class="form-control <?= isset($errors['record_date']) ? 'is-invalid' : '' ?>"
+                                <input type="date"
+                                    class="form-control <?= isset($errors['record_date']) ? 'is-invalid' : '' ?>"
                                     id="record_date"
                                     name="record_date"
-                                    value="<?= set_value('record_date') ?>">
+                                    value="<?= esc(old('record_date', $record->record_date == '0000-00-00' ? '' : date('Y-m-d', strtotime($record->record_date)))) ?>">
                                 <?php if (isset($errors['record_date'])): ?>
                                     <div class="invalid-feedback"><?= $errors['record_date'] ?></div>
                                 <?php endif; ?>
@@ -119,7 +132,7 @@ Add Record
                             </div>
                         </div>
 
-                        <!-- RIGHT SIDE (PDF Preview) -->
+                        <!-- RIGHT SIDE -->
                         <div class="col-md-6">
                             <div class="card card-outline card-secondary h-100">
                                 <div class="card-header py-2">
@@ -128,47 +141,44 @@ Add Record
                                 <div class="card-body p-1 d-flex justify-content-center align-items-center"
                                     style="height: 500px; background:#f8f9fa;">
                                     <span id="pdfPlaceholder" class="text-muted">No file selected</span>
-                                    <embed id="pdfPreview" src="" type="application/pdf" width="100%" height="100%" style="display:none;">
+                                    <embed id="pdfPreview"
+                                        src="<?= $record->file_path ? base_url('uploads/' . $record->file_path) : '' ?>"
+                                        type="application/pdf"
+                                        width="100%" height="100%"
+                                        style="<?= $record->file_path ? '' : 'display:none;' ?>">
+                                    <span id="pdfPlaceholder" class="text-muted" style="<?= $record->file_path ? 'display:none;' : '' ?>">
+                                        No file selected
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- FOOTER -->
                 <div class="card-footer text-right">
-                    <div class="d-flex align-items-center float-right gap-1">
-                        <div class="icheck-primary">
-                            <input type="checkbox" id="save_as_draft" name="save_as_draft" value="1"
-                                <?= set_value('save_as_draft') ? 'checked' : '' ?>>
-                            <label for="save_as_draft" class="text-muted">Save as Draft</label>
-                        </div>
-                        <button type="submit" class="btn btn-info btn-flat ml-2">
-                            <i class="fas fa-save mr-1"></i> Save Record
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-info btn-flat">
+                        <i class="fas fa-save mr-1"></i> Update Record
+                    </button>
                 </div>
-
-
             </form>
         </div>
     </div>
 </section>
 <?= $this->endSection() ?>
 
-
 <?= $this->section('scripts') ?>
 <script>
     $(document).ready(function() {
-        // Init Select2
         $('#series').select2({
             theme: 'bootstrap4',
             width: '100%'
         });
 
+        // record indexes from server (saved values OR old())
+        let recordIndexes = <?= json_encode(old('indexes') ?? $indexValues ?? []) ?>;
+
         function loadIndexes(seriesId) {
             let indexInputs = $('#dynamic_indexes');
-            let oldIndexes = <?= json_encode(old('indexes') ?? []) ?>;
 
             if (!seriesId) {
                 indexInputs.html('<p class="text-muted mb-0">Select a series to load indexes...</p>');
@@ -187,7 +197,11 @@ Add Record
 
                     let html = '';
                     indexes.forEach(idx => {
-                        let value = oldIndexes[idx.id] ?? '';
+                        // ensure idx.id matches string key in recordIndexes
+                        let value = recordIndexes[String(idx.id)] ?? '';
+                        // escape safely for HTML
+                        let safeValue = $('<div>').text(value).html();
+
                         let isRequired = Boolean(Number(idx.required));
                         let requiredAttr = isRequired ? 'required' : '';
                         let requiredStar = isRequired ? '<span class="text-danger">*</span>' : '';
@@ -199,11 +213,10 @@ Add Record
                             <input type="${idx.type}" 
                                 name="indexes[${idx.id}]" 
                                 class="form-control form-control-sm" 
-                                value="${value}" 
+                                value="${safeValue}" 
                                 ${placeholderText} 
                                 ${requiredAttr}>
-                        </div>
-                    `;
+                        </div>`;
                     });
 
                     indexInputs.html(html);
@@ -221,15 +234,13 @@ Add Record
         });
 
         // Initial load if series is preselected
-        let preselectedSeries = $('#series').val();
-        if (!preselectedSeries) {
+        if (!<?= $record->series_id ?>) {
             $('#dynamic_indexes').html('<p class="text-muted text-center mb-0">Select a series to load indexes...</p>');
         } else {
-            loadIndexes(preselectedSeries);
+            loadIndexes(<?= $record->series_id ?>);
         }
     });
 </script>
-
 
 <script>
     $(function() {

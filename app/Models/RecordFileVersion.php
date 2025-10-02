@@ -55,4 +55,11 @@ class RecordFileVersion extends Model
                     ->join('users', 'users.id = record_file_versions.user_id')
                     ->where('record_id', $id)->findAll();
     }
+
+    public function deleteFiles($id)
+    {
+        return $this->where('record_id', $id)->delete();
+    }
+
+    
 }

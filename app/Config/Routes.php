@@ -11,6 +11,7 @@ use App\Controllers\PermissionController;
 use App\Controllers\RecordIndexController;
 use App\Controllers\RecordSeriesController;
 use App\Controllers\RecordClassificationController;
+use App\Controllers\RecordRequestController;
 use App\Controllers\ReportController;
 
 /**
@@ -50,6 +51,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('', 'RecordController::index');
         $routes->get('create', 'RecordController::create');
         $routes->post('store', 'RecordController::store');
+        $routes->get('edit/(:num)', [RecordController::class, 'edit']);
         $routes->get('show/(:num)', [RecordController::class, 'show']);
         $routes->get('getIndexes/(:num)', 'RecordController::getIndexes/$1');
         $routes->get('workflow/(:num)', [RecordController::class, 'workflow']);
@@ -57,9 +59,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('approve/(:num)', [RecordController::class, 'approveRecord']);
         $routes->get('archival', [RecordController::class, 'archival']);
         $routes->get('archive/(:num)', [RecordController::class, 'archive']);
-        $routes->get('requests', [RecordController::class, 'requests']);
-        $routes->get('request/(:num)', [RecordController::class, 'request']);
-        $routes->post('submitRequest/(:num)', [RecordController::class, 'submitRequest']);
+        $routes->get('requests', [RecordRequestController::class, 'index']);
+        $routes->get('request/(:num)', [RecordRequestController::class, 'request']);
+        $routes->post('submitRequest/(:num)', [RecordRequestController::class, 'submitRequest']);
         $routes->get('test', function () {
             return view('pages/records/test');
         });
