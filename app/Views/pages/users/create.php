@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Users
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 Users
 <?= $this->endSection() ?>

@@ -4,6 +4,10 @@ $errors = $errors ?? [];
 
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Records
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 Edit Record
 <?= $this->endSection() ?>

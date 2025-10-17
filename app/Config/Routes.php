@@ -60,6 +60,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('archival', [RecordController::class, 'archival']);
         $routes->get('archive/(:num)', [RecordController::class, 'archive']);
         $routes->get('requests', [RecordRequestController::class, 'index']);
+        $routes->get('search', [RecordController::class, 'search']);
         $routes->get('request/(:num)', [RecordRequestController::class, 'request']);
         $routes->post('submitRequest/(:num)', [RecordRequestController::class, 'submitRequest']);
         $routes->get('test', function () {

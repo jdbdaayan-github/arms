@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Record Series
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 Record Series
 <?= $this->endSection() ?>

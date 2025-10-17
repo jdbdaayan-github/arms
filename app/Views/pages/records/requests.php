@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Records
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 Records
 <?= $this->endSection() ?>
@@ -13,7 +17,7 @@ Records
     <div class="container-fluid">
         <div class="card card-outline card-secondary">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h3 class="card-title"><i class="fas fa-exchange-alt mr-2"></i>Record Transactions</h3>
+                <h3 class="card-title"><i class="fas fa-exchange-alt mr-2"></i>Record Requests</h3>
             </div>
 
             <div class="card-body">
@@ -86,7 +90,7 @@ Records
 
                 <!-- Pagination Info -->
                 <div class="d-flex justify-content-between align-items-center text-sm mt-2">
-                    <div>Showing 1 to 5 of 5 results</div>
+                    <div>Showing 1 to 1 of 1 results</div>
                     <div>
                         <ul class="pagination pagination-sm mb-0">
                             <li class="page-item disabled"><a class="page-link" href="#">«</a></li>

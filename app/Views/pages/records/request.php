@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Records
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 Record Request
 <?= $this->endSection() ?>

@@ -4,13 +4,17 @@ $errors = session()->getFlashdata('errors') ?? [];
 
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Records
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
-Add Record
+Records
 <?= $this->endSection() ?>
 
 <?= $this->section('content-breadcrumbs') ?>
 <li class="breadcrumb-item"><a href="<?= base_url('records') ?>">Records</a></li>
-<li class="breadcrumb-item active">Add Record</li>
+<li class="breadcrumb-item active">Upload Record</li>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -19,7 +23,7 @@ Add Record
 
         <div class="card card-outline card-secondary">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-folder-plus mr-2"></i>Create Record</h3>
+                <h3 class="card-title"><i class="fas fa-folder-plus mr-2"></i>Upload Record</h3>
             </div>
 
             <form action="<?= base_url('records/store') ?>" method="post" enctype="multipart/form-data">

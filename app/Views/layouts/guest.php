@@ -5,6 +5,8 @@
     <title>ARMS - Guest</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="shortcut icon" href="<?= asset('assets/images/dswd_logo.png') ?>" type="image/png">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?= base_url('assets/template/plugins/fontawesome-free/css/all.min.css') ?>">
 

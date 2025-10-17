@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>ARMS</title>
+    <title>ARMS <?= $this->renderSection('title') ?></title>
 
     <link rel="shortcut icon" href="<?= asset('assets/images/dswd_logo.png') ?>" type="image/png">
 
@@ -181,6 +181,9 @@
 
     <!-- Dual List Box -->
     <script src="<?= asset('assets/template/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') ?>"></script>
+
+    <!-- Chart.js -->
+    <script src="<?= asset('assets/template/plugins/chart.js/Chart.min.js') ?>"></script>
 
     <!-- Custom Pages Scripts  -->
     <?= $this->renderSection('scripts') ?>

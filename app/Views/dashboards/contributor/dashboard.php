@@ -1,11 +1,11 @@
 <?= $this->extend('layouts/app'); ?>
 
 <?= $this->section('content-header') ?>
-Dashboard (Contributor)
+Dashboard
 <?= $this->endSection() ?>
 
 <?= $this->section('content-breadcrumbs') ?>
-<li class="breadcrumb-item active">Contributor Dashboard</li>
+<li class="breadcrumb-item active">Dashboard</li>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -19,12 +19,12 @@ Dashboard (Contributor)
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>45</h3>
-                        <p>Records Submitted</p>
+                        <p>Total Records</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-upload"></i>
                     </div>
-                    <a href="#" class="small-box-footer">View My Records <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="#" class="small-box-footer">View Records <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -60,7 +60,7 @@ Dashboard (Contributor)
         <!-- Recent Submissions Table -->
         <div class="card card-outline card-success">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-clock mr-2"></i>My Recent Submissions</h3>
+                <h3 class="card-title"><i class="fas fa-clock mr-2"></i>Recent Uploads</h3>
                 <div class="card-tools">
                     <a href="#" class="btn btn-sm btn-success">View All</a>
                 </div>
@@ -111,10 +111,10 @@ Dashboard (Contributor)
                     </div>
                     <div class="card-body">
                         <a href="#" class="btn btn-primary btn-block mb-2">
-                            <i class="fas fa-file-upload mr-2"></i>Submit New Record
+                            <i class="fas fa-file-upload mr-2"></i>Upload New Record
                         </a>
                         <a href="#" class="btn btn-secondary btn-block">
-                            <i class="fas fa-search mr-2"></i>Search My Records
+                            <i class="fas fa-search mr-2"></i>Search Records
                         </a>
                     </div>
                 </div>

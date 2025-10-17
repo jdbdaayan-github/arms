@@ -18,10 +18,17 @@
       <form action="<?= base_url('reset_password/update') ?>" method="post" autocomplete="off">
         <?= csrf_field() ?>
 
-        <input type="hidden" name="token" value="<?= $token ?>">
+        <div class="input-group mb-3">
+          <input type="password" name="password" id="password" class="form-control rounded-0" placeholder="New Password" required>
+          <div class="input-group-append">
+            <div class="input-group-text rounded-0">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
 
         <div class="input-group mb-1">
-          <input type="password" name="password" id="password" class="form-control rounded-0" placeholder="New Password" required>
+          <input type="password" name="password" id="password" class="form-control rounded-0" placeholder="Confirm Password" required>
           <div class="input-group-append">
             <div class="input-group-text rounded-0">
               <span class="fas fa-lock"></span>

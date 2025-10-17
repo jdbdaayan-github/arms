@@ -70,7 +70,7 @@ class AuthController extends BaseController
                 return redirect()->to('/auth/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.')->withInput();
             }
 
-            return redirect()->to('/auth/login')->with('error', 'Invalid username or password.')->withInput();
+            return redirect()->to('/auth/login')->with('error', 'Invalid email or password.')->withInput();
         }
 
 
@@ -204,5 +204,10 @@ class AuthController extends BaseController
         } else {
             return "❌ Failed to send reset email.<br>" . $email->printDebugger(['headers']);
         }
+    }
+
+    public function new_password()
+    {
+        return view('pages/auth/new_password');
     }
 }

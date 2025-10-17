@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Record Series
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 Manage Indexes - <?= esc($series->name) ?>
 <?= $this->endSection() ?>

@@ -124,7 +124,7 @@ Dashboard
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
-                                        <th>Created</th>
+                                        <th>Joined Last</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -152,9 +152,10 @@ Dashboard
 
     </div>
 </section>
+<?= $this->endSection() ?>
 
+<?= $this->section('scripts')?>
 <!-- ChartJS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('recordsChart').getContext('2d');
     new Chart(ctx, {
@@ -164,12 +165,7 @@ Dashboard
             datasets: [{
                 label: 'Records',
                 data: <?= json_encode($chartData ?? [5,10,7,12]) ?>,
-                backgroundColor: [
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(40, 167, 69, 0.7)',
-                    'rgba(255, 193, 7, 0.7)',
-                    'rgba(220, 53, 69, 0.7)'
-                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
             }]
         },
         options: {

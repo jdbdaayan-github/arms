@@ -1,180 +1,208 @@
-<?= $this->extend('layouts/app') ?>
+<?= $this->extend('layouts/app'); ?>
+
+<?= $this->section('title') ?>
+| Records
+<?= $this->endSection() ?>
+
+<?= $this->section('content-header') ?>
+Advanced Search
+<?= $this->endSection() ?>
+
+<?= $this->section('content-breadcrumbs') ?>
+<li class="breadcrumb-item"><a href="<?= base_url('records') ?>">Records</a></li>
+<li class="breadcrumb-item active">Advanced Search</li>
+<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<div class="container-fluid">
+<section class="content">
+    <div class="container-fluid">
 
-    <!-- Content Header -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Records</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="<?= base_url('dashboard') ?>">Home</a></li>
-                        <li class="breadcrumb-item active">Records</li>
-                    </ol>
-                </div>
+        <div class="card card-outline card-secondary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-search mr-2"></i>Advanced Search Filters</h3>
             </div>
-        </div>
-    </div>
 
-    <!-- Advanced Search Card -->
-    <div class="card card-outline card-primary mb-3">
-        <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-search"></i> Advanced Search</h3>
-        </div>
-        <div class="card-body">
-            <form id="searchForm" class="row g-2">
-                <div class="col-md-2">
-                    <input type="text" class="form-control form-control-sm" id="searchID" placeholder="ID">
+            <form method="GET" action="<?= base_url('records/search') ?>">
+                <div class="card-body">
+                    <div class="row">
+                        <!-- LEFT SIDE -->
+                        <div class="col-md-6">
+
+                            <!-- Keyword -->
+                            <div class="form-group">
+                                <label for="keyword">Keyword</label>
+                                <input type="text" class="form-control" id="keyword" name="keyword"
+                                    placeholder="Search by title, index, or content..."
+                                    value="<?= esc($filters['keyword'] ?? '') ?>">
+                            </div>
+
+                            <!-- Series -->
+                            <div class="form-group">
+                                <label for="series">Series</label>
+                                <select class="form-control select2bs4" id="series" name="series">
+                                    <option value="">-- Any Series --</option>
+                                    <?php foreach ($series as $ser): ?>
+                                        <option value="<?= $ser->id ?>"
+                                            <?= ($filters['series'] ?? '') == $ser->id ? 'selected' : '' ?>>
+                                            <?= esc($ser->name) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <!-- Confidentiality -->
+                            <div class="form-group">
+                                <label for="confidentiality">Confidentiality</label>
+                                <select class="form-control select2bs4" id="confidentiality" name="confidentiality">
+                                    <option value="">-- Any --</option>
+                                    <option value="0" <?= ($filters['confidentiality'] ?? '') === '0' ? 'selected' : '' ?>>Public</option>
+                                    <option value="1" <?= ($filters['confidentiality'] ?? '') === '1' ? 'selected' : '' ?>>Confidential</option>
+                                </select>
+                            </div>
+
+                            <!-- Record Date Range -->
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" name="date_from"
+                                        value="<?= esc($filters['date_from'] ?? '') ?>">
+                                    <input type="date" class="form-control" name="date_to"
+                                        value="<?= esc($filters['date_to'] ?? '') ?>">
+                                </div>
+                            </div>
+
+                            <!-- ⚡ Dynamic Index Filters -->
+                            <div class="card card-sm mt-3">
+                                <div class="card-header py-2">Index Filters</div>
+                                <div class="card-body p-2" id="dynamic_indexes">
+                                    <?php if (isset($indexes) && !empty($indexes)): ?>
+                                        <?php foreach ($indexes as $idx): ?>
+                                            <div class="form-group mb-2">
+                                                <label class="text-sm mb-0"><?= esc($idx->name) ?></label>
+                                                <input type="text"
+                                                    name="indexes[<?= $idx->id ?>]"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="<?= esc($idx->placeholder ?? '') ?>"
+                                                    value="<?= esc($filters['indexes'][$idx->id] ?? '') ?>">
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <p class="text-muted mb-0">Select a series to load index filters...</p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT SIDE -->
+                        <div class="col-md-6">
+                            <div class="card card-outline card-secondary h-100">
+                                <div class="card-header py-2">
+                                    <h3 class="card-title text-sm"><i class="fas fa-table mr-2"></i> Search Results</h3>
+                                </div>
+                                <div class="card-body p-2" style="min-height: 500px; overflow:auto;">
+                                    <?php if (isset($records)): ?>
+                                        <?php if (empty($records)): ?>
+                                            <div class="text-center text-muted my-5">
+                                                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                                                <p>No records found.</p>
+                                            </div>
+                                        <?php else: ?>
+                                            <table class="table table-sm table-bordered table-striped mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Title</th>
+                                                        <th>Series</th>
+                                                        <th>Date</th>
+                                                        <th>Confidentiality</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($records as $r): ?>
+                                                        <tr>
+                                                            <td><?= esc($r->title) ?></td>
+                                                            <td><?= esc($r->series_name ?? '') ?></td>
+                                                            <td><?= esc($r->record_date) ?></td>
+                                                            <td><?= $r->confidential ? 'Confidential' : 'Public' ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <div class="text-center text-muted my-5">
+                                            <i class="fas fa-search fa-2x mb-2"></i>
+                                            <p>Use filters and click <b>Search</b> to view results.</p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control form-control-sm" id="searchTitle" placeholder="Title">
-                </div>
-                <div class="col-md-3">
-                    <select class="form-control form-control-sm select2" id="searchOffice">
-                        <option value="">Select Office</option>
-                        <option>Main Office</option>
-                        <option>Finance Dept</option>
-                        <option>HR Office</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control form-control-sm" id="searchDate" placeholder="Select Date Range">
-                </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-primary btn-sm w-100" id="btnSearch">
-                        <i class="fas fa-search"></i> Search
+
+                <!-- FOOTER -->
+                <div class="card-footer text-right">
+                    <button type="submit" class="btn btn-info btn-flat">
+                        <i class="fas fa-search mr-1"></i> Search
                     </button>
+                    <a href="<?= base_url('records/search') ?>" class="btn btn-outline-secondary btn-flat ml-1">
+                        <i class="fas fa-undo mr-1"></i> Reset
+                    </a>
                 </div>
             </form>
         </div>
     </div>
-
-    <!-- Records Table -->
-    <div class="card card-outline card-secondary">
-        <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-table"></i> Records List</h3>
-            <div class="card-tools">
-                <a href="<?= base_url('records/create') ?>" class="btn btn-success btn-sm">
-                    <i class="fas fa-plus"></i> Add New Record
-                </a>
-            </div>
-        </div>
-        <div class="card-body table-responsive p-0">
-            <table class="table table-hover table-striped table-bordered table-sm text-sm mb-0" id="recordsTable">
-                <thead class="table-primary">
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Office</th>
-                        <th>Date Created</th>
-                        <th style="width: 150px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Records will appear here -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-</div>
+</section>
 <?= $this->endSection() ?>
+
 
 <?= $this->section('scripts') ?>
 <script>
-$(document).ready(function () {
-    // Initialize Select2
-    $('.select2').select2({width:'100%'});
-
-    // Initialize Date Range Picker
-    $('#searchDate').daterangepicker({
-        autoUpdateInput: false,
-        locale: { cancelLabel: 'Clear', format: 'YYYY-MM-DD' }
+$(function() {
+    $('#series, #confidentiality').select2({
+        theme: 'bootstrap4',
+        width: '100%'
     });
 
-    $('#searchDate').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-    });
-    $('#searchDate').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-    });
+    // Load dynamic indexes like in create form
+    $('#series').on('change', function() {
+        let seriesId = $(this).val();
+        let indexInputs = $('#dynamic_indexes');
 
-    // Sample records data
-    const records = [
-        {id:1, title:'Project Archive', office:'Main Office', date_created:'2025-08-25'},
-        {id:2, title:'Financial Report', office:'Finance Dept', date_created:'2025-08-24'},
-        {id:3, title:'Employee Records', office:'HR Office', date_created:'2025-08-23'},
-    ];
-
-    function renderTable(filteredRecords) {
-        const tbody = $('#recordsTable tbody');
-        tbody.empty();
-        if(filteredRecords.length === 0){
-            tbody.append('<tr><td colspan="5" class="text-center text-muted">No records found</td></tr>');
+        if (!seriesId) {
+            indexInputs.html('<p class="text-muted mb-0">Select a series to load index filters...</p>');
             return;
         }
-        filteredRecords.forEach(r => {
-            tbody.append(`
-                <tr>
-                    <td>${r.id}</td>
-                    <td>${r.title}</td>
-                    <td>${r.office}</td>
-                    <td>${r.date_created}</td>
-                    <td>
-                        <button class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button>
-                        <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm btn-delete"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `);
-        });
-    }
 
-    // Initial render
-    renderTable(records);
+        $.ajax({
+            url: `/records/getIndexes/${seriesId}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function(indexes) {
+                if (!indexes || indexes.length === 0) {
+                    indexInputs.html('<p class="text-muted mb-0">No index filters for this series.</p>');
+                    return;
+                }
 
-    // Search functionality
-    $('#btnSearch').click(function () {
-        const id = $('#searchID').val().toLowerCase();
-        const title = $('#searchTitle').val().toLowerCase();
-        const office = $('#searchOffice').val();
-        const dateRange = $('#searchDate').val();
-        let startDate='', endDate='';
-        if(dateRange){
-            [startDate,endDate] = dateRange.split(' - ');
-        }
-
-        const filtered = records.filter(r => {
-            let dateCheck = true;
-            if(startDate && endDate){
-                dateCheck = r.date_created >= startDate && r.date_created <= endDate;
+                let html = '';
+                indexes.forEach(idx => {
+                    html += `
+                        <div class="form-group mb-2">
+                            <label class="text-sm mb-0">${idx.name}</label>
+                            <input type="text"
+                                name="indexes[${idx.id}]"
+                                class="form-control form-control-sm"
+                                placeholder="${idx.placeholder ?? ''}">
+                        </div>
+                    `;
+                });
+                indexInputs.html(html);
+            },
+            error: function() {
+                indexInputs.html('<p class="text-danger mb-0">Failed to load index filters.</p>');
             }
-            return (id === '' || r.id.toString().includes(id)) &&
-                   (title === '' || r.title.toLowerCase().includes(title)) &&
-                   (office === '' || r.office === office) &&
-                   dateCheck;
-        });
-
-        renderTable(filtered);
-    });
-
-    // SweetAlert for delete
-    $(document).on('click', '.btn-delete', function () {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "This record will be deleted permanently!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
         });
     });
-
 });
 </script>
 <?= $this->endSection() ?>

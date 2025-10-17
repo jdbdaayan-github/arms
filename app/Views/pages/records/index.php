@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Records
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 Records
 <?= $this->endSection() ?>
@@ -69,13 +73,16 @@ Records
                                         <td class="align-items-center"><?= esc($record->title) ?></td>
                                         <td class="text-center">
                                             <!-- VIEW BUTTON -->
-                                            <?php if (hasPermission('records.view')): ?>
-                                                <a href="<?= $record->status_id == 4 && !hasRole('Superadmin') ? '#' : base_url('records/show/' . $record->id) ?>"
-                                                    class="btn btn-info btn-sm <?= $record->status_id == 4 && !hasRole('Superadmin') ? 'disabled' : '' ?>"
-                                                    <?= $record->status_id == 4 && !hasRole('Superadmin') ? 'aria-disabled="true" tabindex="-1"' : '' ?>>
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            <?php endif ?>
+                                            <?php
+                                            $view_enabled = hasRole('Superadmin')
+                                                || (hasPermission('records.edit') && $record->status_id == 1)
+                                                || hasRecordPermission($record->id, 'edit');
+                                            ?>
+                                            <a href="<?= $record->status_id == 1 && !hasRole('Superadmin') ? '#' : base_url('records/show/' . $record->id) ?>"
+                                                class="btn btn-info btn-sm <?= $record->status_id == 4 && !hasRole('Superadmin') ? 'disabled' : '' ?>"
+                                                <?= $record->status_id == 4 && !hasRole('Superadmin') ? 'aria-disabled="true" tabindex="-1"' : '' ?>>
+                                                <i class="fas fa-eye"></i>
+                                            </a>
 
                                             <!-- EDIT BUTTON -->
                                             <?php $enabled = hasRole('Superadmin') || (hasPermission('records.edit') && $record->status_id == 1) || hasRecordPermission($record->id, 'edit'); ?>
@@ -94,19 +101,25 @@ Records
 
                                             <!-- DELETE BUTTONS -->
                                             <!-- Soft Delete Button -->
-                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Soft Delete">
-                                                <i class="fas fa-archive"></i>
-                                            </button>
+                                            <?php if (hasRole('Superadmin')): ?>
+                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Soft Delete">
+                                                    <i class="fas fa-archive"></i>
+                                                </button>
+                                            <?php endif ?>
 
                                             <!-- Delete Files Button -->
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <?php if (hasRole('Superadmin')): ?>
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            <?php endif ?>
 
                                             <!-- Force Delete Button -->
-                                            <button type="button" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Force Delete">
-                                                <i class="fas fa-skull-crossbones"></i>
-                                            </button>
+                                            <?php if (hasRole('Superadmin')): ?>
+                                                <button type="button" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Force Delete">
+                                                    <i class="fas fa-skull-crossbones"></i>
+                                                </button>
+                                            <?php endif ?>
 
                                             <!-- BORROW / REQUEST BUTTON FOR CONTRIBUTORS -->
                                             <?php if (hasRole('Superadmin') || $record->status_id == 4 && hasRole('Contributor')): ?>

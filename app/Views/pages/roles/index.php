@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Manage Roles
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 Roles
 <?= $this->endSection() ?>
@@ -15,7 +19,7 @@ Roles
             <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-user-shield mr-2"></i>Roles List</h3>
                 <div class="card-tools">
-                    <a href="<?= base_url('roles/create') ?>" class="btn btn-success btn-sm">
+                    <a href="<?= base_url('roles/create') ?>" class="btn btn-primary btn-flat btn-sm">
                         <i class="fas fa-plus"></i> Add Role
                     </a>
                 </div>

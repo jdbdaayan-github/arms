@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/app'); ?>
 
 <?= $this->section('content-header') ?>
-PERMISSIONS
+Record Classifications
 <?= $this->endSection() ?>
 
 <?= $this->section('content-breadcrumbs') ?>

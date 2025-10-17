@@ -1,7 +1,11 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Users
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
-Roles
+Users
 <?= $this->endSection() ?>
 
 <?= $this->section('content-breadcrumbs') ?>

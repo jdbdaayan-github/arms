@@ -89,6 +89,12 @@ function isMenuOpen($segment1Expected)
                                 <p>List</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('records/search') ?>" class="nav-link <?= isActive('records', 'search') ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Advanced Search</p>
+                            </a>
+                        </li>
                         <?php if (hasRole('Superadmin') || hasRole('Records Officer') || hasPermission('records.approve')): ?>
                             <li class="nav-item">
                                 <a href="<?= base_url('records/approval') ?>" class="nav-link <?= isActive('records', 'approval') ?>">
@@ -322,7 +328,7 @@ function isMenuOpen($segment1Expected)
                             <li class="nav-item">
                                 <a href="<?= base_url('logs/access') ?>" class="nav-link <?= isActive('logs', 'access') ?>">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Access</p>
+                                    <p>Activity</p>
                                 </a>
                             </li>
                         </ul>

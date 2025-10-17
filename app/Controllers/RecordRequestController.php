@@ -7,6 +7,7 @@ use App\Models\Record;
 use App\Models\RecordRequest;
 use App\Models\RecordRequestType;
 use CodeIgniter\HTTP\ResponseInterface;
+use PhpParser\Node\Expr\FuncCall;
 
 class RecordRequestController extends BaseController
 {
@@ -77,6 +78,8 @@ class RecordRequestController extends BaseController
 
         return redirect()->to('records')->with('success', 'Record requested successfully!');
     }
+
+    
 
     public function cancelRequest($id) {
         //

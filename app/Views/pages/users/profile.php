@@ -1,5 +1,9 @@
 <?= $this->extend('layouts/app'); ?>
 
+<?= $this->section('title') ?>
+| Profile
+<?= $this->endSection() ?>
+
 <?= $this->section('content-header') ?>
 My Profile
 <?= $this->endSection() ?>
