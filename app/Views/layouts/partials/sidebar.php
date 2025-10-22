@@ -363,22 +363,22 @@ function isMenuOpen($segment1Expected)
 
                 <li class="nav-item">
                     <a href="<?= base_url('reports/borrowed') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-book-reader"></i>
-                        <p>Borrowed Records</p>
+                        <i class="nav-icon fas fa-upload"></i>
+                        <p>Uploaded Records</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="<?= base_url('reports/returned') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-undo-alt"></i>
-                        <p>Returned Records</p>
+                        <i class="nav-icon fas fa-upload"></i>
+                        <p>Approved Records</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="<?= base_url('reports/users') ?>" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
-                        <p>User Reports</p>
+                        <p>Archived Records</p>
                     </a>
                 </li>
 

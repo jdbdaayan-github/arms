@@ -52,6 +52,11 @@ class CreateRecordsTable extends Migration
                 'unsigned' => TRUE,
                 'null' => true
             ],
+            'restored_by'=> [
+                'type'=> 'INT',
+                'unsigned' => TRUE,
+                'null' => true
+            ],
             'deleted_by' => [
                 'type'=> 'INT',
                 'unsigned' => true,
@@ -70,6 +75,10 @@ class CreateRecordsTable extends Migration
                 'null' => true
             ],
             'archived_at' => [
+                'type'=> 'DATETIME',
+                'null'=> true,
+            ],
+            'restored_at' => [
                 'type'=> 'DATETIME',
                 'null'=> true,
             ],

@@ -305,6 +305,25 @@ class RecordController extends BaseController
         return view('pages/records/view', $data);
     }
 
+    public function preview($filename)
+    {
+        $path = WRITEPATH . 'uploads/records/' . $filename;
+
+        if (!file_exists($path)) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('File not found.');
+        }
+
+        $mime = mime_content_type($path);
+        $this->response->setHeader('Content-Type', $mime);
+
+        if (in_array($mime, ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'])) {
+            return $this->response->setBody(file_get_contents($path));
+        }
+
+        // For other file types, download instead of preview
+        return $this->response->download($path, null);
+    }
+
     public function edit($id)
     {
         $record = $this->record_model->find($id);
@@ -333,83 +352,83 @@ class RecordController extends BaseController
     {
         //
     }
-public function search()
-{
-    $filters = $this->request->getGet();
-    $records = null;
-    $indexes = [];
+    public function search()
+    {
+        $filters = $this->request->getGet();
+        $records = null;
+        $indexes = [];
 
-    $data['series'] = $this->record_series_model->findAll();
-    $data['filters'] = $filters;
+        $data['series'] = $this->record_series_model->findAll();
+        $data['filters'] = $filters;
 
-    // Load all indexes for the selected series
-    if (!empty($filters['series'])) {
-        $indexes = $this->record_series_index_model
-            ->select('record_indexes.id, record_indexes.name, record_indexes.type, record_indexes.placeholder')
-            ->join('record_indexes', 'record_indexes.id = record_series_indexes.record_index_id', 'left')
-            ->where('record_series_indexes.record_series_id', $filters['series'])
-            ->orderBy('record_indexes.id', 'ASC')
-            ->get()
-            ->getResult();
-    }
-
-    // Perform search only when form submitted
-    if (!empty($filters)) {
-        $builder = $this->record_model
-            ->select('records.*, s.name AS series_name')
-            ->join('record_series s', 's.id = records.series_id', 'left');
-
-        // Keyword filter
-        if (!empty($filters['keyword'])) {
-            $builder->groupStart()
-                ->like('records.title', $filters['keyword'])
-                ->groupEnd();
-        }
-
-        // Series
+        // Load all indexes for the selected series
         if (!empty($filters['series'])) {
-            $builder->where('records.series_id', $filters['series']);
+            $indexes = $this->record_series_index_model
+                ->select('record_indexes.id, record_indexes.name, record_indexes.type, record_indexes.placeholder')
+                ->join('record_indexes', 'record_indexes.id = record_series_indexes.record_index_id', 'left')
+                ->where('record_series_indexes.record_series_id', $filters['series'])
+                ->orderBy('record_indexes.id', 'ASC')
+                ->get()
+                ->getResult();
         }
 
-        // Confidentiality
-        if (isset($filters['confidentiality']) && $filters['confidentiality'] !== '') {
-            $builder->where('records.confidential', $filters['confidentiality']);
-        }
+        // Perform search only when form submitted
+        if (!empty($filters)) {
+            $builder = $this->record_model
+                ->select('records.*, s.name AS series_name')
+                ->join('record_series s', 's.id = records.series_id', 'left');
 
-        // Date Range
-        if (!empty($filters['date_from'])) {
-            $builder->where('records.record_date >=', $filters['date_from']);
-        }
-        if (!empty($filters['date_to'])) {
-            $builder->where('records.record_date <=', $filters['date_to']);
-        }
+            // Keyword filter
+            if (!empty($filters['keyword'])) {
+                $builder->groupStart()
+                    ->like('records.title', $filters['keyword'])
+                    ->groupEnd();
+            }
 
-        // 🔍 Dynamic Index Filters (using record_index_values)
-        if (!empty($filters['indexes']) && is_array($filters['indexes'])) {
-            foreach ($filters['indexes'] as $indexId => $value) {
-                if (trim($value) !== '') {
-                    $alias = 'riv_' . $indexId;
+            // Series
+            if (!empty($filters['series'])) {
+                $builder->where('records.series_id', $filters['series']);
+            }
 
-                    $builder->join(
-                        "record_index_values AS {$alias}",
-                        "{$alias}.record_id = records.id AND {$alias}.index_id = " . (int)$indexId,
-                        'left'
-                    );
+            // Confidentiality
+            if (isset($filters['confidentiality']) && $filters['confidentiality'] !== '') {
+                $builder->where('records.confidential', $filters['confidentiality']);
+            }
 
-                    $builder->like("{$alias}.value", $value);
+            // Date Range
+            if (!empty($filters['date_from'])) {
+                $builder->where('records.record_date >=', $filters['date_from']);
+            }
+            if (!empty($filters['date_to'])) {
+                $builder->where('records.record_date <=', $filters['date_to']);
+            }
+
+            // 🔍 Dynamic Index Filters (using record_index_values)
+            if (!empty($filters['indexes']) && is_array($filters['indexes'])) {
+                foreach ($filters['indexes'] as $indexId => $value) {
+                    if (trim($value) !== '') {
+                        $alias = 'riv_' . $indexId;
+
+                        $builder->join(
+                            "record_index_values AS {$alias}",
+                            "{$alias}.record_id = records.id AND {$alias}.index_id = " . (int)$indexId,
+                            'left'
+                        );
+
+                        $builder->like("{$alias}.value", $value);
+                    }
                 }
             }
+
+            $builder->groupBy('records.id');
+            $records = $builder->get()->getResult();
         }
 
-        $builder->groupBy('records.id');
-        $records = $builder->get()->getResult();
+        $data['indexes'] = $indexes;
+        $data['records'] = $records;
+
+        return view('pages/records/search', $data);
     }
-
-    $data['indexes'] = $indexes;
-    $data['records'] = $records;
-
-    return view('pages/records/search', $data);
-}
 
     public function workflow($id)
     {

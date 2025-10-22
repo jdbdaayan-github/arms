@@ -72,19 +72,18 @@ Records
                                         <td class="text-center"><input type="checkbox"></td>
                                         <td class="align-items-center"><?= esc($record->title) ?></td>
                                         <td class="text-center">
-                                            <!-- VIEW BUTTON -->
+
                                             <?php
                                             $view_enabled = hasRole('Superadmin')
-                                                || (hasPermission('records.edit') && $record->status_id == 1)
-                                                || hasRecordPermission($record->id, 'edit');
+                                                || (hasPermission('records.view') && $record->status_id == 4)
+                                                || hasRecordPermission($record->id, 'view');
                                             ?>
-                                            <a href="<?= $record->status_id == 1 && !hasRole('Superadmin') ? '#' : base_url('records/show/' . $record->id) ?>"
-                                                class="btn btn-info btn-sm <?= $record->status_id == 4 && !hasRole('Superadmin') ? 'disabled' : '' ?>"
-                                                <?= $record->status_id == 4 && !hasRole('Superadmin') ? 'aria-disabled="true" tabindex="-1"' : '' ?>>
+                                            <a href="<?= $record->status_id != 1 && !hasRole('Superadmin') ? '#' : base_url('records/show/' . $record->id) ?>"
+                                                class="btn btn-info btn-sm <?= $record->status_id != 1 && !hasRole('Superadmin') ? 'disabled' : '' ?>"
+                                                <?= $view_enabled ? 'aria-disabled="true" tabindex="-1"' : '' ?>>
                                                 <i class="fas fa-eye"></i>
                                             </a>
 
-                                            <!-- EDIT BUTTON -->
                                             <?php $enabled = hasRole('Superadmin') || (hasPermission('records.edit') && $record->status_id == 1) || hasRecordPermission($record->id, 'edit'); ?>
                                             <a href="<?= $enabled ? base_url('records/edit/' . $record->id) : '#' ?>"
                                                 class="btn btn-warning btn-sm <?= $enabled ? '' : 'disabled' ?>"
@@ -92,36 +91,27 @@ Records
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            <!-- WORKFLOW BUTTON -->
                                             <?php if (hasRole('Superadmin') || hasPermission('records.workflow')): ?>
                                                 <a href="<?= base_url('records/workflow/' . $record->id) ?>" class="btn btn-primary btn-sm">
                                                     <i class="fas fa-map-marked-alt"></i>
                                                 </a>
                                             <?php endif ?>
 
-                                            <!-- DELETE BUTTONS -->
-                                            <!-- Soft Delete Button -->
                                             <?php if (hasRole('Superadmin')): ?>
                                                 <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Soft Delete">
                                                     <i class="fas fa-archive"></i>
                                                 </button>
                                             <?php endif ?>
-
-                                            <!-- Delete Files Button -->
                                             <?php if (hasRole('Superadmin')): ?>
                                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             <?php endif ?>
-
-                                            <!-- Force Delete Button -->
                                             <?php if (hasRole('Superadmin')): ?>
                                                 <button type="button" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Force Delete">
                                                     <i class="fas fa-skull-crossbones"></i>
                                                 </button>
                                             <?php endif ?>
-
-                                            <!-- BORROW / REQUEST BUTTON FOR CONTRIBUTORS -->
                                             <?php if (hasRole('Superadmin') || $record->status_id == 4 && hasRole('Contributor')): ?>
                                                 <a href="<?= base_url('records/request/' . $record->id) ?>"
                                                     class="btn btn-secondary btn-sm">
@@ -161,6 +151,12 @@ Records
                             $start = 0;
                             $end   = 0;
                         }
+
+                        // Build query string except 'page'
+                        $query = $_GET;
+                        unset($query['page']);
+                        $queryString = http_build_query($query);
+                        $queryString = $queryString ? "&" . $queryString : "";
                         ?>
                         Showing <?= $start ?> to <?= $end ?> of <?= $total ?> results
                     </div>
@@ -170,23 +166,24 @@ Records
                         <ul class="pagination pagination-sm m-0">
                             <!-- Prev button -->
                             <li class="page-item <?= ($currentPage <= 1) ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $currentPage - 1 ?>">«</a>
+                                <a class="page-link" href="?page=<?= $currentPage - 1 ?><?= $queryString ?>">«</a>
                             </li>
 
                             <!-- Page numbers -->
                             <?php for ($page = 1; $page <= $totalPages; $page++): ?>
                                 <li class="page-item <?= ($page == $currentPage) ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a>
+                                    <a class="page-link" href="?page=<?= $page ?><?= $queryString ?>"><?= $page ?></a>
                                 </li>
                             <?php endfor; ?>
 
                             <!-- Next button -->
                             <li class="page-item <?= ($currentPage >= $totalPages) ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $currentPage + 1 ?>">»</a>
+                                <a class="page-link" href="?page=<?= $currentPage + 1 ?><?= $queryString ?>">»</a>
                             </li>
                         </ul>
                     </nav>
                 </div>
+
 
             </div>
         </div>

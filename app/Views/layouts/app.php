@@ -191,26 +191,6 @@
     <!-- Index.js -->
     <script src="<?= asset('assets/js/index.js') ?>"></script>
 
-    <script>
-         const BASE_URL = "<?= base_url() ?>";
-
-    setInterval(() => {
-        console.log("check");
-        $.get(BASE_URL + 'system/checkSession', function(res) {
-            if (res.status === 'expired') {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Session Expired',
-                    text: res.message,
-                    confirmButtonText: 'Login'
-                }).then(() => {
-                    window.location.href = BASE_URL + 'auth/login';
-                });
-            }
-        });
-    }, 60000); 
-    </script>
-
 </body>
 
 </html>

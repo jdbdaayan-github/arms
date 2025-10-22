@@ -53,6 +53,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'RecordController::store');
         $routes->get('edit/(:num)', [RecordController::class, 'edit']);
         $routes->get('show/(:num)', [RecordController::class, 'show']);
+        $routes->get('preview/(:any)', [RecordController::class, 'preview']);
         $routes->get('getIndexes/(:num)', 'RecordController::getIndexes/$1');
         $routes->get('workflow/(:num)', [RecordController::class, 'workflow']);
         $routes->get('approval', [RecordController::class, 'approval']);

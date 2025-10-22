@@ -68,7 +68,7 @@ class Record extends Model
 
     public function getRecordById($id)
     {
-        return $this->select('records.*, record_series.name as series, record_statuses.name as status, record_file_versions.filename as filename, record_file_versions.version as version , CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as user_name')
+        return $this->select('records.*, record_series.name as series, record_statuses.name as status, record_file_versions.filename as filename, record_file_versions.randomfilename as randomfilename, record_file_versions.version as version , CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as user_name')
             ->join('record_series', 'record_series.id=records.series_id')
             ->join('record_statuses', 'record_statuses.id = records.status_id')
             ->join('record_file_versions', 'record_file_versions.record_id = records.id', 'left')
@@ -79,6 +79,27 @@ class Record extends Model
     public function insertRecord($data)
     {
         return $this->insert($data);
+    }
+
+    public function getContriRecentRecords()
+    {
+        return $this->select('records.title,records.created_at,record_statuses.name as status')
+                    ->join('record_statuses','record_statuses.id = records.status_id')
+                    ->where('created_by', session()->get('user_id'))->findAll(5);
+    }
+
+    public function getTotalUpload()
+    {
+        return $this->where('created_by', session()->get('user_id'))->countAllResults();
+    }
+
+    public function getApprovedRecords()
+    {
+        return $this->where('created_by', session()->get('user_id'))->where('status_id >=', 3)->countAllResults();
+    }
+    public function getPendingRecords()
+    {
+        return $this->where('created_by', session()->get('user_id'))->where('status_id', 2)->countAllResults();
     }
 
     public function getRecentRecords()
