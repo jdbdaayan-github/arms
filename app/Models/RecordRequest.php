@@ -22,11 +22,11 @@ class RecordRequest extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+    protected $deletedField  = '';
 
     // Validation
     protected $validationRules      = [];
@@ -60,5 +60,9 @@ class RecordRequest extends Model
     public function updateRequest($id, $data)
     {
         return $this->update($id, $data);
+    }
+
+    public function countPendingRequest(){
+        return $this->where('status', 'Pending')->countAllResults();
     }
 }

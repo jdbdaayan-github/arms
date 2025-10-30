@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\Permission;
 use App\Models\User;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -10,10 +11,12 @@ class UserController extends BaseController
 {
 
     protected $user_model;
+    protected $permission_model;
 
     public function __construct()
     {
         $this->user_model = new User();
+        $this->permission_model = new Permission();
     }
     public function index()
     {
@@ -75,5 +78,17 @@ class UserController extends BaseController
     public function create()
     {
         return view('pages/users/create');
+    }
+
+    public function user_permissions($user_id)
+    {
+        $data['user'] = $this->user_model->getUserById($user_id);
+        $data['user_permissions'] = $this->permission_model->getPermissions();
+        return view('pages/users/user_permissions', $data);
+    }
+
+    public function set_user_permission()
+    {
+        //
     }
 }

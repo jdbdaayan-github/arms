@@ -112,7 +112,7 @@ Records
                                                     <i class="fas fa-skull-crossbones"></i>
                                                 </button>
                                             <?php endif ?>
-                                            <?php if (hasRole('Superadmin') || $record->status_id == 4 && hasRole('Contributor')): ?>
+                                            <?php if (hasRole('Superadmin') || hasRole('Contributor')): ?>
                                                 <a href="<?= base_url('records/request/' . $record->id) ?>"
                                                     class="btn btn-secondary btn-sm">
                                                     <i class="fas fa-book-reader"></i>
@@ -213,4 +213,16 @@ Records
         });
     </script>
 <?php endif; ?>
+
+<?php if (session()->get('req_success')):?>
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text : '<?= session()->get('req_success') ?>',
+            icon: 'success',
+            showCloseButton: true
+        })
+    </script>
+<?php endif ?>
+
 <?= $this->endSection() ?>

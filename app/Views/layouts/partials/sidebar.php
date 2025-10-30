@@ -1,10 +1,13 @@
 <?php
 
 use App\Models\Record;
+use App\Models\RecordRequest;
 
 $record_model = new Record();
+$request_model = new RecordRequest();
 $pendingApprovalCount = $record_model->countPendingApproval();
 $pendingArchivalCount = $record_model->countPendingArchival();
+$pendingRequest = $request_model->countPendingRequest();
 
 $uri = service('uri');
 $segments = $uri->getSegments();
@@ -123,7 +126,7 @@ function isMenuOpen($segment1Expected)
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>
                                         Requests
-                                        <span class="right badge badge-danger"><?= $pendingArchivalCount ?></span>
+                                        <span class="right badge badge-danger"><?= $pendingRequest ?></span>
                                     </p>
                                 </a>
                             </li>

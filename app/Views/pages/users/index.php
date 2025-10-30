@@ -120,7 +120,7 @@ Users
                         <a href="<?= base_url('roles/edit/') ?>${data}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a href="<?= base_url('roles/permissions/') ?>${data}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Permissions">
+                        <a href="<?= base_url('users/permissions/') ?>${data}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Permissions">
                             <i class="fas fa-shield-alt"></i>
                         </a>
                         <button class="btn btn-success btn-sm verify-user" data-id="${data}" data-verified="${row.verified}" data-bs-toggle="tooltip" data-bs-placement="top" title="Verify/Unverify">

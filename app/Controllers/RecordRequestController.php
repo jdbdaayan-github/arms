@@ -76,7 +76,7 @@ class RecordRequestController extends BaseController
 
         $this->record_request_model->addRequest($data);
 
-        return redirect()->to('records')->with('success', 'Record requested successfully!');
+        return redirect()->to('records')->with('req_success', 'Record requested successfully!');
     }
 
     

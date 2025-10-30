@@ -77,6 +77,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('create', 'UserController::create');
         $routes->get('profile/(:num)', 'UserController::profile/$1');
         $routes->post('resetAttempts/(:num)', [UserController::class, 'resetAttempts']);
+        $routes->get('permissions/(:num)', [UserController::class, 'user_permissions']);
     });
 
     #Roles
