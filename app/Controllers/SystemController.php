@@ -93,9 +93,10 @@ class SystemController extends BaseController
 
     public function checkSession() {
         $session = session();
-        if (!$session->get('user_id')) {
-            return $this->response->setJSON(['status' => 'expired', 'message' => 'Session expired']);
+        if ($session->has('user_id')) {
+            return $this->response->setJSON(['alive' => true]);
+        } else {
+            return $this->response->setJSON(['alive' => false]);
         }
-        return $this->response->setJSON(['status' => 'ok']);
     }
 }

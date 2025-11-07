@@ -85,6 +85,7 @@ class Filters extends BaseFilters
                     'auth/forgot',
                     'auth/reset',
                     'auth/terms',
+                    'system/checkSession',
                 ]
             ],
         ],

@@ -27,9 +27,23 @@ class AuthFilter implements FilterInterface
     {
         $session = session();
 
-        if(!$session->has('user_id'))
-        {
-            return redirect()->to('auth/login');
+        if (! $session->has('user_id')) {
+            // Safe AJAX detection (works even if isAJAX() doesn't exist)
+            $isAjax = false;
+            $xrw = $request->getHeaderLine('X-Requested-With');
+            $accept = $request->getHeaderLine('Accept');
+
+            if (strtolower($xrw) === 'xmlhttprequest' || str_contains($accept, 'application/json')) {
+                $isAjax = true;
+            }
+
+            if ($isAjax) {
+                // Return JSON instead of redirecting
+                return service('response')->setJSON(['alive' => false]);
+            }
+
+            // For normal page requests, redirect to login
+            return redirect()->to(base_url('auth/login'));
         }
     }
 

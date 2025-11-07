@@ -79,8 +79,6 @@ class RecordRequestController extends BaseController
         return redirect()->to('records')->with('req_success', 'Record requested successfully!');
     }
 
-    
-
     public function cancelRequest($id) {
         //
     }
