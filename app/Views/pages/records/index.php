@@ -1,3 +1,50 @@
+<style>
+/* === Expand Button Styling === */
+.toggle-row {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+.toggle-row i {
+    transition: transform 0.2s ease;
+}
+.toggle-row:hover {
+    background-color: #e2e6ea;
+    border-color: #adb5bd;
+}
+
+/* === Expanded Row === */
+.expandable-row {
+    transition: all 0.25s ease-in-out;
+}
+
+.expandable-row td {
+    border-top: none !important;
+}
+
+.expandable-row .row > div {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.expandable-row .btn {
+    font-size: 12px;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+/* Optional slide effect */
+.slide-toggle {
+    display: none;
+}
+</style>
+
 <?= $this->extend('layouts/app'); ?>
 
 <?= $this->section('title') ?>
@@ -60,64 +107,78 @@ Records
                     <table class="table table-bordered table-hover table-sm mb-1">
                         <thead>
                             <tr>
-                                <th style="width:30px;">#</th>
+                                <th style="width: 40px;" class="text-center"></th>
                                 <th>Title</th>
-                                <th style="width:20%;" class="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (!empty($records)): ?>
                                 <?php foreach ($records as $record): ?>
                                     <tr>
-                                        <td class="text-center"><input type="checkbox"></td>
-                                        <td class="align-items-center"><?= esc($record->title) ?></td>
-                                        <td class="text-center">
+                                        <!-- + Button (for mobile expand) -->
+                                        <td class="text-center align-middle">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary toggle-row" data-id="<?= $record->id ?>">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </td>
 
-                                            <?php
-                                            $view_enabled = hasRole('Superadmin')
-                                                || (hasPermission('records.view') && $record->status_id == 4)
-                                                || hasRecordPermission($record->id, 'view');
-                                            ?>
-                                            <a href="<?= $record->status_id != 1 && !hasRole('Superadmin') ? '#' : base_url('records/show/' . $record->id) ?>"
-                                                class="btn btn-info btn-sm <?= $record->status_id != 1 && !hasRole('Superadmin') ? 'disabled' : '' ?>"
-                                                <?= $view_enabled ? 'aria-disabled="true" tabindex="-1"' : '' ?>>
-                                                <i class="fas fa-eye"></i>
-                                            </a>
+                                        <td class="align-middle"><a href="<?= base_url('records/show/' . $record->id) ?>"><?= esc($record->title) ?></a></td>
+                                                <?php
+                                                $view_enabled = hasRole('Superadmin')
+                                                    || (hasPermission('records.view') && $record->status_id == 4)
+                                                    || hasRecordPermission($record->id, 'view');
 
-                                            <?php $enabled = hasRole('Superadmin') || (hasPermission('records.edit') && $record->status_id == 1) || hasRecordPermission($record->id, 'edit'); ?>
-                                            <a href="<?= $enabled ? base_url('records/edit/' . $record->id) : '#' ?>"
-                                                class="btn btn-warning btn-sm <?= $enabled ? '' : 'disabled' ?>"
-                                                <?= $enabled ? '' : 'aria-disabled="true" tabindex="-1"' ?>>
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                                $edit_enabled = hasRole('Superadmin')
+                                                    || (hasPermission('records.edit') && $record->status_id == 1)
+                                                    || hasRecordPermission($record->id, 'edit');
+                                                ?>
+                                    </tr>
 
-                                            <?php if (hasRole('Superadmin') || hasPermission('records.workflow')): ?>
-                                                <a href="<?= base_url('records/workflow/' . $record->id) ?>" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-map-marked-alt"></i>
-                                                </a>
-                                            <?php endif ?>
+                                    <!-- EXPANDABLE ROW (MOBILE ACTIONS) -->
+                                    <tr class="expandable-row d-none" id="expand-<?= $record->id ?>">
+                                        
+                                        <td colspan="3" class="bg-light p-2">
+                                            <div class="row d-flex justify-content-around gap-1">
+                                            <div><b>Created By:</b> <?= $record->user_name ?></div>
+                                            <div><b>Created at:</b> <?= date('F d, Y',strtotime($record->created_at)) ?></div>
+                                            <div><b>Status:</b> <?= $record->status ?></div>
+                                            <div><b>Access:</b> <?= ($record->confidential == 0)?'Public':'Confidential' ?></div> 
+                                            </div>
+                                            <hr class="m-2">
+                                            <div class="d-flex flex-wrap justify-content-center">
+                                                <?php if ($view_enabled): ?>
+                                                    <a class="btn btn-info btn-sm mr-1 mb-1" href="<?= base_url('records/show/' . $record->id) ?>">
+                                                        <i class="fas fa-eye mr-1"></i> View
+                                                    </a>
+                                                <?php endif ?>
 
-                                            <?php if (hasRole('Superadmin')): ?>
-                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Soft Delete">
-                                                    <i class="fas fa-archive"></i>
-                                                </button>
-                                            <?php endif ?>
-                                            <?php if (hasRole('Superadmin')): ?>
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            <?php endif ?>
-                                            <?php if (hasRole('Superadmin')): ?>
-                                                <button type="button" class="btn btn-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Force Delete">
-                                                    <i class="fas fa-skull-crossbones"></i>
-                                                </button>
-                                            <?php endif ?>
-                                            <?php if (hasRole('Superadmin') || hasRole('Contributor')): ?>
-                                                <a href="<?= base_url('records/request/' . $record->id) ?>"
-                                                    class="btn btn-secondary btn-sm">
-                                                    <i class="fas fa-book-reader"></i>
-                                                </a>
-                                            <?php endif ?>
+                                                <?php if ($edit_enabled): ?>
+                                                    <a class="btn btn-warning btn-sm mr-1 mb-1" href="<?= base_url('records/edit/' . $record->id) ?>">
+                                                        <i class="fas fa-edit mr-1"></i> Edit
+                                                    </a>
+                                                <?php endif ?>
+
+                                                <?php if (hasRole('Superadmin') || hasPermission('records.workflow')): ?>
+                                                    <a class="btn btn-primary btn-sm mr-1 mb-1" href="<?= base_url('records/workflow/' . $record->id) ?>">
+                                                        <i class="fas fa-map-marked-alt mr-1"></i> Track
+                                                    </a>
+                                                <?php endif ?>
+
+                                                <?php if (hasRole('Superadmin')): ?>
+                                                    <button class="btn btn-warning btn-sm mr-1 mb-1">
+                                                        <i class="fas fa-archive mr-1"></i> Soft Delete
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm mr-1 mb-1">
+                                                        <i class="fas fa-trash mr-1"></i> Delete
+                                                    </button>
+                                                <?php endif ?>
+
+                                                <?php if (hasRole('Superadmin') || hasRole('Contributor')): ?>
+                                                    <a class="btn btn-secondary btn-sm mr-1 mb-1" href="<?= base_url('records/request/' . $record->id) ?>">
+                                                        <i class="fas fa-book-reader mr-1"></i> Make Request
+                                                    </a>
+                                                <?php endif ?>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -214,15 +275,34 @@ Records
     </script>
 <?php endif; ?>
 
-<?php if (session()->get('req_success')):?>
+<?php if (session()->get('req_success')): ?>
     <script>
         Swal.fire({
             title: 'Success!',
-            text : '<?= session()->get('req_success') ?>',
+            text: '<?= session()->get('req_success') ?>',
             icon: 'success',
             showCloseButton: true
         })
     </script>
 <?php endif ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-row').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const row = document.getElementById(`expand-${id}`);
+            const icon = this.querySelector('i');
+
+            if (row.classList.contains('d-none')) {
+                row.classList.remove('d-none');
+                icon.classList.replace('fa-plus', 'fa-minus');
+            } else {
+                row.classList.add('d-none');
+                icon.classList.replace('fa-minus', 'fa-plus');
+            }
+        });
+    });
+});
+</script>
 
 <?= $this->endSection() ?>

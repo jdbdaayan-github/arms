@@ -44,7 +44,6 @@ class RecordController extends BaseController
     {
         $status_model = new RecordStatus();
         $statuses = $status_model->getAllStatus();
-        $recordModel = new Record();
 
         // Get request params
         $status_id = $this->request->getGet('status_id');
@@ -361,7 +360,7 @@ class RecordController extends BaseController
         $data['series'] = $this->record_series_model->findAll();
         $data['filters'] = $filters;
 
-        // Load all indexes for the selected series
+        // Load indexes for selected series
         if (!empty($filters['series'])) {
             $indexes = $this->record_series_index_model
                 ->select('record_indexes.id, record_indexes.name, record_indexes.type, record_indexes.placeholder')
@@ -372,7 +371,7 @@ class RecordController extends BaseController
                 ->getResult();
         }
 
-        // Perform search only when form submitted
+        // Search logic only when form submitted
         if (!empty($filters)) {
             $builder = $this->record_model
                 ->select('records.*, s.name AS series_name')
@@ -403,25 +402,29 @@ class RecordController extends BaseController
                 $builder->where('records.record_date <=', $filters['date_to']);
             }
 
-            // 🔍 Dynamic Index Filters (using record_index_values)
+            // Dynamic Index Filters
             if (!empty($filters['indexes']) && is_array($filters['indexes'])) {
                 foreach ($filters['indexes'] as $indexId => $value) {
                     if (trim($value) !== '') {
                         $alias = 'riv_' . $indexId;
-
                         $builder->join(
                             "record_index_values AS {$alias}",
                             "{$alias}.record_id = records.id AND {$alias}.index_id = " . (int)$indexId,
                             'left'
                         );
-
                         $builder->like("{$alias}.value", $value);
                     }
                 }
             }
 
             $builder->groupBy('records.id');
-            $records = $builder->get()->getResult();
+
+            // ✅ Pagination using model's pager
+            $perPage = 10;
+            $records = $builder->paginate($perPage);
+            $pager = $this->record_model->pager;
+
+            $data['pager'] = $pager;
         }
 
         $data['indexes'] = $indexes;
@@ -429,6 +432,7 @@ class RecordController extends BaseController
 
         return view('pages/records/search', $data);
     }
+
 
     public function workflow($id)
     {

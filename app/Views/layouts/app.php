@@ -92,6 +92,12 @@
         input[type="date"] {
             border-radius: 0 !important;
         }
+
+        @media (max-width: 760px) {
+            .user-menu {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -193,39 +199,39 @@
 
     <!-- Session Checker -->
     <script>
-function checkUserSession() {
-    console.log('Checking session...');
-    fetch('<?= base_url('system/checkSession'); ?>', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        cache: 'no-store'
-    })
-    .then(async response => {
-        const text = await response.text();
-        try {
-            const data = JSON.parse(text);
-            if (!data.alive) {
-                Swal.fire({
-                    title: 'Session Expired',
-                    text: 'Your session has expired. Please log in again.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = '<?= base_url('auth/login'); ?>';
-                });
-            }
-        } catch (e) {
-            console.error('Server returned non-JSON:', text);
+        function checkUserSession() {
+            console.log('Checking session...');
+            fetch('<?= base_url('system/checkSession'); ?>', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    cache: 'no-store'
+                })
+                .then(async response => {
+                    const text = await response.text();
+                    try {
+                        const data = JSON.parse(text);
+                        if (!data.alive) {
+                            Swal.fire({
+                                title: 'Session Expired',
+                                text: 'Your session has expired. Please log in again.',
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = '<?= base_url('auth/login'); ?>';
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Server returned non-JSON:', text);
+                    }
+                })
+                .catch(error => console.error('Session check failed:', error));
         }
-    })
-    .catch(error => console.error('Session check failed:', error));
-}
 
-setInterval(checkUserSession, 120000);
-</script>
+        setInterval(checkUserSession, 120000);
+    </script>
 
 </body>
 

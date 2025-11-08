@@ -56,14 +56,16 @@ Records
                         <div class="card mb-3 border">
                             <div class="card-body py-3">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <p><strong>Title:</strong> <?= esc($record->title) ?></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Created By:</strong> <?= esc($record->user_name) ?></p>
                                         <p><strong>Confidential:</strong> <?= $record->confidential == 0 ? 'No' : 'Yes' ?></p>
                                         <p><strong>Date:</strong> <?= ($record->record_date == '0000-00-00' || $record->record_date == null) ? '--' : date('F j, Y', strtotime($record->record_date)) ?></p>
                                         <p><strong>Series Title:</strong> <?= esc($record->series) ?></p>
                                     </div>
                                     <div class="col-md-6">
-                                        <p><strong>Created By:</strong> <?= esc($record->user_name) ?></p>
                                         <p><strong>Status:</strong> <?= esc($record->status) ?></p>
                                         <p><strong>File Name:</strong> <?= esc($record->filename . ' v[' . $record->version . ']') ?></p>
                                         <p><strong>Creation Date:</strong> <?= date('F j, Y', strtotime($record->created_at)) ?></p>
@@ -199,7 +201,7 @@ Records
 
                     <!-- RIGHT SIDE: Preview -->
                     <div class="col-lg-5">
-                        <div class="card card-outline card-primary h-100 shadow-sm">
+                        <div class="card card-outline <?= ($record->confidential == 0?'card-primary':'card-danger') ?> h-100 shadow-sm">
                             <div class="card-header py-2">
                                 <h3 class="card-title mb-0"><i class="fas fa-file-alt mr-2"></i> Preview</h3>
                             </div>

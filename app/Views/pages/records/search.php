@@ -110,23 +110,24 @@ Advanced Search
                                             <table class="table table-sm table-bordered table-striped mb-0">
                                                 <thead>
                                                     <tr>
+                                                        <th></th>
                                                         <th>Title</th>
-                                                        <th>Series</th>
-                                                        <th>Date</th>
-                                                        <th>Confidentiality</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php foreach ($records as $r): ?>
                                                         <tr>
+                                                            <td class="text-center"><a href="<?= base_url('records/show/') ?><?= $r->id ?>" class="btn btn-sm btn-primary"> <i class="fas fa-eye"></i></a></td>
                                                             <td><?= esc($r->title) ?></td>
-                                                            <td><?= esc($r->series_name ?? '') ?></td>
-                                                            <td><?= esc($r->record_date) ?></td>
-                                                            <td><?= $r->confidential ? 'Confidential' : 'Public' ?></td>
                                                         </tr>
                                                     <?php endforeach; ?>
                                                 </tbody>
                                             </table>
+                                        <?php endif; ?>
+                                        <?php if (!empty($records) && isset($pager)): ?>
+                                            <div class="mt-2 d-flex justify-content-center">
+                                                <?= $pager->links() ?>
+                                            </div>
                                         <?php endif; ?>
                                     <?php else: ?>
                                         <div class="text-center text-muted my-5">
@@ -158,35 +159,35 @@ Advanced Search
 
 <?= $this->section('scripts') ?>
 <script>
-$(function() {
-    $('#series, #confidentiality').select2({
-        theme: 'bootstrap4',
-        width: '100%'
-    });
+    $(function() {
+        $('#series, #confidentiality').select2({
+            theme: 'bootstrap4',
+            width: '100%'
+        });
 
-    // Load dynamic indexes like in create form
-    $('#series').on('change', function() {
-        let seriesId = $(this).val();
-        let indexInputs = $('#dynamic_indexes');
+        // Load dynamic indexes like in create form
+        $('#series').on('change', function() {
+            let seriesId = $(this).val();
+            let indexInputs = $('#dynamic_indexes');
 
-        if (!seriesId) {
-            indexInputs.html('<p class="text-muted mb-0">Select a series to load index filters...</p>');
-            return;
-        }
+            if (!seriesId) {
+                indexInputs.html('<p class="text-muted mb-0">Select a series to load index filters...</p>');
+                return;
+            }
 
-        $.ajax({
-            url: `/records/getIndexes/${seriesId}`,
-            method: 'GET',
-            dataType: 'json',
-            success: function(indexes) {
-                if (!indexes || indexes.length === 0) {
-                    indexInputs.html('<p class="text-muted mb-0">No index filters for this series.</p>');
-                    return;
-                }
+            $.ajax({
+                url: `/records/getIndexes/${seriesId}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(indexes) {
+                    if (!indexes || indexes.length === 0) {
+                        indexInputs.html('<p class="text-muted mb-0">No index filters for this series.</p>');
+                        return;
+                    }
 
-                let html = '';
-                indexes.forEach(idx => {
-                    html += `
+                    let html = '';
+                    indexes.forEach(idx => {
+                        html += `
                         <div class="form-group mb-2">
                             <label class="text-sm mb-0">${idx.name}</label>
                             <input type="text"
@@ -195,14 +196,14 @@ $(function() {
                                 placeholder="${idx.placeholder ?? ''}">
                         </div>
                     `;
-                });
-                indexInputs.html(html);
-            },
-            error: function() {
-                indexInputs.html('<p class="text-danger mb-0">Failed to load index filters.</p>');
-            }
+                    });
+                    indexInputs.html(html);
+                },
+                error: function() {
+                    indexInputs.html('<p class="text-danger mb-0">Failed to load index filters.</p>');
+                }
+            });
         });
     });
-});
 </script>
 <?= $this->endSection() ?>

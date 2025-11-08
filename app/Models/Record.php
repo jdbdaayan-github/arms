@@ -63,7 +63,10 @@ class Record extends Model
     }
 
     // Admins or other roles see all records
-    return $this->orderBy('created_at', 'DESC');
+    return $this->select('records.*,record_statuses.name as status,CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as user_name')
+                ->join('record_statuses', 'record_statuses.id = records.status_id')
+                ->join('users', 'users.id = records.created_by')
+                ->orderBy('created_at', 'DESC');
     }
 
     public function getRecordById($id)
