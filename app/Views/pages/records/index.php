@@ -1,48 +1,50 @@
 <style>
-/* === Expand Button Styling === */
-.toggle-row {
-    width: 32px;
-    height: 32px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    transition: all 0.2s ease-in-out;
-}
-.toggle-row i {
-    transition: transform 0.2s ease;
-}
-.toggle-row:hover {
-    background-color: #e2e6ea;
-    border-color: #adb5bd;
-}
+    /* === Expand Button Styling === */
+    .toggle-row {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        transition: all 0.2s ease-in-out;
+    }
 
-/* === Expanded Row === */
-.expandable-row {
-    transition: all 0.25s ease-in-out;
-}
+    .toggle-row i {
+        transition: transform 0.2s ease;
+    }
 
-.expandable-row td {
-    border-top: none !important;
-}
+    .toggle-row:hover {
+        background-color: #e2e6ea;
+        border-color: #adb5bd;
+    }
 
-.expandable-row .row > div {
-    font-size: 0.9rem;
-    color: #333;
-}
+    /* === Expanded Row === */
+    .expandable-row {
+        transition: all 0.25s ease-in-out;
+    }
 
-.expandable-row .btn {
-    font-size: 12px;
-}
+    .expandable-row td {
+        border-top: none !important;
+    }
 
-.bg-light {
-    background-color: #f8f9fa !important;
-}
+    .expandable-row .row>div {
+        font-size: 0.9rem;
+        color: #333;
+    }
 
-/* Optional slide effect */
-.slide-toggle {
-    display: none;
-}
+    .expandable-row .btn {
+        font-size: 12px;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+
+    /* Optional slide effect */
+    .slide-toggle {
+        display: none;
+    }
 </style>
 
 <?= $this->extend('layouts/app'); ?>
@@ -117,43 +119,39 @@ Records
                                     <tr>
                                         <!-- + Button (for mobile expand) -->
                                         <td class="text-center align-middle">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary toggle-row" data-id="<?= $record->id ?>">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary toggle-row" data-id="<?= $record->id ?>" style="border:0;">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </td>
 
-                                        <td class="align-middle"><a href="<?= base_url('records/show/' . $record->id) ?>"><?= esc($record->title) ?></a></td>
-                                                <?php
-                                                $view_enabled = hasRole('Superadmin')
-                                                    || (hasPermission('records.view') && $record->status_id == 4)
-                                                    || hasRecordPermission($record->id, 'view');
+                                        <td class="align-middle"><a href="<?= base_url('records/show/' . $record->id) ?>"><?= esc($record->title) ?></a><a href="javascript:void(0)" class="text-<?= ($record->is_bookmarked)?'warning':'secondary'  ?> ?> float-right align-middle d-flex"><i class="fas fa-star star-id" data-id="<?= $record->id ?>" data-mark = '<?=  $record->is_bookmarked ?>'></i></a></td>
+                                        <?php
+                                        $view_enabled = hasRole('Superadmin')
+                                            || (hasPermission('records.view') && $record->status_id == 4)
+                                            || hasRecordPermission($record->id, 'view');
 
-                                                $edit_enabled = hasRole('Superadmin')
-                                                    || (hasPermission('records.edit') && $record->status_id == 1)
-                                                    || hasRecordPermission($record->id, 'edit');
-                                                ?>
+                                        $edit_enabled = hasRole('Superadmin')
+                                            || hasRole('Administrator')
+                                            || (hasPermission('records.edit') && $record->status_id == 1)
+                                            || hasRecordPermission($record->id, 'edit');
+                                        ?>
                                     </tr>
 
                                     <!-- EXPANDABLE ROW (MOBILE ACTIONS) -->
                                     <tr class="expandable-row d-none" id="expand-<?= $record->id ?>">
-                                        
+
                                         <td colspan="3" class="bg-light p-2">
                                             <div class="row d-flex justify-content-around gap-1">
-                                            <div><b>Created By:</b> <?= $record->user_name ?></div>
-                                            <div><b>Created at:</b> <?= date('F d, Y',strtotime($record->created_at)) ?></div>
-                                            <div><b>Status:</b> <?= $record->status ?></div>
-                                            <div><b>Access:</b> <?= ($record->confidential == 0)?'Public':'Confidential' ?></div> 
+                                                <div><b>Created By:</b> <?= $record->user_name ?></div>
+                                                <div><b>Created at:</b> <?= date('F d, Y', strtotime($record->created_at)) ?></div>
+                                                <div><b>Status:</b> <?= $record->status ?></div>
+                                                <div><b>Access:</b> <?= ($record->confidential == 0) ? 'Public' : 'Confidential' ?></div>
                                             </div>
                                             <hr class="m-2">
                                             <div class="d-flex flex-wrap justify-content-center">
-                                                <?php if ($view_enabled): ?>
-                                                    <a class="btn btn-info btn-sm mr-1 mb-1" href="<?= base_url('records/show/' . $record->id) ?>">
-                                                        <i class="fas fa-eye mr-1"></i> View
-                                                    </a>
-                                                <?php endif ?>
 
                                                 <?php if ($edit_enabled): ?>
-                                                    <a class="btn btn-warning btn-sm mr-1 mb-1" href="<?= base_url('records/edit/' . $record->id) ?>">
+                                                    <a class="btn btn-info btn-sm mr-1 mb-1" href="<?= base_url('records/edit/' . $record->id) ?>">
                                                         <i class="fas fa-edit mr-1"></i> Edit
                                                     </a>
                                                 <?php endif ?>
@@ -164,7 +162,7 @@ Records
                                                     </a>
                                                 <?php endif ?>
 
-                                                <?php if (hasRole('Superadmin')): ?>
+                                                <?php if (hasRole('Superadmin') || hasRole('Administrator')): ?>
                                                     <button class="btn btn-warning btn-sm mr-1 mb-1">
                                                         <i class="fas fa-archive mr-1"></i> Soft Delete
                                                     </button>
@@ -173,7 +171,7 @@ Records
                                                     </button>
                                                 <?php endif ?>
 
-                                                <?php if (hasRole('Superadmin') || hasRole('Contributor')): ?>
+                                                <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Contributor')): ?>
                                                     <a class="btn btn-secondary btn-sm mr-1 mb-1" href="<?= base_url('records/request/' . $record->id) ?>">
                                                         <i class="fas fa-book-reader mr-1"></i> Make Request
                                                     </a>
@@ -281,28 +279,74 @@ Records
             title: 'Success!',
             text: '<?= session()->get('req_success') ?>',
             icon: 'success',
-            showCloseButton: true
+            showCloseButton: true,
+            showConfirmButton: true,
         })
     </script>
 <?php endif ?>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.toggle-row').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const id = this.dataset.id;
-            const row = document.getElementById(`expand-${id}`);
-            const icon = this.querySelector('i');
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.toggle-row').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                const row = document.getElementById(`expand-${id}`);
+                const icon = this.querySelector('i');
 
-            if (row.classList.contains('d-none')) {
-                row.classList.remove('d-none');
-                icon.classList.replace('fa-plus', 'fa-minus');
-            } else {
-                row.classList.add('d-none');
-                icon.classList.replace('fa-minus', 'fa-plus');
-            }
+                if (row.classList.contains('d-none')) {
+                    row.classList.remove('d-none');
+                    icon.classList.replace('fa-plus', 'fa-minus');
+                } else {
+                    row.classList.add('d-none');
+                    icon.classList.replace('fa-minus', 'fa-plus');
+                }
+            });
         });
     });
-});
 </script>
+<script>
+    document.querySelectorAll('.star-id').forEach(star => {
+        star.addEventListener('click', function(e) {
+            e.preventDefault();
+            const id = e.target.dataset.id;
+            const mark = e.target.dataset.mark;;
+            Swal.fire({
+                title: 'Bookmark',
+                text: mark == true ? 'Remove bookmark on this record?': 'Add bookmark on this record?',
+                icon: 'question',
+                showCloseButton: true,
+                showDenyButton: true,
+                confirmButtonText: mark == true ? 'Remove Bookmark': 'Add Bookmark',
+                denyButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    let csrfName = '<?= csrf_token() ?>';
+                    let csrfHash = '<?= csrf_hash() ?>';
 
+                    fetch('<?= base_url('records/bookmark') ?>/' + id, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfHash
+                            },
+                            body: JSON.stringify({
+                                [csrfName]: csrfHash,
+                                id: id
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            Swal.fire('Success', mark == true ? 'Removed bookmark on this record': 'Added bookmark on this record', 'success')
+                            .then(() => {
+                            location.reload();
+                        });
+                        })
+                        .catch(err => {
+                            Swal.fire('Error', 'Something went wrong!', 'error');
+                        });
+                }
+            });
+        });
+    });
+</script>
 <?= $this->endSection() ?>

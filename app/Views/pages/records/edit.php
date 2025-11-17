@@ -146,10 +146,10 @@ Edit Record
                                     style="height: 500px; background:#f8f9fa;">
                                     <span id="pdfPlaceholder" class="text-muted">No file selected</span>
                                     <embed id="pdfPreview"
-                                        src="<?= $record->file_path ? base_url('uploads/' . $record->filename) : '' ?>"
+                                        src="<?= $record->filename ? base_url('uploads/records' . $record->filename) : '' ?>"
                                         type="application/pdf"
                                         width="100%" height="100%"
-                                        style="<?= $record->file_path ? '' : 'display:none;' ?>">
+                                        style="<?= $record->filename ? '' : 'display:none;' ?>">
                                     <span id="pdfPlaceholder" class="text-muted" style="<?= $record->filename ? 'display:none;' : '' ?>">
                                         No file selected
                                     </span>

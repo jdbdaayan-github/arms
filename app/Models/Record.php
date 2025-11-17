@@ -48,25 +48,30 @@ class Record extends Model
     protected $oldData = null;
 
     protected function generateRefNumber(array $data)
-{
-    $data['data']['ref_number'] = 'REC-' . date('Ymd') . '-' . str_pad(uniqid(), 6, '0', STR_PAD_LEFT);
-    return $data;
-}
+    {
+        $data['data']['ref_number'] = 'REC-' . date('Ymd') . '-' . str_pad(uniqid(), 6, '0', STR_PAD_LEFT);
+        return $data;
+    }
 
     public function getRecords()
     {
         $role = session()->get('role');
         $user_id = session()->get('user_id');
 
-    if ($role == 'Contributor') {
-        return $this->where('created_by', $user_id)->orderBy('created_at', 'DESC');
-    }
+        $builder = $this->select('records.*, 
+        record_statuses.name as status,
+        CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as user_name,
+        IF(record_bookmarks.user_id IS NOT NULL, 1, 0) as is_bookmarked')
+            ->join('record_statuses', 'record_statuses.id = records.status_id')
+            ->join('users', 'users.id = records.created_by', 'left')
+            ->join('record_bookmarks', 'record_bookmarks.record_id = records.id AND record_bookmarks.user_id = ' . $user_id, 'left')
+            ->orderBy('records.created_at', 'DESC');
 
-    // Admins or other roles see all records
-    return $this->select('records.*,record_statuses.name as status,CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as user_name')
-                ->join('record_statuses', 'record_statuses.id = records.status_id')
-                ->join('users', 'users.id = records.created_by')
-                ->orderBy('created_at', 'DESC');
+        if ($role == 'Contributor') {
+            $builder->where('records.created_by', $user_id);
+        }
+
+        return $builder;
     }
 
     public function getRecordById($id)
@@ -87,8 +92,8 @@ class Record extends Model
     public function getContriRecentRecords()
     {
         return $this->select('records.title,records.created_at,record_statuses.name as status')
-                    ->join('record_statuses','record_statuses.id = records.status_id')
-                    ->where('created_by', session()->get('user_id'))->findAll(5);
+            ->join('record_statuses', 'record_statuses.id = records.status_id')
+            ->where('created_by', session()->get('user_id'))->findAll(5);
     }
 
     public function getTotalUpload()

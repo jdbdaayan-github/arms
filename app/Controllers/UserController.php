@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -77,7 +78,9 @@ class UserController extends BaseController
     
     public function create()
     {
-        return view('pages/users/create');
+        $role_model = new Role();
+        $data['roles'] = $role_model->getRoles();
+        return view('pages/users/create', $data);
     }
 
     public function user_permissions($user_id)

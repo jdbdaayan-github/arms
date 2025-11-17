@@ -96,7 +96,7 @@ Records
                                                 <?php foreach ($histories as $his): ?>
                                                     <tr>
                                                         <td>
-                                                            [ <b><?= date('Y-m-d H:i', strtotime($his->created_at)) ?></b> ]
+                                                            [ <?= date('Y-m-d h:i A', strtotime($his->created_at)) ?> ]
                                                             <span class="text-primary mx-1"><?= esc($his->user) ?></span>
                                                             <?= esc($his->action) ?>
                                                             <span class="text-success ml-1"><?= esc($his->description) ?></span>.

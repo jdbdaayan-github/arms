@@ -15,6 +15,7 @@ use App\Models\RecordFileVersion;
 use App\Models\RecordRequestType;
 use App\Models\RecordSeriesIndex;
 use App\Controllers\BaseController;
+use App\Models\RecordBookmark;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class RecordController extends BaseController
@@ -202,7 +203,7 @@ class RecordController extends BaseController
                 'rules' => 'uploaded[record_file]'
                     . '|ext_in[record_file,pdf]'
                     . '|mime_in[record_file,application/pdf]'
-                    . `|max_size[record_file,{$validSize}]`,
+                    . "|max_size[record_file,{$validSize}]",
             ],
             'title'          => 'required',
             'confidentiality' => 'permit_empty',
@@ -327,12 +328,12 @@ class RecordController extends BaseController
     {
         $record = $this->record_model->find($id);
 
+        $fileversion = $this->record_file_version_model->getVersionByRecordId($id);
         // kunin lahat ng indexes ng series
         $indexes = $this->record_index_model->getSeriesIndexesById($record->series_id);
 
         // kunin yung saved values ng record na ito
         $recordIndexes = $this->record_index_value->getRecordIndexValues($id);
-
         // gawing associative array para madaling i-access sa view
         $indexValues = [];
         foreach ($recordIndexes as $ri) {
@@ -340,6 +341,7 @@ class RecordController extends BaseController
         }
 
         return view('pages/records/edit', [
+            'fileversion' => $fileversion,
             'record' => $record,
             'series' => $this->record_series_model->getSeries(),
             'indexValues' => $indexValues, // ← importante
@@ -434,7 +436,7 @@ class RecordController extends BaseController
     }
 
 
-    public function workflow($id)
+    public function workflow()
     {
         return view('pages/records/workflow');
     }
@@ -457,13 +459,11 @@ class RecordController extends BaseController
                 }
             }
         }
-
         return redirect()->to('records')->with('success', 'Files deleted, data remains.');
     }
 
     public function forceDelete($id)
     {
-
         $recordFiles = $this->record_file_version_model->getVersionByRecordId($id);
         if ($recordFiles) {
             foreach ($recordFiles as $file) {
@@ -476,5 +476,22 @@ class RecordController extends BaseController
             $this->record_model->forceDelete($id);
         }
         return redirect()->to('records')->with('success', 'Record deleted successfully!');
+    }
+
+    public function bookmark($id)
+    {
+        $bookmark_model = new RecordBookmark();
+
+        if(!$bookmark_model->getBookmarkByRecordId($id))
+        {
+            $bookmark_model->insert([
+                'user_id' => session()->get('user_id'),
+                'record_id' => $id,
+            ]);
+            return $this->response->setJSON(['success' => true, 'message' => 'Document bookmarked']);
+        }
+        $bookmark_model->where('user_id', session()->get('user_id'))->where('record_id', $id)->delete();
+
+        return $this->response->setJSON(['success' => true, 'message' => 'Document bookmarked']);
     }
 }

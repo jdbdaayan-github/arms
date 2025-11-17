@@ -21,7 +21,6 @@ Records
             </div>
 
             <div class="card-body">
-                <!-- Search + Per Page -->
                 <form method="get" class="mb-2 d-flex justify-content-between">
                     <select name="per_page" class="form-control form-control-sm mr-2" style="width:55px;">
                         <?php foreach ([5, 10, 25, 50] as $num): ?>
@@ -39,12 +38,11 @@ Records
                     </div>
                 </form>
 
-                <!-- Table -->
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-sm mb-1">
                         <thead>
                             <tr>
-                                <th class="text-center">#</th>
+                                <th class="text-center"><input type="checkbox" name="" id=""></th>
                                 <th>Record Title</th>
                                 <th>Requested By</th>
                                 <th>Request Date</th>
@@ -56,10 +54,10 @@ Records
                             <?php if(!empty($requests)): ?>
                             <?php foreach($requests as $request): ?>
                             <tr>
-                                <td class="text-center">1</td>
+                                <td class="text-center"><input type="checkbox" name="" id=""></td>
                                 <td><?= esc($request->title) ?></td>
                                 <td><?= esc($request->fullname) ?></td>
-                                <td><?= esc(date("F j, Y, g:i a",strtotime($request->created_at))) ?></td>
+                                <td><?= esc(date("F j, Y, g:i A",strtotime($request->created_at))) ?></td>
                                 <td><?= esc($request->status) ?></td>
                                 <td class="text-center">
                                     <a href="<?= base_url('request/view/').$request->id ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-eye"></i></a>
@@ -69,7 +67,7 @@ Records
                                     <button class="btn btn-danger btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Disapprove">
                                         <i class="fas fa-thumbs-down"></i>
                                     </button>
-                                    <button class="btn btn-success btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Done">
+                                    <button class="btn btn-success btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Completed">
                                         <i class="fas fa-check"></i>
                                     </button>
                                     <button class="btn btn-warning btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Cancel">
@@ -87,8 +85,6 @@ Records
                     </table>
                 </div>
 
-
-                <!-- Pagination Info -->
                 <div class="d-flex justify-content-between align-items-center text-sm mt-2">
                     <div>Showing 1 to 1 of 1 results</div>
                     <div>
@@ -109,11 +105,10 @@ Records
 <?= $this->section('scripts') ?>
 <script>
     $(function () {
-        // Attach SweetAlert only to action buttons (Approve, Done, Deny, Cancel)
         $('.return-btn').on('click', function (e) {
             e.preventDefault();
 
-            let action = $(this).attr('title'); // "Approve", "Done", "Deny", "Cancel"
+            let action = $(this).attr('title');
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -130,8 +125,6 @@ Records
                         'The record has been ' + action.toLowerCase() + 'd.',
                         'success'
                     )
-                    
-                    // 👉 TODO: Add AJAX or form submission here if you want
                 }
             });
         });

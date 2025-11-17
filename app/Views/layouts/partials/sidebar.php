@@ -120,7 +120,7 @@ function isMenuOpen($segment1Expected)
                                 </a>
                             </li>
                         <?php endif ?>
-                        <?php if (hasRole('Superadmin') || hasRole('Archivist') || hasPermission('records.archival')): ?>
+                        <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Archivist') || hasPermission('records.archival')): ?>
                             <li class="nav-item">
                                 <a href="<?= base_url('records/requests') ?>" class="nav-link <?= isActive('records', 'requests') ?>">
                                     <i class="far fa-circle nav-icon"></i>

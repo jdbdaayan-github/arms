@@ -199,39 +199,44 @@
 
     <!-- Session Checker -->
     <script>
-        function checkUserSession() {
-            console.log('Checking session...');
-            fetch('<?= base_url('system/checkSession'); ?>', {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    cache: 'no-store'
-                })
-                .then(async response => {
-                    const text = await response.text();
-                    try {
-                        const data = JSON.parse(text);
-                        if (!data.alive) {
-                            Swal.fire({
-                                title: 'Session Expired',
-                                text: 'Your session has expired. Please log in again.',
-                                icon: 'warning',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                window.location.href = '<?= base_url('auth/login'); ?>';
-                            });
-                        }
-                    } catch (e) {
-                        console.error('Server returned non-JSON:', text);
-                    }
-                })
-                .catch(error => console.error('Session check failed:', error));
-        }
+    let sessionInterval; // store the interval ID
 
-        setInterval(checkUserSession, 120000);
-    </script>
+    function checkUserSession() {
+        console.log('Checking session...');
+        fetch('<?= base_url('system/checkSession'); ?>', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                cache: 'no-store'
+            })
+            .then(async response => {
+                const text = await response.text();
+                try {
+                    const data = JSON.parse(text);
+                    if (!data.alive) {
+                        clearInterval(sessionInterval); // 🛑 stop checking
+                        Swal.fire({
+                            title: 'Session Expired',
+                            text: 'Your session has expired. Please log in again.',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.href = '<?= base_url('auth/login'); ?>';
+                        });
+                    }
+                } catch (e) {
+                    console.error('Server returned non-JSON:', text);
+                }
+            })
+            .catch(error => console.error('Session check failed:', error));
+    }
+
+    // start the interval
+    sessionInterval = setInterval(checkUserSession, 120000);
+</script>
+
 
 </body>
 

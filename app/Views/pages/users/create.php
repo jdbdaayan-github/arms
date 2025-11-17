@@ -138,9 +138,9 @@ Users
                                         id="role"
                                         name="role">
                                     <option value="">-- Select Role --</option>
-                                    <option value="admin" <?= set_select('role', 'admin') ?>>Administrator</option>
-                                    <option value="staff" <?= set_select('role', 'staff') ?>>Staff</option>
-                                    <option value="user" <?= set_select('role', 'user') ?>>User</option>
+                                    <?php foreach( $roles as $role): ?>
+                                    <option value="<?= $role->id ?>"><?= $role->role_name ?></option>
+                                    <?php endforeach ?>
                                 </select>
                                 <?php if (isset($errors['role'])): ?>
                                     <div class="invalid-feedback"><?= $errors['role'] ?></div>
