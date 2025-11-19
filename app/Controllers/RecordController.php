@@ -59,7 +59,7 @@ class RecordController extends BaseController
 
         //filter record per status
         if ($status_id) {
-            $builder = $builder->where('status_id', $status_id);
+            $builder = $builder->where('records.status_id', $status_id);
         }
 
         /**Contributor can view his records created only
