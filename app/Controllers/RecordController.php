@@ -326,7 +326,7 @@ class RecordController extends BaseController
 
     public function edit($id)
     {
-        $record = $this->record_model->find($id);
+        $record = $this->record_model->getRecordById($id);
 
         $fileversion = $this->record_file_version_model->getVersionByRecordId($id);
         // kunin lahat ng indexes ng series
@@ -349,9 +349,135 @@ class RecordController extends BaseController
         ]);
     }
 
+    public function edit_preview($filename)
+    {
+        $path = WRITEPATH . 'uploads/records/' . $filename;
+
+        if (!file_exists($path)) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('File not found.');
+        }
+
+        $mime = mime_content_type($path);
+        $this->response->setHeader('Content-Type', $mime);
+
+        if (in_array($mime, ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'])) {
+            return $this->response->setBody(file_get_contents($path));
+        }
+
+        return $this->response->download($path, null);
+    }
+
     public function update($id)
     {
-        //
+        $record_version = $this->record_file_version_model->getLatestVersionByRecordId($id);
+        $settings_model = new Settings();
+
+        $validSize = $settings_model->getValidFileSize('maxfilesize');
+
+        $rules = [
+            'record_file' => [
+                'label' => 'Record File',
+                'rules' => 'uploaded[record_file]'
+                    . '|permit_empty'
+                    . '|ext_in[record_file,pdf]'
+                    . '|mime_in[record_file,application/pdf]'
+                    . "|max_size[record_file,{$validSize}]",
+            ],
+            'title'          => 'required',
+            'confidentiality' => 'permit_empty',
+            'series'         => 'required',
+            'record_date'    => 'permit_empty',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $uploadPath = WRITEPATH . 'uploads/records/';
+        if (! is_dir($uploadPath)) {
+            if (! mkdir($uploadPath, 0777, true) && ! is_dir($uploadPath)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploadPath));
+            }
+        }
+
+        if (! is_writable($uploadPath)) {
+            throw new \RuntimeException(sprintf('Directory "%s" is not writable', $uploadPath));
+        }
+
+        $file = $this->request->getFile('record_file');
+        $newName = null;
+        $record_version_data = [];
+
+        if ($file && $file->isValid() && ! $file->hasMoved()) {
+            $newName = $file->getRandomName();
+            $file->move($uploadPath, $newName);
+
+            $record_version_data = [
+                'record_id'      => $id,
+                'user_id'        => session()->get('user_id'),
+                'filename'       => $file->getClientName(), // original uploaded filename
+                'randomfilename' => $newName,
+                'version'        => $record_version->version + 1, // stored filename
+            ];
+            $this->record_file_version_model->insertRecordFileVersion($record_version_data);
+            
+        }
+
+        //$isDraft = (bool) $this->request->getPost('save_as_draft');
+        $record_data = [
+            'title'        => $this->request->getPost('title'),
+            'confidential' => $this->request->getPost('confidentiality'),
+            'series_id'    => $this->request->getPost('series'),
+            'record_date'  => $this->request->getPost('record_date'),
+            'created_by'   => session()->get('user_id'),
+        ];
+
+        $this->record_model->updateRecord($id, $record_data);
+
+        // save indexes
+        $indexes = $this->request->getPost('indexes');
+
+        if (!empty($indexes) && is_array($indexes)) {
+            foreach ($indexes as $indexId => $value) {
+                // Ensure value is not null (optional, depending on your business logic)
+                if ($value === null) {
+                    continue;
+                }
+
+                // Prepare data for update
+                $data = [
+                    'value' => $value
+                ];
+
+                // Update the record index
+                $updated = $this->record_index_value->where([
+                    'record_id' => $id,
+                    'index_id'  => $indexId
+                ])->set($data)->update();
+
+                // Optional: handle "no rows updated" scenario
+                if (!$updated) {
+                    // You can log it or create a new row if not exists
+                    // Example: insert if not exists
+                    $this->record_index_value->insert([
+                        'record_id' => $id,
+                        'index_id'  => $indexId,
+                        'value'     => $value
+                    ]);
+                }
+            }
+        }
+
+        $log_data = [
+            'record'       => $record_data,
+            'file_version' => $record_version_data,
+            'indexes'      => $indexes ?? [],
+        ];
+
+        audit_log('CREATE', 'records', $id, null, $log_data, 'update record ' . $record_data['title']);
+        record_hisory_log('UPDATED', $id, 'Record updated');
+
+        return redirect()->to('/records')->with('success', $id);
     }
     public function search()
     {
@@ -482,8 +608,7 @@ class RecordController extends BaseController
     {
         $bookmark_model = new RecordBookmark();
 
-        if(!$bookmark_model->getBookmarkByRecordId($id))
-        {
+        if (!$bookmark_model->getBookmarkByRecordId($id)) {
             $bookmark_model->insert([
                 'user_id' => session()->get('user_id'),
                 'record_id' => $id,

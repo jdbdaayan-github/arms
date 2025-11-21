@@ -17,7 +17,7 @@ Records
     <div class="container-fluid">
         <div class="card card-outline card-secondary">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h3 class="card-title"><i class="fas fa-check-circle mr-2"></i>Pending Records Approval</h3>
+                <h3 class="card-title"><i class="fas fa-check-circle mr-2"></i>Pending Records For Approval</h3>
             </div>
 
             <div class="card-body">

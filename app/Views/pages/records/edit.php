@@ -35,7 +35,7 @@ Edit Record
 
                             <!-- File Upload -->
                             <div class="form-group">
-                                <label for="record_file">Upload PDF <span class="text-danger">*</span></label>
+                                <label for="record_file">Upload PDF</label>
                                 <div class="custom-file">
                                     <input type="file"
                                         class="custom-file-input <?= isset($errors['record_file']) ? 'is-invalid' : '' ?>"
@@ -144,13 +144,12 @@ Edit Record
                                 </div>
                                 <div class="card-body p-1 d-flex justify-content-center align-items-center"
                                     style="height: 500px; background:#f8f9fa;">
-                                    <span id="pdfPlaceholder" class="text-muted">No file selected</span>
                                     <embed id="pdfPreview"
-                                        src="<?= $record->filename ? base_url('uploads/records' . $record->filename) : '' ?>"
+                                        src="<?= $record->randomfilename ? base_url('records/edit_preview/' . $record->randomfilename) : '' ?>"
                                         type="application/pdf"
                                         width="100%" height="100%"
-                                        style="<?= $record->filename ? '' : 'display:none;' ?>">
-                                    <span id="pdfPlaceholder" class="text-muted" style="<?= $record->filename ? 'display:none;' : '' ?>">
+                                        style="<?= $record->randomfilename ? '' : 'display:none;' ?>">
+                                    <span id="pdfPlaceholder" class="text-muted" style="<?= $record->randomfilename ? 'display:none;' : '' ?>">
                                         No file selected
                                     </span>
                                 </div>

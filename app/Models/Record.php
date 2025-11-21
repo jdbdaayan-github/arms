@@ -89,6 +89,11 @@ class Record extends Model
         return $this->insert($data);
     }
 
+    public function updateRecord($id, $data)
+    {
+        return $this->update($id, $data);
+    }
+
     public function getContriRecentRecords()
     {
         return $this->select('records.title,records.created_at,record_statuses.name as status')

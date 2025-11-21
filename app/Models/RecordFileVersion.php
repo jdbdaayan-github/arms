@@ -56,6 +56,14 @@ class RecordFileVersion extends Model
                     ->where('record_id', $id)->findAll();
     }
 
+    public function getLatestVersionByRecordId($id)
+    {
+        return $this->select('record_file_versions.created_at,record_id,filename, version, randomfilename, CONCAT_WS(" ",users.firstname, users.middlename, users.lastname, users.extension) as user_name')
+                    ->join('users', 'users.id = record_file_versions.user_id')
+                    ->where('record_id', $id)
+                    ->orderBy('created_at', 'desc')->first();
+    }
+
     public function deleteFiles($id)
     {
         return $this->where('record_id', $id)->delete();

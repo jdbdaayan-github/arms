@@ -29,21 +29,21 @@ Login
       <form action="<?= base_url('auth/authenticate') ?>" method="post" autocomplete="off">
         <?= csrf_field() ?>
         <div class="input-group mb-3">
-          <input type="email"
-            name="email"
-            class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?> rounded-0"
-            placeholder="Email"
+          <input type="text"
+            name="user"
+            class="form-control <?= isset($errors['user']) ? 'is-invalid' : '' ?> rounded-0"
+            placeholder="Email or Username"
             autofocus
-            value="<?= set_value('email') ?>">
+            value="<?= set_value('user') ?>">
 
           <div class="input-group-append">
             <div class="input-group-text rounded-0">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
-          <?php if (isset($errors['email'])): ?>
+          <?php if (isset($errors['user'])): ?>
             <div class="invalid-feedback">
-              <?= $errors['email'] ?>
+              <?= $errors['user'] ?>
             </div>
           <?php endif; ?>
         </div>

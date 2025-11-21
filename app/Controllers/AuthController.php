@@ -25,7 +25,7 @@ class AuthController extends BaseController
         $session = session();
 
         $rules = [
-            'email' => 'required|max_length[30]|valid_email',
+            'user' => 'required|max_length[30]',
             'password' => 'required|max_length[255]|min_length[8]'
         ];
 
@@ -34,12 +34,12 @@ class AuthController extends BaseController
         }
 
         $captcha_word = $session->get('captcha_word');
-        $email = $this->request->getPost('email');
+        $user = $this->request->getPost('user');
         $password = $this->request->getPost('password');
         $captcha_input = $this->request->getPost('captcha');
 
         $user_model = new User();
-        $user = $user_model->where('email', $email)->first();
+        $user = $user_model->where('email', $user)->orWhere('username', $user)->first();
 
         if (!$user) {
             return redirect()->to('/auth/login')->with('error', 'Invalid username or password.');

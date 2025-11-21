@@ -55,4 +55,9 @@ class RecordIndexValue extends Model
     {
         return $this->insert($data);
     }
+
+    public function updateRecordIndexValue($id, $data)
+    {
+        return $this->where('record_id', $id)->update($data);
+    }
 }
