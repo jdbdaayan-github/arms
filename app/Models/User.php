@@ -63,6 +63,11 @@ class User extends Model
                     ->findAll();
     }
 
+    public function updateProfile($id, $data)
+    {
+        return $this->update($id, $data);
+    }
+
     public function updateStatus($id,$data)
     {
         return $this->update($id, $data);

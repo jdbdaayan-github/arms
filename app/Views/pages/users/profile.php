@@ -16,18 +16,6 @@ My Profile
 <section class="content">
     <div class="container-fluid">
 
-        <?php if (session()->getFlashdata('success')): ?>
-            <div class="alert alert-success alert-dismissible fade show">
-                <i class="fas fa-check-circle mr-1"></i> <?= session()->getFlashdata('success') ?>
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-            </div>
-        <?php elseif (session()->getFlashdata('error')): ?>
-            <div class="alert alert-danger alert-dismissible fade show">
-                <i class="fas fa-exclamation-circle mr-1"></i> <?= session()->getFlashdata('error') ?>
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-            </div>
-        <?php endif; ?>
-
         <!-- Profile Info Card -->
         <div class="card card-outline card-primary">
             <div class="card-body">
@@ -46,7 +34,7 @@ My Profile
 
                     <!-- Right: Editable Info -->
                     <div class="col-lg-8 col-md-7 col-sm-12">
-                        <form action="<?= base_url('profile/update') ?>" method="post">
+                        <form action="<?= base_url('users/profile/update/') ?><?= $user->id  ?>" method="post">
                             <?= csrf_field() ?>
 
                             <div class="mb-3 p-3 bg-light border rounded">
@@ -63,7 +51,7 @@ My Profile
                                                 <td><input type="text" name="firstname" class="form-control form-control-sm" value="<?= esc($user->firstname) ?>" required></td>
                                             </tr>
                                             <tr>
-                                                <th><i class="fas fa-user-alt mr-1"></i> Middle Name</th>
+                                                <th><i class="fas fa-user-alt mr-1"></i> Middle Initial</th>
                                                 <td><input type="text" name="middlename" class="form-control form-control-sm" value="<?= esc($user->middlename ?? '') ?>"></td>
                                             </tr>
                                             <tr>
@@ -80,7 +68,7 @@ My Profile
                                             </tr>
                                             <tr>
                                                 <th><i class="fas fa-calendar-alt mr-1"></i> Date Joined</th>
-                                                <td><input type="text" class="form-control form-control-sm" value="<?= esc(date('F j, Y', strtotime($user->created_at))) ?>" readonly></td>
+                                                <td><input type="text" class="form-control form-control-sm" value="<?= esc(date('F j, Y', strtotime($user->created_at))) ?>" disabled></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -105,7 +93,7 @@ My Profile
 
                     <!-- Right: Table Form -->
                     <div class="col-sm-12">
-                        <form action="<?= base_url('profile/change-password') ?>" method="post" autocomplete="off">
+                        <form action="<?= base_url('users/profile/change-password/') ?><?= $user->id  ?>" method="post" autocomplete="off">
                             <?= csrf_field() ?>
 
                             <div class="mb-3 p-3 bg-light border rounded">
@@ -149,3 +137,24 @@ My Profile
     </div>
 </section>
 <?= $this->endSection() ?>
+<?=  $this->section('scripts') ?>
+<?php if (session()->get('success')): ?>
+<script>
+    Swal.fire({
+        title: 'Success!',
+        text: '<?=  session()->get('success') ?>',
+        icon: 'success',
+    });
+</script>
+<?php endif ?>
+
+<?php if (session()->get('error')): ?>
+<script>
+    Swal.fire({
+        title: 'Error',
+        text: '<?= session()->get('error') ?>',
+        icon: 'error',
+    });
+</script>
+<?php endif ?>
+<?=  $this->endSection() ?>
