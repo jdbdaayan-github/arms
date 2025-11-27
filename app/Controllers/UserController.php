@@ -110,9 +110,11 @@ class UserController extends BaseController
         if($user)
         {
             $newStatus = ($user->verified == 1) ? 0 : 1;
+            $newStatusState = ($newStatus == 1) ? 2 : 1;
 
             $data = [
                 'verified' => $newStatus,
+                'status_id' => $newStatusState,
             ];
             $this->user_model->updateStatus($id, $data);
 
@@ -147,6 +149,44 @@ class UserController extends BaseController
         return view('pages/users/create', $data);
     }
 
+    public function store()
+    {
+        $rules = [
+            'firstname' => 'required',
+            'middlename' => 'permit_empty',
+            'lastname' => 'required',
+            'extension' => 'permit_empty',
+            'username' => 'required|is_unique[users.username]',
+            'email' => 'required|is_unique[users.email]',
+            'password' => 'required',
+            'role' => 'required',
+        ];
+
+        if(!$this->validate($rules))
+        {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $hash_password = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+
+        $data = [
+            'firstname' => $this->request->getPost('firstname'),
+            'middlename' => $this->request->getPost('middlename'),
+            'lastname' => $this->request->getPost('lastname'),
+            'extension' => $this->request->getPost('extension'),
+            'email' => $this->request->getPost('email'),
+            'username' => $this->request->getPost('username'),
+            'password' => $hash_password,
+            'role_id' => $this->request->getPost('role'),
+        ];
+
+        if(!$this->user_model->insertUser($data)) {
+            return redirect()->to('users')->with('error', 'Error when saving data');
+        }
+
+        return redirect()->to('users')->with('success', 'Created user successfully!');
+    }
+
     public function user_permissions($user_id)
     {
         $data['user'] = $this->user_model->getUserById($user_id);
@@ -156,6 +196,6 @@ class UserController extends BaseController
 
     public function set_user_permission()
     {
-        //
+        
     }
 }

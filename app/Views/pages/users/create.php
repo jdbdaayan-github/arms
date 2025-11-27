@@ -33,41 +33,41 @@ Users
                             <h5 class="mb-3">Personal Information</h5>
 
                             <div class="form-group">
-                                <label for="first_name">First Name <span class="text-danger">*</span></label>
+                                <label for="firstname">First Name <span class="text-danger">*</span></label>
                                 <input type="text"
-                                       class="form-control <?= isset($errors['first_name']) ? 'is-invalid' : '' ?>"
-                                       id="first_name"
-                                       name="first_name"
-                                       value="<?= set_value('first_name') ?>"
+                                       class="form-control <?= isset($errors['firstname']) ? 'is-invalid' : '' ?>"
+                                       id="firstname"
+                                       name="firstname"
+                                       value="<?= set_value('firstname') ?>"
                                        placeholder="Enter first name">
-                                <?php if (isset($errors['first_name'])): ?>
-                                    <div class="invalid-feedback"><?= $errors['first_name'] ?></div>
+                                <?php if (isset($errors['firstname'])): ?>
+                                    <div class="invalid-feedback"><?= $errors['firstname'] ?></div>
                                 <?php endif; ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="middle_name">Middle Name</label>
+                                <label for="middlename">Middle Name</label>
                                 <input type="text"
-                                       class="form-control <?= isset($errors['middle_name']) ? 'is-invalid' : '' ?>"
-                                       id="middle_name"
-                                       name="middle_name"
-                                       value="<?= set_value('middle_name') ?>"
+                                       class="form-control <?= isset($errors['middlename']) ? 'is-invalid' : '' ?>"
+                                       id="middlename"
+                                       name="middlename"
+                                       value="<?= set_value('middlename') ?>"
                                        placeholder="Enter middle name">
-                                <?php if (isset($errors['middle_name'])): ?>
-                                    <div class="invalid-feedback"><?= $errors['middle_name'] ?></div>
+                                <?php if (isset($errors['middlename'])): ?>
+                                    <div class="invalid-feedback"><?= $errors['middlename'] ?></div>
                                 <?php endif; ?>
                             </div>
 
                             <div class="form-group">
-                                <label for="last_name">Last Name <span class="text-danger">*</span></label>
+                                <label for="lastname">Last Name <span class="text-danger">*</span></label>
                                 <input type="text"
-                                       class="form-control <?= isset($errors['last_name']) ? 'is-invalid' : '' ?>"
-                                       id="last_name"
-                                       name="last_name"
-                                       value="<?= set_value('last_name') ?>"
+                                       class="form-control <?= isset($errors['lastname']) ? 'is-invalid' : '' ?>"
+                                       id="lastname"
+                                       name="lastname"
+                                       value="<?= set_value('lastname') ?>"
                                        placeholder="Enter last name">
-                                <?php if (isset($errors['last_name'])): ?>
-                                    <div class="invalid-feedback"><?= $errors['last_name'] ?></div>
+                                <?php if (isset($errors['last_lastnamename'])): ?>
+                                    <div class="invalid-feedback"><?= $errors['lastname'] ?></div>
                                 <?php endif; ?>
                             </div>
 
@@ -121,6 +121,18 @@ Users
                             </div>
 
                             <div class="form-group">
+                                <label for="password">Username <span class="text-danger">*</span></label>
+                                <input type="text"
+                                       class="form-control <?= isset($errors['username']) ? 'is-invalid' : '' ?>"
+                                       id="username"
+                                       name="username"
+                                       placeholder="Enter username">
+                                <?php if (isset($errors['username'])): ?>
+                                    <div class="invalid-feedback"><?= $errors['username'] ?></div>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="password">Password <span class="text-danger">*</span></label>
                                 <input type="password"
                                        class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
@@ -151,6 +163,9 @@ Users
                 </div>
 
                 <div class="card-footer text-right">
+                    <a href="<?=  base_url('users/create') ?>" class="btn btn-secondary btn-flat">
+                        <i class="fas fa-save mr-1"></i> Reset
+                                </a>
                     <button type="submit" class="btn btn-primary btn-flat">
                         <i class="fas fa-save mr-1"></i> Save User
                     </button>

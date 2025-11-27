@@ -48,6 +48,11 @@ class User extends Model
     {
         return $this->find($id);
     }
+
+    public function insertUser($data)
+    {
+        return $this->insert($data);
+    }
     
     public function getUserRoleByUserId($id)
     {

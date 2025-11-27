@@ -38,11 +38,11 @@ Records
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     <?php endif ?>
-                    
+
                     <?php if (hasRole('Superadmin')): ?>
-                    <button data-id="<?= $record->id ?>" class="btn btn-dark btn-flat btn-purge-record" title="Purge">
-                        <i class="fas fa-times"></i> Purge
-                    </button>
+                        <button data-id="<?= $record->id ?>" class="btn btn-dark btn-flat btn-purge-record" title="Purge">
+                            <i class="fas fa-times"></i> Purge
+                        </button>
                     <?php endif ?>
                 </div>
             </div>
@@ -91,7 +91,11 @@ Records
                                     <!-- History Tab -->
                                     <div class="tab-pane active" id="history">
                                         <table class="table table-sm table-bordered">
-                                            <thead><tr><th>Record History</th></tr></thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>Record History</th>
+                                                </tr>
+                                            </thead>
                                             <tbody>
                                                 <?php foreach ($histories as $his): ?>
                                                     <tr>
@@ -144,7 +148,12 @@ Records
                                     <!-- Indexes Tab -->
                                     <div class="tab-pane" id="indexes">
                                         <table class="table table-sm table-bordered">
-                                            <thead><tr><th>Index Name</th><th>Value</th></tr></thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>Index Name</th>
+                                                    <th>Value</th>
+                                                </tr>
+                                            </thead>
                                             <tbody>
                                                 <?php foreach ($indexes as $index): ?>
                                                     <tr>
@@ -201,14 +210,14 @@ Records
 
                     <!-- RIGHT SIDE: Preview -->
                     <div class="col-lg-5">
-                        <div class="card card-outline <?= ($record->confidential == 0?'card-primary':'card-danger') ?> h-100 shadow-sm">
+                        <div class="card card-outline <?= ($record->confidential == 0 ? 'card-primary' : 'card-danger') ?> h-100 shadow-sm">
                             <div class="card-header py-2">
                                 <h3 class="card-title mb-0"><i class="fas fa-file-alt mr-2"></i> Preview</h3>
                             </div>
                             <div class="card-body p-0 text-center" style="height: 500px; overflow: hidden;">
                                 <?php
-                                    $filePath = base_url('records/preview/' . $record->randomfilename);
-                                    $extension = strtolower(pathinfo($record->randomfilename, PATHINFO_EXTENSION));
+                                $filePath = base_url('records/preview/' . $record->randomfilename);
+                                $extension = strtolower(pathinfo($record->randomfilename, PATHINFO_EXTENSION));
                                 ?>
 
                                 <?php if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])): ?>

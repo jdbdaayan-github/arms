@@ -19,7 +19,7 @@ Users
             <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-user-shield mr-2"></i>User List</h3>
                 <div class="card-tools">
-                    <a href="<?= base_url('roles/create') ?>" class="btn btn-primary btn-flat btn-sm">
+                    <a href="<?= base_url('users/create') ?>" class="btn btn-primary btn-flat btn-sm">
                         <i class="fas fa-plus"></i> Add User
                     </a>
                 </div>
