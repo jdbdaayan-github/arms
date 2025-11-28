@@ -619,4 +619,43 @@ class RecordController extends BaseController
 
         return $this->response->setJSON(['success' => true, 'message' => 'Document bookmarked']);
     }
+
+    public function download($id) {
+        /*
+         if ($this->request->getMethod() === 'post') {
+
+            $pdfFile = $this->request->getFile('pdf_file');
+
+            if ($pdfFile->isValid() && !$pdfFile->hasMoved()) {
+
+                // Get temporary path
+                $tmpPath = $pdfFile->getTempName();
+
+                // Create FPDI instance
+                $pdf = new Fpdi();//composer require setasign/fpdi for installation
+
+                $pageCount = $pdf->setSourceFile($tmpPath);
+
+                for ($i = 1; $i <= $pageCount; $i++) {
+                    $tplId = $pdf->importPage($i);
+                    $pdf->AddPage();
+                    $pdf->useTemplate($tplId);
+
+                    // Add text
+                    $pdf->SetFont('Helvetica', 'B', 16);
+                    $pdf->SetTextColor(255, 0, 0);
+                    $pdf->SetXY(50, 50);
+                    $pdf->Write(10, 'This text is added on top!');
+                }
+
+                // Output PDF for download (force download)
+                return $pdf->Output('D', 'modified.pdf'); // 'D' = download
+            } else {
+                return redirect()->back()->with('error', $pdfFile->getErrorString());
+            }
+        }
+
+        return view('upload_pdf');
+        */
+    }
 }

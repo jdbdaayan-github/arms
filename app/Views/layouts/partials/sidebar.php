@@ -363,28 +363,6 @@ function isMenuOpen($segment1Expected)
                     </li>
                 <?php endif ?>
                 <li class="nav-header">REPORTS</li>
-
-                <li class="nav-item">
-                    <a href="<?= base_url('reports/borrowed') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-upload"></i>
-                        <p>Uploaded Records</p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="<?= base_url('reports/returned') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-upload"></i>
-                        <p>Approved Records</p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="<?= base_url('reports/users') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>Archived Records</p>
-                    </a>
-                </li>
-
                 <li class="nav-item">
                     <a href="<?= base_url('reports/summary') ?>" class="nav-link">
                         <i class="nav-icon fas fa-chart-bar"></i>
