@@ -231,6 +231,7 @@ function isMenuOpen($segment1Expected)
                     </li>
                 <?php endif ?>
                 <?php if (hasRole('Superadmin') || hasRole('Administrator')): ?>
+                    
                     <!-- LIBRARIES -->
                     <li class="nav-header">LIBRARIES</li>
 
