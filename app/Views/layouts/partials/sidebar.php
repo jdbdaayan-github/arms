@@ -162,7 +162,7 @@ function isMenuOpen($segment1Expected)
                                 </a>
                             </li>
                             <!-- user.create permission -->
-                            <?php if (hasRole('Superadmin') || hasPermission('users.create')): ?>
+                            <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasPermission('users.create')): ?>
                                 <li class="nav-item">
                                     <a href="<?= base_url('users/create') ?>" class="nav-link <?= isActive('users', 'create') ?>">
                                         <i class="far fa-circle nav-icon"></i>

@@ -13,11 +13,13 @@ class UserController extends BaseController
 
     protected $user_model;
     protected $permission_model;
+    protected $role_model;
 
     public function __construct()
     {
         $this->user_model = new User();
         $this->permission_model = new Permission();
+        $this->role_model = new Role();
     }
     public function index()
     {
@@ -185,6 +187,50 @@ class UserController extends BaseController
         }
 
         return redirect()->to('users')->with('success', 'Created user successfully!');
+    }
+
+    public function edit($id) {
+
+        $data['user'] = $this->user_model->getUserById($id);
+        $data['roles'] = $this->role_model->getRoles();
+        return view('pages/users/edit', $data);
+    }
+
+    public function update($id)
+    {
+        $rules = [
+            'firstname' => 'required',
+            'middlename' => 'permit_empty',
+            'lastname' => 'required',
+            'extension' => 'permit_empty',
+            'email' => "required|is_unique[users.email,id,{$id}]",
+            'username' => "required|is_unique[users.username,id,{$id}]",
+            'password' => 'permit_empty',
+            'role' => 'required'
+        ];
+
+        if(!$this->validate($rules))
+        {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'firstname' => $this->request->getPost('firstname'),
+            'middlename' => $this->request->getPost('middlename'),
+            'lastname' => $this->request->getPost('lastname'),
+            'extension' => $this->request->getPost('extension'),
+            'email' => $this->request->getPost('email'),
+            'username' => $this->request->getPost('username'),
+            'password' => $this->request->getPost('password'),
+            'role_id' => $this->request->getPost('role'),
+        ];
+
+        if(!$this->user_model->updateUser($id, $data))
+        {
+            return redirect()->to('users')->with('error', 'There is an error when updating!');
+        }
+
+        return redirect()->to('users')->with('success', 'User updated successfully!');
     }
 
     public function user_permissions($user_id)

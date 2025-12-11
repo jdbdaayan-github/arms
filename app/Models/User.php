@@ -100,4 +100,9 @@ class User extends Model
     {
         return $this->update($id, $data);
     }
+
+    public function updateUser($id, $data)
+    {
+        return $this->update($id, $data);
+    }
 }

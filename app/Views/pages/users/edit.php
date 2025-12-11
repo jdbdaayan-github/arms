@@ -10,7 +10,7 @@ Users
 
 <?= $this->section('content-breadcrumbs') ?>
 <li class="breadcrumb-item"><a href="<?= base_url('users') ?>">Users</a></li>
-<li class="breadcrumb-item active">Create</li>
+<li class="breadcrumb-item active">Edit</li>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -19,12 +19,12 @@ Users
 
         <div class="card card-outline card-secondary">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-user-plus mr-2"></i>Create User</h3>
+                <h3 class="card-title"><i class="fas fa-user-plus mr-2"></i>Edit User</h3>
             </div>
 
             <?php $errors = session()->getFlashdata('errors') ?? []; ?>
 
-            <form action="<?= base_url('users/store') ?>" method="POST" enctype="multipart/form-data">
+            <form action="<?= base_url('users/update/') ?><?=  $user->id ?>" method="POST" enctype="multipart/form-data">
                 <?= csrf_field() ?>
                 <div class="card-body">
                     <div class="row">
@@ -38,7 +38,7 @@ Users
                                        class="form-control <?= isset($errors['firstname']) ? 'is-invalid' : '' ?>"
                                        id="firstname"
                                        name="firstname"
-                                       value="<?= set_value('firstname') ?>"
+                                       value="<?= $user->firstname ?>"
                                        placeholder="Enter first name">
                                 <?php if (isset($errors['firstname'])): ?>
                                     <div class="invalid-feedback"><?= $errors['firstname'] ?></div>
@@ -51,7 +51,7 @@ Users
                                        class="form-control <?= isset($errors['middlename']) ? 'is-invalid' : '' ?>"
                                        id="middlename"
                                        name="middlename"
-                                       value="<?= set_value('middlename') ?>"
+                                       value="<?= $user->middlename ?>"
                                        placeholder="Enter middle name">
                                 <?php if (isset($errors['middlename'])): ?>
                                     <div class="invalid-feedback"><?= $errors['middlename'] ?></div>
@@ -64,7 +64,7 @@ Users
                                        class="form-control <?= isset($errors['lastname']) ? 'is-invalid' : '' ?>"
                                        id="lastname"
                                        name="lastname"
-                                       value="<?= set_value('lastname') ?>"
+                                       value="<?= $user->lastname ?>"
                                        placeholder="Enter last name">
                                 <?php if (isset($errors['lastname'])): ?>
                                     <div class="invalid-feedback"><?= $errors['lastname'] ?></div>
@@ -77,7 +77,7 @@ Users
                                        class="form-control <?= isset($errors['extension']) ? 'is-invalid' : '' ?>"
                                        id="extension"
                                        name="extension"
-                                       value="<?= set_value('extension') ?>"
+                                       value="<?= $user->extension ?>"
                                        placeholder="e.g. Jr, Sr, II">
                                 <?php if (isset($errors['extension'])): ?>
                                     <div class="invalid-feedback"><?= $errors['extension'] ?></div>
@@ -89,7 +89,7 @@ Users
                                        class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>"
                                        id="email"
                                        name="email"
-                                       value="<?= set_value('email') ?>"
+                                       value="<?= $user->email ?>"
                                        placeholder="Enter email">
                                 <?php if (isset($errors['email'])): ?>
                                     <div class="invalid-feedback"><?= $errors['email'] ?></div>
@@ -126,7 +126,8 @@ Users
                                        class="form-control <?= isset($errors['username']) ? 'is-invalid' : '' ?>"
                                        id="username"
                                        name="username"
-                                       placeholder="Enter username">
+                                       placeholder="Enter username"
+                                       value="<?= $user->username ?>">
                                 <?php if (isset($errors['username'])): ?>
                                     <div class="invalid-feedback"><?= $errors['username'] ?></div>
                                 <?php endif; ?>
@@ -151,7 +152,7 @@ Users
                                         name="role">
                                     <option value="">-- Select Role --</option>
                                     <?php foreach( $roles as $role): ?>
-                                    <option value="<?= $role->id ?>"><?= $role->role_name ?></option>
+                                    <option value="<?= $role->id ?>" <?= ($user->role_id == $role->id)? 'selected': '' ?>><?= $role->role_name ?></option>
                                     <?php endforeach ?>
                                 </select>
                                 <?php if (isset($errors['role'])): ?>
@@ -163,11 +164,11 @@ Users
                 </div>
 
                 <div class="card-footer text-right">
-                    <a href="<?=  base_url('users/create') ?>" class="btn btn-secondary btn-flat">
+                    <a href="<?=  base_url('users/edit/') ?><?= $user->id  ?> ?>" class="btn btn-secondary btn-flat">
                         <i class="fas fa-save mr-1"></i> Reset
                                 </a>
-                    <button type="submit" class="btn btn-primary btn-flat">
-                        <i class="fas fa-save mr-1"></i> Save User
+                    <button type="submit" class="btn btn-success btn-flat">
+                        <i class="fas fa-edit mr-1"></i> Update User
                     </button>
                 </div>
             </form>

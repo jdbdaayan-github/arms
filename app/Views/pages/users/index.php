@@ -32,6 +32,7 @@ Users
                                 <input type="checkbox" id="select-all">
                             </th>
                             <th>Name</th>
+                            <th>Username</th>
                             <th>Email</th>
                             <th>Role</th>
                             <th>Status</th>
@@ -71,6 +72,9 @@ Users
                     data: "Fullname"
                 },
                 {
+                    data: "username"
+                },
+                {
                     data: "email"
                 },
                 {
@@ -81,7 +85,7 @@ Users
                 },
                 {
                     data: "status",
-                    orderable: false,
+                    //orderable: false,
                     searchable: false,
                     className: "text-center",
                     render: function(data, type, row) {
@@ -117,7 +121,7 @@ Users
                     className: "text-center text-sm",
                     render: function(data, type, row) {
                         return `
-                        <a href="<?= base_url('roles/edit/') ?>${data}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                        <a href="<?= base_url('users/edit/') ?>${data}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a href="<?= base_url('users/permissions/') ?>${data}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Permissions">
@@ -137,7 +141,7 @@ Users
                 }
             ],
             columnDefs: [{
-                targets: [0, 3],
+                targets: [0],
                 orderable: false
             }],
             order: [],
@@ -259,4 +263,13 @@ Users
 
     });
 </script>
+<?php if (session()->has('success')): ?>
+    <script>
+        Swal.fire({
+            title : 'Success',
+            text: "<?= session()->get('success') ?>",
+            icon: "success",
+        })
+    </script>
+<?php endif ?>
 <?= $this->endSection() ?>

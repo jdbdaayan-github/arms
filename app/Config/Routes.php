@@ -79,6 +79,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->post('toggleVerify/(:num)', [UserController::class, 'toggleVerify']);
         $routes->get('create', 'UserController::create');
         $routes->post('store', [UserController::class, 'store']);
+        $routes->get('edit/(:num)', [UserController::class, 'edit']);
+        $routes->post('update/(:num)', [UserController::class, 'update']);
         $routes->get('profile/(:num)', 'UserController::profile/$1');
         $routes->post('profile/update/(:num)', [UserController::class, 'profileUpdate']);
         $routes->post('profile/change-password/(:num)', [UserController::class, 'profilePassUpdate']);
