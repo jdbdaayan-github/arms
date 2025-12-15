@@ -60,7 +60,7 @@ Records
                                 <td><?= esc(date("F j, Y, g:i A",strtotime($request->created_at))) ?></td>
                                 <td><?= esc($request->status) ?></td>
                                 <td class="text-center">
-                                    <a href="<?= base_url('request/view/').$request->id ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-eye"></i></a>
+                                    <a href="<?= base_url('records/request_view/').$request->request_id ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-eye"></i></a>
                                     <button class="btn btn-primary btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Approve">
                                         <i class="fas fa-thumbs-up"></i>
                                     </button>

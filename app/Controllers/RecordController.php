@@ -477,7 +477,7 @@ class RecordController extends BaseController
         audit_log('CREATE', 'records', $id, null, $log_data, 'update record ' . $record_data['title']);
         record_hisory_log('UPDATED', $id, 'Record updated');
 
-        return redirect()->to('/records')->with('success', $id);
+        return redirect()->to('/records')->with('up_success', $id);
     }
     public function search()
     {

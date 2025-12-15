@@ -220,10 +220,10 @@
                     try {
                         const data = JSON.parse(text);
                         if (!data.alive) {
-                            clearInterval(sessionInterval); // 🛑 stop checking
+                            clearInterval(sessionInterval); // stop checking
                             Swal.fire({
                                 title: 'Session Expired',
-                                text: 'Your session has expired. Please log in again.',
+                                text: 'Your session has expired due to inactivity',
                                 icon: 'warning',
                                 confirmButtonText: 'OK'
                             }).then(() => {
@@ -236,12 +236,8 @@
                 })
                 .catch(error => console.error('Session check failed:', error));
         }
-
         // start the interval
         sessionInterval = setInterval(checkUserSession, 120000);
     </script>
-
-
 </body>
-
 </html>

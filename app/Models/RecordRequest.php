@@ -47,7 +47,7 @@ class RecordRequest extends Model
 
     public function getAllRequest()
     {
-        return $this->select('record_requests.*, records.*, CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as fullname')
+        return $this->select('record_requests.*,record_requests.id as request_id, records.*, CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as fullname')
                     ->join('users', 'users.id = record_requests.user_id')
                     ->join('records', 'records.id = record_requests.record_id');
     }
@@ -64,5 +64,14 @@ class RecordRequest extends Model
 
     public function countPendingRequest(){
         return $this->where('status', 'Pending')->countAllResults();
+    }
+
+    public function getRequestById($id) {
+        return $this->select('record_requests.*,records.*,rqt.name as request_type,CONCAT_WS(" ", u.firstname, u.middlename, u.lastname, u.extension) as user_name')
+                    ->join('records', 'records.id = record_requests.record_id')
+                    ->join('record_request_types rqt', 'rqt.id = record_requests.request_id')
+                    ->join('users u', 'u.id = record_requests.user_id')
+                    ->where('record_requests.id', $id)
+                    ->first();
     }
 }

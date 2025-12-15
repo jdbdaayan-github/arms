@@ -95,5 +95,10 @@ class RecordRequestController extends BaseController
         //
     }
 
+    public function request_view($id) {
+        $data['request']  = $this->record_request_model->getRequestById($id);
+        return view('pages/records/request_view', $data);
+    }
+
 
 }

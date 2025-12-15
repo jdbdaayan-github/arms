@@ -132,7 +132,7 @@ Records
 
                                         $edit_enabled = hasRole('Superadmin')
                                             || hasRole('Administrator')
-                                            || (hasPermission('records.edit') && $record->status_id == 1)
+                                            || (hasPermission('records.edit') && $record->status_id == 2)
                                             || hasRecordPermission($record->id, 'edit');
                                         ?>
                                     </tr>
@@ -266,6 +266,28 @@ Records
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = "<?= base_url('records/show/') ?>" + "<?= session()->get('success') ?>";
+            } else if (result.isDenied) {
+                window.location.href = "<?= base_url('records/create') ?>";
+            }
+        });
+    </script>
+<?php endif; ?>
+<?php if (session()->get('up_success')): ?>
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: 'Record has been updated successfully.',
+            icon: 'success',
+            showCancelButton: false,
+            showDenyButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'View Details',
+            denyButtonText: 'Upload New',
+            cancelButtonText: 'Close',
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "<?= base_url('records/show/') ?>" + "<?= session()->get('up_success') ?>";
             } else if (result.isDenied) {
                 window.location.href = "<?= base_url('records/create') ?>";
             }
