@@ -51,31 +51,67 @@ Records
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if(!empty($requests)): ?>
-                            <?php foreach($requests as $request): ?>
-                            <tr>
-                                <td class="text-center"><input type="checkbox" name="" id=""></td>
-                                <td><?= esc($request->title) ?></td>
-                                <td><?= esc($request->fullname) ?></td>
-                                <td><?= esc(date("F j, Y, g:i A",strtotime($request->created_at))) ?></td>
-                                <td><?= esc($request->status) ?></td>
-                                <td class="text-center">
-                                    <a href="<?= base_url('records/request_view/').$request->request_id ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-eye"></i></a>
-                                    <button class="btn btn-primary btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Approve">
-                                        <i class="fas fa-thumbs-up"></i>
-                                    </button>
-                                    <button class="btn btn-danger btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Disapprove">
-                                        <i class="fas fa-thumbs-down"></i>
-                                    </button>
-                                    <button class="btn btn-success btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Completed">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                    <button class="btn btn-warning btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Cancel">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php endforeach ?>
+                            <?php if (!empty($requests)): ?>
+                                <?php foreach ($requests as $request): ?>
+                                    <tr>
+                                        <td class="text-center"><input type="checkbox" name="" id=""></td>
+                                        <td><?= esc($request->title) ?></td>
+                                        <td><?= esc($request->fullname) ?></td>
+                                        <td><?= esc(date("F j, Y, g:i A", strtotime($request->created_at))) ?></td>
+                                        <td><?= esc($request->status) ?></td>
+                                        <td class="text-center">
+                                            <a href="<?= base_url('records/request_view/') . $request->request_id ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-eye"></i></a>
+                                            <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Archivist')): ?>
+                                                <button class="btn btn-primary btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Approve">
+                                                    <i class="fas fa-thumbs-up"></i>
+                                                </button>
+                                            <?php endif ?>
+
+                                            <?php
+                                            $canEdit = hasRole('Superadmin')
+                                                || hasRole('Administrator')
+                                                || ($request->user_id == session()->get('user_id') && $request->status === "Pending");
+                                            ?>
+
+                                            <a href="<?= $canEdit ? base_url('records/requests/edit/' . $request->id) : 'javascript:void(0)' ?>"
+                                                class="btn btn-info btn-sm "
+                                                data-toggle="tooltip"
+                                                title="<?= $canEdit ? 'Edit' : 'Not allowed' ?>"
+                                                <?= $canEdit ? '' : 'disabled' ?>
+                                                style="<?= $canEdit ? '' : 'cursor:not-allowed;opacity: 0.6' ?>">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Archivist')): ?>
+                                                <button class="btn btn-danger btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Disapprove">
+                                                    <i class="fas fa-thumbs-down"></i>
+                                                </button>
+                                            <?php endif ?>
+
+                                            <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Archivist')): ?>
+                                                <button class="btn btn-success btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Completed">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            <?php endif ?>
+
+                                            <?php
+                                            $canCancel = (
+                                                hasRole('Superadmin')
+                                                || hasRole('Administrator')
+                                                || $request->user_id == session()->get('user_id')
+                                            ) && $request->status === 'Pending';
+                                            ?>
+
+                                            <button class="btn btn-warning btn-sm return-btn"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="<?= $canCancel ? 'Cancel' : 'Not allowed' ?>"
+                                                <?= $canCancel ? '' : 'disabled' ?>>
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
                             <?php else: ?>
                                 <tr>
                                     <td colspan="6" class="text-center">No requests found</td>
@@ -104,8 +140,8 @@ Records
 
 <?= $this->section('scripts') ?>
 <script>
-    $(function () {
-        $('.return-btn').on('click', function (e) {
+    $(function() {
+        $('.return-btn').on('click', function(e) {
             e.preventDefault();
 
             let action = $(this).attr('title');

@@ -46,11 +46,29 @@ class RecordRequest extends Model
     protected $afterDelete    = [];
 
     public function getAllRequest()
-    {
-        return $this->select('record_requests.*,record_requests.id as request_id, records.*, CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as fullname')
-                    ->join('users', 'users.id = record_requests.user_id')
-                    ->join('records', 'records.id = record_requests.record_id');
+{
+    $builder = $this->select('
+            record_requests.*,
+            record_requests.id as request_id,
+            records.*,
+            CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as fullname
+        ')
+        ->join('users', 'users.id = record_requests.user_id')
+        ->join('records', 'records.id = record_requests.record_id');
+
+    // Role-based filtering
+    if (
+        ! hasRole('Superadmin') &&
+        ! hasRole('Administrator') &&
+        ! hasRole('Archivist')
+    ) {
+        // Contributor → own requests only
+        $builder->where('record_requests.user_id', session()->get('user_id'));
     }
+
+    return $builder;
+}
+
 
     public function addRequest($data)
     {

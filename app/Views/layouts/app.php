@@ -3,10 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- Dynamic Title -->
     <title>ARMS <?= $this->renderSection('title') ?></title>
 
+    <!-- APP Icon -->
     <link rel="shortcut icon" href="<?= asset('assets/images/dswd_logo.png') ?>" type="image/png">
 
+    <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Font Awesome (AdminLTE icons) -->
@@ -39,7 +42,7 @@
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="<?= asset('assets/template/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>">
 
-    <!-- AdminLTE -->
+    <!-- AdminLTE Assets -->
     <link rel="stylesheet" href="<?= asset('assets/template/dist/css/adminlte.min.css') ?>">
 
     <!-- Dual List Box -->
@@ -136,19 +139,18 @@
         <footer class="main-footer">
             <strong class="text-info">&copy; 2025 AS-RAMD.</strong> All rights reserved.
         </footer>
-
     </div>
 
-    <!-- REQUIRED SCRIPTS -->
+    <!-- SCRIPTS -->
 
-    <!-- jQuery -->
+    <!-- jQuery(AdminLTE) -->
     <script src="<?= asset('assets/template/plugins/jquery/jquery.min.js') ?>"></script>
     <script src="<?= asset('assets/template/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 
     <!-- overlayScrollbars -->
     <script src="<?= asset('assets/template/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') ?>"></script>
 
-    <!-- DataTables -->
+    <!-- DataTables Scripts -->
     <script src="<?= asset('assets/template/plugins/datatables/jquery.dataTables.min.js') ?>"></script>
     <script src="<?= asset('assets/template/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
     <script src="<?= asset('assets/template/plugins/datatables-responsive/js/dataTables.responsive.min.js') ?>"></script>
@@ -165,9 +167,13 @@
     <!-- Select2 -->
     <script src="<?= asset('assets/template/plugins/select2/js/select2.full.min.js') ?>"></script>
 
-    <!-- Tempusdominus Bootstrap 4 -->
+    <!-- Moment -->
     <script src="<?= asset('assets/template/plugins/moment/moment.min.js') ?>"></script>
+
+    <!-- Date Range Picker -->
     <script src="<?= asset('assets/template/plugins/daterangepicker/daterangepicker.js') ?>"></script>
+
+    <!-- Tempusdominus Bootstrap 4 -->
     <script src="<?= asset('assets/template/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') ?>"></script>
 
     <!-- Summernote -->
@@ -240,4 +246,5 @@
         sessionInterval = setInterval(checkUserSession, 120000);
     </script>
 </body>
+
 </html>
