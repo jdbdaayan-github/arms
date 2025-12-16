@@ -13,7 +13,7 @@ class RecordRequest extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['record_id', 'user_id', 'request_date', 'request_id', 'remarks', 'status', 'due_date'];
+    protected $allowedFields    = ['record_id', 'user_id', 'request_date', 'request_id','description','remarks', 'status', 'due_date'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

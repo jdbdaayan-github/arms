@@ -61,7 +61,7 @@
                 <!-- Footer with buttons -->
                 <li class="user-footer">
                     <a href="<?= base_url('users/profile') ?>/<?= $user_id ?>" class="btn btn-info btn-flat">Profile</a>
-                    <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger btn-flat float-right">Logout</a>
+                    <a href="<?= base_url('auth/logout') ?>" class="btn btn-danger btn-flat float-right">Sign out</a>
                 </li>
             </ul>
         </li>

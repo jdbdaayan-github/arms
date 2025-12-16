@@ -18,6 +18,13 @@ Records
         <div class="card card-outline card-secondary">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h3 class="card-title"><i class="fas fa-exchange-alt mr-2"></i>Record Requests</h3>
+                <?php if (hasRole('Superadmin') || hasPermission('records.create') || hasRole('Contributor')): ?>
+                    <div class="card-tools  ml-auto mr-0">
+                        <a href="<?= base_url('records/request_new') ?>" class="btn btn-primary btn-flat btn-sm" style="font-size:12px;">
+                            <i class="fas fa-plus"></i> New Request
+                        </a>
+                    </div>
+                <?php endif ?>
             </div>
 
             <div class="card-body">

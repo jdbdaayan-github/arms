@@ -22,6 +22,10 @@ class CreateRecordRequestTable extends Migration
                 'type'       => 'INT',
                 'unsigned'   => true,
             ],
+            'description' => [
+                'type'       => 'TEXT',
+                'null'       => true,
+            ],
             'request_id' => [
                 'type'       => 'INT',
                 'unsigned'   => true,

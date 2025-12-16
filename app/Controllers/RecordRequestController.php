@@ -47,11 +47,19 @@ class RecordRequestController extends BaseController
         ]);
     }
 
+    // Request per document
     public function request($id)
     {
-        $data['req_type'] = $this->record_request_type->getAllRecordTypes();
+        $data['req_type'] = $this->record_request_type->getAllRequestTypes();
         $data['record'] = $this->record_model->getRecordById($id);
         return view('pages/records/request', $data);
+    }
+
+    //Request for general
+    public function request_new()
+    {
+        $data['req_type'] = $this->record_request_type->getAllRequestTypes();
+        return view('pages/records/request_create', $data);
     }
 
     public function submitRequest($id)

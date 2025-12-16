@@ -44,7 +44,7 @@ class RecordRequestType extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getAllRecordTypes()
+    public function getAllRequestTypes()
     {
         return $this->findAll();
     }
