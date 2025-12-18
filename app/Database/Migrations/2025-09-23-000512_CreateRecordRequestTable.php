@@ -14,9 +14,16 @@ class CreateRecordRequestTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
+            'reference_no'  => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+                'null'      => true,
+            ],
+
             'record_id' => [
                 'type'       => 'INT',
                 'unsigned'   => true,
+                'null'      => true,
             ],
             'user_id' => [
                 'type'       => 'INT',

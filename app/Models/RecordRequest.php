@@ -13,7 +13,7 @@ class RecordRequest extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['record_id', 'user_id', 'request_date', 'request_id','description','remarks', 'status', 'due_date'];
+    protected $allowedFields    = ['reference_no','record_id', 'user_id', 'request_date', 'request_id', 'description', 'remarks', 'status', 'due_date'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -46,33 +46,32 @@ class RecordRequest extends Model
     protected $afterDelete    = [];
 
     public function getAllRequest()
-{
-    $builder = $this->select('
+    {
+        $builder = $this->select('
             record_requests.*,
             record_requests.id as request_id,
-            records.*,
             CONCAT_WS(" ", users.firstname, users.middlename, users.lastname, users.extension) as fullname
         ')
-        ->join('users', 'users.id = record_requests.user_id')
-        ->join('records', 'records.id = record_requests.record_id');
+            ->join('users', 'users.id = record_requests.user_id');
 
-    // Role-based filtering
-    if (
-        ! hasRole('Superadmin') &&
-        ! hasRole('Administrator') &&
-        ! hasRole('Archivist')
-    ) {
-        // Contributor → own requests only
-        $builder->where('record_requests.user_id', session()->get('user_id'));
+        // Role-based filtering
+        if (
+            ! hasRole('Superadmin') &&
+            ! hasRole('Administrator') &&
+            ! hasRole('Archivist')
+        ) {
+            // Contributor → own requests only
+            $builder->where('record_requests.user_id', session()->get('user_id'));
+        }
+
+        return $builder;
     }
 
-    return $builder;
-}
-
-
-    public function addRequest($data)
+    public function addRequest($data):int
     {
-        return $this->insert($data);
+        $data['user_id'] = session()->get('user_id');
+        $this->insert($data);
+        return $this->getInsertID();
     }
 
     public function updateRequest($id, $data)
@@ -80,16 +79,18 @@ class RecordRequest extends Model
         return $this->update($id, $data);
     }
 
-    public function countPendingRequest(){
+    public function countPendingRequest()
+    {
         return $this->where('status', 'Pending')->countAllResults();
     }
 
-    public function getRequestById($id) {
+    public function getRequestById($id)
+    {
         return $this->select('record_requests.*,records.*,rqt.name as request_type,CONCAT_WS(" ", u.firstname, u.middlename, u.lastname, u.extension) as user_name')
-                    ->join('records', 'records.id = record_requests.record_id')
-                    ->join('record_request_types rqt', 'rqt.id = record_requests.request_id')
-                    ->join('users u', 'u.id = record_requests.user_id')
-                    ->where('record_requests.id', $id)
-                    ->first();
+            ->join('records', 'records.id = record_requests.record_id', 'left')
+            ->join('record_request_types rqt', 'rqt.id = record_requests.request_id')
+            ->join('users u', 'u.id = record_requests.user_id')
+            ->where('record_requests.id', $id)
+            ->first();
     }
 }

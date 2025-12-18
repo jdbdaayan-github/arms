@@ -28,15 +28,20 @@ Records
             </div>
 
             <div class="card-body">
+                <!-- Search + Per Page -->
                 <form method="get" class="mb-2 d-flex justify-content-between">
-                    <select name="per_page" class="form-control form-control-sm mr-2" style="width:55px;">
-                        <?php foreach ([5, 10, 25, 50] as $num): ?>
-                            <option value="<?= $num ?>"><?= $num ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <div class="d-flex align-items-center">Select&nbsp;<select name="per_page" class="form-control form-control-sm mr-2" style="width:55px;" onchange="this.form.submit()">
+                        
+                            <?php foreach ([5, 10, 25, 50] as $num): ?>
+                                <option value="<?= $num ?>" <?= ($perPage == $num) ? 'selected' : '' ?>><?= $num ?></option>
+                            <?php endforeach; ?>
+                            
+                        </select>options
+                    </div>
+
 
                     <div class="input-group input-group-sm" style="max-width: 300px;">
-                        <input type="text" class="form-control" placeholder="Search Title...">
+                        <input type="text" name="search" value="<?= esc($search ?? '') ?>" class="form-control" placeholder="Search Title...">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-secondary">
                                 <i class="fas fa-search"></i>
@@ -50,7 +55,7 @@ Records
                         <thead>
                             <tr>
                                 <th class="text-center"><input type="checkbox" name="" id=""></th>
-                                <th>Record Title</th>
+                                <th>Reference No</th>
                                 <th>Requested By</th>
                                 <th>Request Date</th>
                                 <th>Status</th>
@@ -62,7 +67,7 @@ Records
                                 <?php foreach ($requests as $request): ?>
                                     <tr>
                                         <td class="text-center"><input type="checkbox" name="" id=""></td>
-                                        <td><?= esc($request->title) ?></td>
+                                        <td><?= esc($request->reference_no) ?></td>
                                         <td><?= esc($request->fullname) ?></td>
                                         <td><?= esc(date("F j, Y, g:i A", strtotime($request->created_at))) ?></td>
                                         <td><?= esc($request->status) ?></td>
@@ -173,4 +178,15 @@ Records
         });
     });
 </script>
+<?php if (session()->get('success')): ?>
+    <script>
+        Swal.fire({
+            title: 'Success!',
+            text: '<?= session()->get('req_success') ?>',
+            icon: 'success',
+            showCloseButton: true,
+            showConfirmButton: true,
+        })
+    </script>
+<?php endif ?>
 <?= $this->endSection() ?>

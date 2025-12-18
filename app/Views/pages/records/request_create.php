@@ -24,21 +24,20 @@ Record Request
             </div>
 
             <div class="card-body">
-                <form action="<?= base_url('records/submitRequest/') ?>" method="post">
+                <form action="<?= base_url('records/submitnewRequest') ?>" method="post">
                     <?= csrf_field() ?>
 
                     <!-- Free Text Area -->
                     <div class="form-group">
                         <label>Request Description<span class="text-danger"> *</span></label>
                         <textarea
-                            class="form-control <?= session('errors.free_text') ? 'is-invalid' : '' ?>"
-                            name="free_text"
+                            class="form-control <?= session('errors.description') ? 'is-invalid' : '' ?>"
+                            name="description"
                             rows="4"
-                            placeholder="Enter any details or description related to your request..." required><?= set_value('free_text') ?></textarea>
-
-                        <?php if (session('errors.free_text')): ?>
+                            placeholder="Enter any details or description related to your request..." required><?= set_value('description') ?></textarea>
+                        <?php if (session('errors.description')): ?>
                             <div class="invalid-feedback">
-                                <?= session('errors.free_text') ?>
+                                <?= session('errors.description') ?>
                             </div>
                         <?php endif ?>
                     </div>

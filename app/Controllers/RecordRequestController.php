@@ -30,7 +30,7 @@ class RecordRequestController extends BaseController
         // Make sure getForApprovalData() returns a Builder object
         $builder = $this->record_request_model->getAllRequest();
         if ($search) {
-            $builder = $builder->like('title', $search);
+            $builder = $builder->like('reference_no', $search);
         }
 
         $requests = $builder->paginate($perPage, 'default', $page); // always array
@@ -87,26 +87,78 @@ class RecordRequestController extends BaseController
         return redirect()->to('records')->with('req_success', 'Record requested successfully!');
     }
 
-    public function cancelRequest($id) {
+    public function submitnewRequest()
+    {
+        $rules = [
+            'description'   => 'required',
+            'request_type'  => 'required',
+            'remarks'       => 'required',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'description' => $this->request->getPost('description'),
+            'request_id'  => $this->request->getPost('request_type'),
+            'remarks'     => $this->request->getPost('remarks'),
+            'user_id'     => session()->get('id'), // ✅ FIXED
+            'created_at'  => date('Y-m-d H:i:s'),
+        ];
+
+        // Insert first
+        $insertId = $this->record_request_model->addRequest($data);
+
+        if (!$insertId) {
+            return redirect()->to('records/requests')
+                ->with('error', 'Record request failed!');
+        }
+
+        // Generate YYYY-MM-XXXXXX
+        $referenceNo = date('Y-m') . '-' . str_pad($insertId, 6, '0', STR_PAD_LEFT);
+
+        // Update with formatted ID
+        $this->record_request_model->updateRequest($insertId, [
+            'reference_no' => $referenceNo
+        ]);
+
+        return redirect()->to('records/requests')
+            ->with('success', 'Record requested successfully!');
+    }
+
+    //public function 
+
+    public function cancelRequest($id)
+    {
+        $data = [
+            'request_id' => 2,
+        ];
+        $this->record_request_model->updateRequest($id, $data);
+
+    }
+
+    public function approveRequest($id)
+    {
+        
+    }
+
+    public function disapproveRequest($id)
+    {
         //
     }
 
-    public function approveRequest($id) {
+    public function completeRequest($id)
+    {
         //
     }
 
-    public function disapproveRequest($id) {
-        //
-    }
-
-    public function completeRequest($id) {
-        //
-    }
-
-    public function request_view($id) {
+    public function request_view($id)
+    {
         $data['request']  = $this->record_request_model->getRequestById($id);
+        //dd($data);
         return view('pages/records/request_view', $data);
     }
-
-
 }

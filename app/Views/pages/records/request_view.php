@@ -27,18 +27,26 @@ View Record Request
                 <!-- Record Info -->
                 <h6 class="text-muted mb-2">Record Information</h6>
                 <table class="table table-sm table-borderless">
-                    <tr>
-                        <th width="200">Record Title</th>
-                        <td><?= esc($request->title) ?></td>
-                    </tr>
-                    <tr>
-                        <th>Archived By</th>
-                        <td><?= esc($request->archived_by) ?></td>
-                    </tr>
-                    <tr>
-                        <th>Date Archived</th>
-                        <td><?= esc($request->archived_at) ?></td>
-                    </tr>
+                    <?php if ($request && $request->title): ?>
+                        <tr>
+                            <th width="200">Record Title</th>
+                            <td><?= esc($request->title) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Archived By</th>
+                            <td><?= esc($request->archived_by) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Date Archived</th>
+                            <td><?= esc($request->archived_at) ?></td>
+                        </tr>
+                    <?php endif ?>
+                    <?php if ( $request && $request->description) : ?>
+                        <tr>
+                            <th>Description</th>
+                            <td><?= esc($request->description) ?></td>
+                        </tr>
+                    <?php endif ?>
                 </table>
 
                 <hr>
