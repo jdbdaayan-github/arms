@@ -85,7 +85,7 @@ Records
                                                 || ($request->user_id == session()->get('user_id') && $request->status === "Pending");
                                             ?>
 
-                                            <a href="<?= $canEdit ? base_url('records/requests/edit/' . $request->id) : 'javascript:void(0)' ?>"
+                                            <a href="<?= $canEdit ? base_url('records/request_edit/' . $request->id) : 'javascript:void(0)' ?>"
                                                 class="btn btn-info btn-sm "
                                                 data-toggle="tooltip"
                                                 title="<?= $canEdit ? 'Edit' : 'Not allowed' ?>"

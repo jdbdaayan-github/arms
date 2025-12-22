@@ -68,6 +68,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->post('submitRequest/(:num)', [RecordRequestController::class, 'submitRequest']);
         $routes->get('request_view/(:num)', [RecordRequestController::class, 'request_view']);
         $routes->get('request_new', [RecordRequestController::class, 'request_new']);
+        $routes->get('request_edit/(:num)', [RecordRequestController::class, 'edit']);
         $routes->post('submitnewRequest', [RecordRequestController::class, 'submitnewRequest']);
         $routes->post('bookmark/(:num)', [RecordController::class, 'bookmark']);
         $routes->get('test', function () {

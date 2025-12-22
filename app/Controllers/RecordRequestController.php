@@ -129,30 +129,48 @@ class RecordRequestController extends BaseController
             ->with('success', 'Record requested successfully!');
     }
 
-    //public function 
+    public function edit($id)
+    {
+        $data['req_type'] = $this->record_request_type->getAllRequestTypes();
+        $data['request'] = $this->record_request_model->getRequestById($id);
+        return view('pages/records/request_edit', $data);
+    }
 
     public function cancelRequest($id)
     {
         $data = [
-            'request_id' => 2,
+            'status' => 'Cancelled',
         ];
+
         $this->record_request_model->updateRequest($id, $data);
 
     }
 
     public function approveRequest($id)
     {
+        $data = [
+            'status' => 'Ongoing',
+        ];
         
+        $this->record_request_model->updateRequest($id, $data);
     }
 
     public function disapproveRequest($id)
     {
-        //
+        $data = [
+            'status' => 'Disapproved',
+        ];
+        
+        $this->record_request_model->updateRequest($id, $data);
     }
 
     public function completeRequest($id)
     {
-        //
+        $data = [
+            'status' => 'Completed',
+        ];
+        
+        $this->record_request_model->updateRequest($id, $data);
     }
 
     public function request_view($id)
