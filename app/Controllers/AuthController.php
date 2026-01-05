@@ -125,8 +125,8 @@ class AuthController extends BaseController
                 ->with('login', 'Welcome! ' . $user->firstname);
         }
 
-        if ($role->role_name === 'Contributor') {
-            return redirect()->to('/dashboard/contributor')
+        if ($role->role_name === 'Standard User') {
+            return redirect()->to('/dashboard/standard_user')
                 ->with('login', 'Welcome! ' . $user->firstname);
         }
 

@@ -41,9 +41,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->group('dashboard', function ($routes) {
         $routes->get('superadmin', [DashboardController::class, 'superadminDashboard']);
         $routes->get('administrator', [DashboardController::class, 'adminDashboard']);
-        $routes->get('archivist', [DashboardController::class, 'archivistDashboard']);
-        $routes->get('records-officer', [DashboardController::class, 'recordsOfficerDashboard']);
-        $routes->get('contributor', [DashboardController::class, 'contributorDashboard']);
+        $routes->get('standard_user', [DashboardController::class, 'standardDashboard']);
     });
 
     #Records

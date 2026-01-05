@@ -98,28 +98,26 @@ function isMenuOpen($segment1Expected)
                                 <p>Advanced Search</p>
                             </a>
                         </li>
-                        <?php if (hasRole('Superadmin') || hasRole('Records Officer') || hasPermission('records.approve')): ?>
+                        <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasPermission('records.approve')): ?>
                             <li class="nav-item">
                                 <a href="<?= base_url('records/approval') ?>" class="nav-link <?= isActive('records', 'approval') ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>
-                                        Approval
+                                        Pending
                                         <span class="right badge badge-danger"><?= $pendingApprovalCount ?></span>
                                     </p>
                                 </a>
                             </li>
                         <?php endif ?>
-                        <?php if (hasRole('Superadmin') || hasRole('Archivist') || hasPermission('records.archival')): ?>
                             <li class="nav-item">
                                 <a href="<?= base_url('records/archival') ?>" class="nav-link <?= isActive('records', 'archival') ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>
-                                        Archival
+                                        Archived
                                         <span class="right badge badge-danger"><?= $pendingArchivalCount ?></span>
                                     </p>
                                 </a>
                             </li>
-                        <?php endif ?>
                         <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Archivist') || hasPermission('records.archival') || hasRole('Contributor')): ?>
                             <li class="nav-item">
                                 <a href="<?= base_url('records/requests') ?>" class="nav-link <?= isActive('records', 'requests') ?>">

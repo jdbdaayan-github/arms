@@ -72,13 +72,13 @@ class DashboardController extends BaseController
         return view('dashboards/records_officer/dashboard');
     }
 
-    public function contributorDashboard()
+    public function standardDashboard()
     {
         $data['records'] = $this->record_model->getContriRecentRecords();
         $data['totalRecords'] = $this->record_model->getTotalUpload();
         $data['totalApoproved'] = $this->record_model->getApprovedRecords();
         $data['totalPending'] = $this->record_model->getPendingRecords();
 
-        return view('dashboards/contributor/dashboard', $data);
+        return view('dashboards/standard_user/dashboard', $data);
     }
 }
