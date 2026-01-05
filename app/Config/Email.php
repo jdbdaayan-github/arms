@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = 'noreply@erms.local';
+    public string $fromEmail  = 'noreply@dswd.gov.ph';
     public string $fromName   = 'ARMS Support';
     public string $recipients = '';
 

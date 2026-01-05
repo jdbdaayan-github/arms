@@ -91,12 +91,24 @@ class SystemController extends BaseController
         return view('system/profile');
     }
 
-    public function checkSession() {
+    public function checkSession()
+    {
         $session = session();
-        if ($session->has('user_id')) {
-            return $this->response->setJSON(['alive' => true]);
-        } else {
+
+        if (!$session->has('user_id')) {
             return $this->response->setJSON(['alive' => false]);
         }
+
+        $config  = config('Session');
+        $timeout = $config->expiration;
+
+        $last = $session->get('last_activity');
+
+        if (!$last || time() - $last >= $timeout) {
+            $session->destroy();
+            return $this->response->setJSON(['alive' => false]);
+        }
+
+        return $this->response->setJSON(['alive' => true]);
     }
 }

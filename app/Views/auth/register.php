@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/guest'); ?>
 
 <?= $this->section('title') ?>
-Register
+| Register
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

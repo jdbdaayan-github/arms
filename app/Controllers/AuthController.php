@@ -8,6 +8,7 @@ use App\Models\Permission;
 use App\Controllers\BaseController;
 use App\Controllers\CaptchaController;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Email;
 
 class AuthController extends BaseController
 {
@@ -96,6 +97,7 @@ class AuthController extends BaseController
             'permissions' => $permission,
             'is_super' => $user->is_super,
             'logged_in' => TRUE,
+            'last_activity' => time(),
         ]);
 
         // Remove generated Captcha
@@ -171,6 +173,11 @@ class AuthController extends BaseController
 
         $user = $user_model->getUserByEmail($emailAddress);
 
+        if(!$user)
+        {
+            return redirect()->back()->withInput()->with('error', "Email doesn't exist!");
+        }
+
         // Generate a random password (8 chars: letters + numbers)
         $newPassword = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
 
@@ -186,9 +193,11 @@ class AuthController extends BaseController
 
         $user_model->insertResetPassword($user->id, $data);
 
+        $configEmail = config('Email');
+
         // Send email with new password
         $email = \Config\Services::email();
-        $email->setFrom('noreply@erms.local', 'ARMS Support');
+        $email->setFrom($configEmail->fromEmail, 'ARMS Support');
         $email->setTo($emailAddress);
         $email->setSubject('Your New Password');
         $email->setMessage("
@@ -200,7 +209,7 @@ class AuthController extends BaseController
     ");
 
         if ($email->send()) {
-            return "✅ New password sent. Please check your and return to <a href=" . base_url("auth/login") . "> Login </a>";
+            return "✅ New password sent. Please check your email and return to <a href=" . base_url("auth/login") . "> Login </a>";
         } else {
             return "❌ Failed to send reset email.<br>" . $email->printDebugger(['headers']);
         }

@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/guest'); ?>
 
 <?= $this->section('title') ?>
-Login
+| Login
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

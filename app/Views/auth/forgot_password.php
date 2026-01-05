@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/guest'); ?>
 
 <?= $this->section('title')?>
-  Forgot Password
+ | Forgot Password
 <?= $this->endSection()?>
 
 <?= $this->section('content') ?>
@@ -33,7 +33,7 @@
       </form>
 
       <p class="mb-1 mt-3 text-center">
-        Remember your password? <a href="<?= base_url('login') ?>">Sign in</a>
+        Remember your password? <a href="<?= base_url('auth/login') ?>">Sign in</a>
       </p>
     </div>
   </div>
