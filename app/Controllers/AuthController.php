@@ -150,10 +150,7 @@ class AuthController extends BaseController
         return redirect()->to('auth/login');
     }
 
-    public function forgot()
-    {
-        return view('auth/forgot_password');
-    }
+
 
     public function reset1()
     {
@@ -165,18 +162,35 @@ class AuthController extends BaseController
         return view('auth/terms');
     }
 
+    public function forgot()
+    {
+        session();
+        return view('auth/forgot_password');
+    }
     public function reset()
     {
-        $emailAddress = $this->request->getPost('email') ?? 'testuser@example.com';
+        $rules = [
+            'email' => [
+                'label' => 'Email',
+                'rules' => 'required|valid_email|email_exists',
+                'errors' => [
+                    'email_exists' => 'This email is not exists/registered in our system.'
+                ],
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            //dd(session());
+            return redirect()->to(previous_url() ?? '/auth/forgot')
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $emailAddress = $this->request->getPost('email');
 
         $user_model = new User();
 
         $user = $user_model->getUserByEmail($emailAddress);
-
-        if(!$user)
-        {
-            return redirect()->back()->withInput()->with('error', "Email doesn't exist!");
-        }
 
         // Generate a random password (8 chars: letters + numbers)
         $newPassword = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
@@ -186,8 +200,7 @@ class AuthController extends BaseController
 
         $data = ['password' => $hashedPassword];
 
-        if($user->login_attempts > 4)
-        {
+        if ($user->login_attempts > 4) {
             $data['login_attempts'] = 0;
         }
 

@@ -79,12 +79,7 @@ class Filters extends BaseFilters
             // 'invalidchars',
             'auth' => [
                 'except' => [
-                    'auth/login',
-                    'auth/authenticate',
-                    'auth/register',
-                    'auth/forgot',
-                    'auth/reset',
-                    'auth/terms',
+                    'auth/*',
                     'system/checkSession',
                 ]
             ],

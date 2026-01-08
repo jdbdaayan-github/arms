@@ -1,8 +1,11 @@
+<?php
+$errors = session()->getFlashdata('errors') ?? [];
+?>
 <?= $this->extend('layouts/guest'); ?>
 
-<?= $this->section('title')?>
- | Forgot Password
-<?= $this->endSection()?>
+<?= $this->section('title') ?>
+| Forgot Password
+<?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <div class="login-box">
@@ -19,16 +22,29 @@
         <?= csrf_field() ?>
 
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control rounded-0" placeholder="Email" value="<?= set_value('email') ?>" required>
+          <input
+            type="email"
+            name="email"
+            class="form-control rounded-0 <?= session('errors.email') ? 'is-invalid' : '' ?>"
+            placeholder="Email"
+            value="<?= set_value('email') ?>">
+
           <div class="input-group-append">
             <div class="input-group-text rounded-0">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
+
+          <?php if (session('errors.email')): ?>
+            <div class="invalid-feedback">
+              <?= session('errors.email') ?>
+            </div>
+          <?php endif; ?>
         </div>
 
+
         <div>
-          <button type="submit" class="btn btn-block btn-info btn-flat">Send Reset Link</button>
+          <button type="submit" class="btn btn-block btn-info btn-flat">Reset Password</button>
         </div>
       </form>
 
