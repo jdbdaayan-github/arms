@@ -233,19 +233,14 @@ class RecordController extends BaseController
             $file->move($uploadPath, $newName);
         }
 
-        //$refNumber = 'REC-' . date('Ymd') . '-' . str_pad(uniqid(), 10, '0', STR_PAD_LEFT);
-        $isDraft = (bool) $this->request->getPost('save_as_draft');
         $record_data = [
             'title'        => $this->request->getPost('title'),
             'confidential' => $this->request->getPost('confidentiality'),
             'series_id'    => $this->request->getPost('series'),
+            'status_id'    => 1,
             'record_date'  => $this->request->getPost('record_date'),
             'created_by'   => session()->get('user_id'),
         ];
-
-        if ($isDraft) {
-            $record_data['status_id'] = 1;
-        }
 
         $record_id = $this->record_model->insertRecord($record_data);
 

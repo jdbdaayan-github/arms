@@ -124,10 +124,10 @@ Records
                                             </button>
                                         </td>
 
-                                        <td class="align-middle"><a href="<?= base_url('records/show/' . $record->id) ?>"><?= esc($record->title) ?></a><a href="javascript:void(0)" class="text-<?= ($record->is_bookmarked)?'warning':'secondary'  ?> ?> float-right align-middle d-flex"><i class="fas fa-star star-id" data-id="<?= $record->id ?>" data-mark = '<?=  $record->is_bookmarked ?>'></i></a></td>
+                                        <td class="align-middle"><a href="<?= base_url('records/show/' . $record->id) ?>"><?= esc($record->title) ?></a><a href="javascript:void(0)" class="text-<?= ($record->is_bookmarked) ? 'warning' : 'secondary'  ?> ?> float-right align-middle d-flex"><i class="fas fa-star star-id" data-id="<?= $record->id ?>" data-mark='<?= $record->is_bookmarked ?>'></i></a></td>
                                         <?php
                                         $view_enabled = hasRole('Superadmin')
-                                            || (hasPermission('records.view') && $record->status_id == 4)
+                                            || (hasPermission('records.view') && $record->status_id == 1)
                                             || hasRecordPermission($record->id, 'view');
 
                                         $edit_enabled = hasRole('Superadmin')
@@ -150,11 +150,11 @@ Records
                                             <hr class="m-2">
                                             <div class="d-flex flex-wrap justify-content-center">
 
-                                                <?php if ($edit_enabled): ?>
-                                                    <a class="btn btn-info btn-sm mr-1 mb-1" href="<?= base_url('records/edit/' . $record->id) ?>">
-                                                        <i class="fas fa-edit mr-1"></i> Edit
-                                                    </a>
-                                                <?php endif ?>
+                                                <a class="btn btn-info btn-sm mr-1 mb-1 <?= $edit_enabled ? '' : 'disabled' ?>"
+                                                    href="<?= $edit_enabled ? base_url('records/edit/' . $record->id) : 'javascript:void(0)' ?>"
+                                                    aria-disabled="<?= $edit_enabled ? 'false' : 'true' ?>">
+                                                    <i class="fas fa-edit mr-1"></i> Edit
+                                                </a>
 
                                                 <?php if (hasRole('Superadmin') || hasPermission('records.workflow')): ?>
                                                     <a class="btn btn-primary btn-sm mr-1 mb-1" href="<?= base_url('records/workflow/' . $record->id) ?>">
@@ -333,15 +333,15 @@ Records
             const mark = e.target.dataset.mark;;
             Swal.fire({
                 title: 'Bookmark',
-                text: mark == true ? 'Remove bookmark on this record?': 'Add bookmark on this record?',
+                text: mark == true ? 'Remove bookmark on this record?' : 'Add bookmark on this record?',
                 icon: 'question',
                 showCloseButton: true,
                 showDenyButton: true,
-                confirmButtonText: mark == true ? 'Remove Bookmark': 'Add Bookmark',
+                confirmButtonText: mark == true ? 'Remove Bookmark' : 'Add Bookmark',
                 denyButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    
+
                     let csrfName = '<?= csrf_token() ?>';
                     let csrfHash = '<?= csrf_hash() ?>';
 
@@ -358,10 +358,10 @@ Records
                         })
                         .then(res => res.json())
                         .then(data => {
-                            Swal.fire('Success', mark == true ? 'Removed bookmark on this record': 'Added bookmark on this record', 'success')
-                            .then(() => {
-                            location.reload();
-                        });
+                            Swal.fire('Success', mark == true ? 'Removed bookmark on this record' : 'Added bookmark on this record', 'success')
+                                .then(() => {
+                                    location.reload();
+                                });
                         })
                         .catch(err => {
                             Swal.fire('Error', 'Something went wrong!', 'error');

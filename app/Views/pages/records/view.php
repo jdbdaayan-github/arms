@@ -27,9 +27,15 @@ Records
                         <i class="fas fa-bookmark"></i> Bookmark
                     </a>
 
-                    <?php if (hasRole('Superadmin') || hasRole('Archivist') || hasPermission('records.archive')): ?>
+                    <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasPermission('records.archive')): ?>
                         <a href="<?= base_url('records/archive/' . $record->id) ?>" class="btn btn-info btn-flat" title="Archive">
                             <i class="fas fa-file-archive"></i> Archive
+                        </a>
+                    <?php endif ?>
+
+                    <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasPermission('records.archive')): ?>
+                        <a href="<?= base_url('records/archive/' . $record->id) ?>" class="btn btn-secondary btn-flat" title="Archive">
+                            <i class="fas fa-download"></i> Download
                         </a>
                     <?php endif ?>
 

@@ -142,11 +142,6 @@ Records
                 <!-- FOOTER -->
                 <div class="card-footer text-right">
                     <div class="d-flex align-items-center float-right gap-1">
-                        <div class="icheck-primary">
-                            <input type="checkbox" id="save_as_draft" name="save_as_draft" value="1"
-                                <?= set_value('save_as_draft') ? 'checked' : '' ?>>
-                            <label for="save_as_draft" class="text-muted">Save as Draft</label>
-                        </div>
                         <button type="submit" class="btn btn-info btn-flat ml-2">
                             <i class="fas fa-save mr-1"></i> Save Record
                         </button>

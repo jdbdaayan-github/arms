@@ -144,6 +144,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('create', [RecordIndexController::class, 'create']);
         $routes->post('store', [RecordIndexController::class, 'store']);
         $routes->get('edit/(:num)', [RecordIndexController::class, 'edit']);
+        $routes->post('update/(:num)', [RecordIndexController::class, 'update']);
     });
 
     $routes->get('logs/access', [SystemController::class, 'access']);

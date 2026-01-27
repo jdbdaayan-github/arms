@@ -84,9 +84,6 @@ $(document).ready(function() {
                         <a href="<?= base_url('indexes/edit/') ?>${data}" class="btn btn-primary btn-sm">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a href="<?= base_url('classifications/index/') ?>${data}" class="btn btn-info btn-sm">
-                            <i class="fas fa-list"></i>
-                        </a>
                         <button class="btn btn-danger btn-sm delete-permission" data-id="${data}">
                             <i class="fas fa-trash"></i>
                         </button>
