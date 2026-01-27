@@ -122,7 +122,7 @@ class Record extends Model
 
     public function getForApprovalData()
     {
-        return $this->where('status_id', 2);
+        return $this->where('status_id', 1);
     }
 
     public function countPendingApproval(): int
@@ -142,7 +142,7 @@ class Record extends Model
 
     public function getArchivedData()
     {
-        return $this->where('status_id', 4);
+        return $this->where('status_id', 2);
     }
 
     public function forceDelete($id)

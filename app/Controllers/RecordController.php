@@ -62,10 +62,9 @@ class RecordController extends BaseController
             $builder = $builder->where('records.status_id', $status_id);
         }
 
-        /**Contributor can view his records created only
-        if (session()->get('role') == "Contributor") {
+        if (session()->get('role') == "Standard User") {
             $builder = $builder->where('created_by', session()->get('user_id'));
-        }*/
+        }
 
         // Get paginated results
         $records = $builder->paginate($perPage, 'default', $page);
@@ -110,7 +109,7 @@ class RecordController extends BaseController
     public function approveRecord($id)
     {
         $data = [
-            'status_id' => 3,
+            'status_id' => 2,
         ];
 
         if ($this->record_model->update($id, $data)) {
@@ -158,7 +157,7 @@ class RecordController extends BaseController
     public function archive($id)
     {
         $data = [
-            'status_id' => 4,
+            'status_id' => 2,
             'archived_by' => session()->get('user_id'),
             'archived_at' => date('Y-m-d H:i:s'),
         ];
