@@ -133,6 +133,7 @@ class UserController extends BaseController
     public function resetAttempts($id) {
         $data = [
             'login_attempts' => 0,
+            'status_id' => 2,
         ];
 
         $this->user_model->resetAttempts($id, $data);

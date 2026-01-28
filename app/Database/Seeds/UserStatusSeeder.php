@@ -33,8 +33,14 @@ class UserStatusSeeder extends Seeder
                 'created_at'      => date('Y-m-d H:i:s'),
                 'updated_at'      => date('Y-m-d H:i:s'),
             ],
+            [
+                'id'              => 5,
+                'name'            => 'Locked',
+                'created_at'      => date('Y-m-d H:i:s'),
+                'updated_at'      => date('Y-m-d H:i:s'),
+            ],
             [   
-                'id'              => 5, 
+                'id'              => 6, 
                 'name'            => 'Archived',
                 'created_at'      => date('Y-m-d H:i:s'),
                 'updated_at'      => date('Y-m-d H:i:s'),

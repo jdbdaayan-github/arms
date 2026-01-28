@@ -171,7 +171,7 @@ class RecordController extends BaseController
 
     public function create()
     {
-        if (hasRole('Administrator') || hasPermission('records.create') || hasRole('Contributor')) {
+        if (hasRole('Administrator') || hasPermission('records.create') || hasRole('Standard User')) {
             $series = $this->record_series_model->getSeries();
             return view('pages/records/create', ['series' => $series]);
         }

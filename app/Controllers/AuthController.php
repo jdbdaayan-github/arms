@@ -55,23 +55,30 @@ class AuthController extends BaseController
             return redirect()->to('/auth/login')->with('error', 'Your account has not been verified. Contact the administrator.')->withInput();
         }
 
-        // Check the CAPTCHA input
-        if ($captcha_input !== $captcha_word) {
-            $newAttempts = $user->login_attempts + 1;
-            return redirect()->to('/auth/login')->with('error', 'Incorrect CAPTCHA. Please try again.')->withInput();
-        }
-
         // Verify password
         if (!password_verify($password, $user->password)) {
             $newAttempts = $user->login_attempts + 1;
             $user_model->update($user->id, ['login_attempts' => $newAttempts]);
 
             if ($newAttempts >= 5) {
-                $user_model->update($user->id, ['status_id' => 4]);
+                $user_model->update($user->id, ['status_id' => 5]);
                 return redirect()->to('/auth/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.')->withInput();
             }
 
             return redirect()->to('/auth/login')->with('error', 'Invalid email or password.')->withInput();
+        }
+        
+        // Check the CAPTCHA input
+        if ($captcha_input !== $captcha_word) {
+            $newAttempts = $user->login_attempts + 1;
+            $user_model->update($user->id, ['login_attempts' => $newAttempts]);
+
+            if ($newAttempts >= 5) {
+                $user_model->update($user->id, ['status_id' => 5]);
+                return redirect()->to('/auth/login')->with('error', 'Your account is locked due to multiple failed login attempts. Contact the administrator.')->withInput();
+            }
+
+            return redirect()->to('/auth/login')->with('error', 'Incorrect CAPTCHA. Please try again.')->withInput();
         }
 
 
