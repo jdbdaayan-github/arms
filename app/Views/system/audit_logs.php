@@ -37,50 +37,94 @@ Audit Logs
 
 <?= $this->section('scripts') ?>
 <script>
-$(document).ready(function() {
+    let csrfName = '<?= csrf_token() ?>';
+    let csrfHash = '<?= csrf_hash() ?>';
+</script>
+<script>
+  $(document).ready(function() {
     $('#auditLogsTable').DataTable({
-        serverSide: true,
-        ajax: "<?= base_url('audit/ajaxLogs') ?>",
-        columns: [
-            { data: "id", className: "text-center" },
-            { data: "action", className: "text-center",
-              render: function(data) {
-                  let color = 'secondary';
-                  switch(data.toUpperCase()) {
-                      case 'CREATE': color='success'; break;
-                      case 'UPDATE': color='primary'; break;
-                      case 'DELETE': color='danger'; break;
-                      case 'LOGIN': color='info'; break;
-                      case 'LOGOUT': color='warning'; break;
-                  }
-                  return `<span class="badge badge-${color}">${data}</span>`;
-              }
-            },
-            { data: "module" },
-            { data: "record_id", className: "text-center" },
-            { data: "username", className: "text-center" },
-            { data: "timestamp", className: "text-center" },
-            { 
-                data: "id", 
-                orderable: false, 
-                searchable: false, 
-                className: "text-center",
-                render: function(data) {
-                    return `<a href="<?= site_url('logs/audit/view/') ?>${data}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>`;
-                }
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      ajax: {
+        url: "<?= base_url('audit/ajaxLogs') ?>",
+        type: "POST",
+        data: function (d) {
+        d[csrfName] = csrfHash;
+    },
+    dataSrc: function (json) {
+        // 🔥 update CSRF token after every request
+        csrfHash = json.csrfHash;
+        return json.data;
+    }
+      },
+      columns: [{
+          data: "id",
+          className: "text-center"
+        },
+        {
+          data: "action",
+          className: "text-center",
+          render: function(data) {
+            let color = 'secondary';
+            switch (data.toUpperCase()) {
+              case 'CREATE':
+                color = 'success';
+                break;
+              case 'UPDATE':
+                color = 'primary';
+                break;
+              case 'DELETE':
+                color = 'danger';
+                break;
+              case 'LOGIN':
+                color = 'info';
+                break;
+              case 'LOGOUT':
+                color = 'warning';
+                break;
             }
-        ],
-        order: [[0, "desc"]],
-        processing: true,
-        responsive: true,
-        language: {
-                processing: `
-                    <div class="overlay">
-                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
-                    </div>
-                `
-            },
+            return `<span class="badge badge-${color}">${data}</span>`;
+          }
+        },
+        {
+          data: "module"
+        },
+        {
+          data: "record_id",
+          className: "text-center"
+        },
+        {
+          data: "username",
+          className: "text-center"
+        },
+        {
+          data: "timestamp",
+          className: "text-center"
+        },
+        {
+          data: "id",
+          orderable: false,
+          searchable: false,
+          className: "text-center",
+          render: function(data) {
+            return `<a href="<?= site_url('logs/audit/view/') ?>${data}" class="btn btn-sm btn-info">
+                            <i class="fas fa-eye"></i>
+                        </a>`;
+          }
+        }
+      ],
+      order: [
+        [0, "desc"]
+      ],
+      language: {
+        processing: `
+            <div class="overlay">
+                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+            </div>
+        `
+      }
     });
-});
+  });
 </script>
 <?= $this->endSection() ?>

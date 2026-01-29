@@ -281,7 +281,7 @@ class RecordController extends BaseController
             ];
 
             audit_log('CREATE', 'records', $record_id, null, $log_data, 'create record ' . $record_data['title']);
-            record_hisory_log('CREATED', $record_id, 'Record created and submitted for approval');
+            record_hisory_log('CREATED', $record_id, 'Record created');
         }
 
         return redirect()->to('/records')->with('success', $record_id);

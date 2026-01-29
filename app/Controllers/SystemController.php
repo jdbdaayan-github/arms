@@ -21,46 +21,67 @@ class SystemController extends BaseController
     public function ajaxLogs()
     {
         $request = $this->request;
-        $start   = intval($request->getPost('start') ?? 0);
-        $length  = intval($request->getPost('length') ?? 10);
-        $search  = $request->getPost('search')['value'] ?? null;
-        $draw    = intval($request->getPost('draw') ?? 1);
+
+        $start  = (int) $request->getPost('start');
+        $length = (int) $request->getPost('length');
+        $draw   = (int) $request->getPost('draw');
+        $search = $request->getPost('search')['value'] ?? '';
+
+        $orderColumnIndex = $request->getPost('order')[0]['column'] ?? 0;
+        $orderDir         = $request->getPost('order')[0]['dir'] ?? 'desc';
+
+        $columns = [
+            'activities.id',
+            'activities.action',
+            'activities.module',
+            'activities.record_id',
+            'users.username',
+            'activities.timestamp'
+        ];
+
+        $orderColumn = $columns[$orderColumnIndex] ?? 'activities.id';
 
         $model = new AuditLog();
-        $builder = $model->select('activities.id, activities.timestamp, users.username, activities.action, activities.module, activities.record_id')
+
+        // BASE QUERY
+        $baseBuilder = $model->builder()
+            ->select('activities.id, activities.timestamp, users.username, activities.action, activities.module, activities.record_id')
             ->join('users', 'users.id = activities.user_id', 'left');
 
-        // total records (without filtering)
-        $recordsTotal = $model->countAll();
+        // TOTAL RECORDS (NO SEARCH)
+        $recordsTotal = (clone $baseBuilder)->countAllResults();
 
-        // apply search
-        if ($search) {
-            $builder->groupStart()
+        // SEARCH
+        if (!empty($search)) {
+            $baseBuilder->groupStart()
                 ->like('activities.action', $search)
                 ->orLike('activities.module', $search)
                 ->orLike('users.username', $search)
+                ->orLike('activities.record_id', $search)
                 ->groupEnd();
         }
 
-        // filtered count
-        $recordsFiltered = $builder->countAllResults(false);
+        // FILTERED RECORDS
+        $recordsFiltered = (clone $baseBuilder)->countAllResults();
 
-        // limit & offset
+        // DATA
         if ($length != -1) {
-            $builder->limit($length, $start);
+            $baseBuilder->limit($length, $start);
         }
 
-        // get data
-        $logs = $builder->orderBy('activities.id', 'DESC')->get()->getResultArray();
+        $data = $baseBuilder
+            ->orderBy($orderColumn, $orderDir)
+            ->get()
+            ->getResultArray();
 
         return $this->response->setJSON([
-            "draw" => $draw,
-            "recordsTotal" => $recordsTotal,
-            "recordsFiltered" => $recordsFiltered,
-            "data" => $logs
+            'draw'            => $draw,
+            'recordsTotal'    => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data'            => $data,
+            'csrfHash'        => csrf_hash(),
         ]);
     }
-
 
     public function audit_view($id)
     {

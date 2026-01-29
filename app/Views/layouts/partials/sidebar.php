@@ -347,12 +347,6 @@ function isMenuOpen($segment1Expected)
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="<?= base_url('settings/profile') ?>" class="nav-link <?= isActive('settings', 'profile') ?>">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Profile</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="<?= base_url('settings/preferences') ?>" class="nav-link <?= isActive('settings', 'preferences') ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Preferences</p>
