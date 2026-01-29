@@ -215,6 +215,8 @@ class UserController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $hash = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+
         $data = [
             'firstname' => $this->request->getPost('firstname'),
             'middlename' => $this->request->getPost('middlename'),
@@ -222,7 +224,7 @@ class UserController extends BaseController
             'extension' => $this->request->getPost('extension'),
             'email' => $this->request->getPost('email'),
             'username' => $this->request->getPost('username'),
-            'password' => $this->request->getPost('password'),
+            'password' => $hash, 
             'role_id' => $this->request->getPost('role'),
         ];
 

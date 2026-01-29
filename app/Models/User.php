@@ -62,10 +62,15 @@ class User extends Model
 
     public function getUsersData()
     {
-        return $this->select('users.id,CONCAT_WS(" ", firstname, middlename, lastname, extension) as Fullname, email,username, password, status_id,verified, login_attempts ,user_statuses.name as status, roles.role_name as role_name')
+        $builder = $this->select('users.id,CONCAT_WS(" ", firstname, middlename, lastname, extension) as Fullname, email,username, password, status_id,verified, login_attempts ,user_statuses.name as status, roles.role_name as role_name')
                     ->join('user_statuses', 'user_statuses.id = users.status_id')
-                    ->join('roles', 'roles.id = users.role_id')
-                    ->findAll();
+                    ->join('roles', 'roles.id = users.role_id');
+        
+        if(!hasRole('Superadmin')) {
+            $builder->where('is_super', 0);
+        }
+
+        return $builder->findAll();
     }
 
     public function updateProfile($id, $data)

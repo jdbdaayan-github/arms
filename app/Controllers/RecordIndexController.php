@@ -108,42 +108,56 @@ class RecordIndexController extends BaseController
                 'label' => 'Index Name',
                 'rules' => "required|max_length[100]|is_unique[record_indexes.name,id,{$id}]",
                 'errors' => [
-                    'required'   => 'The {field} field is required.',
-                    'max_length' => 'The {field} cannot exceed 100 characters.',
-                    'is_unique'  => 'This {field} already exists.'
+                    'required'   => 'The Index Name field is required.',
+                    'max_length' => 'The Index Name cannot exceed 100 characters.',
+                    'is_unique'  => 'This Index Name already exists.'
                 ]
             ],
             'type' => [
                 'label' => 'Type',
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'The {field} field is required.'
+                    'required' => 'The Type field is required.'
                 ]
             ],
             'length' => [
                 'label' => 'Length',
-                'rules' => 'required|max_length[2]',
+                'rules' => 'required|max_length[3]',
                 'errors' => [
-                    'required'   => 'The {field} field is required.',
-                    'max_length' => 'The {field} cannot exceed 2 characters.'
+                    'required'   => 'The length field is required.',
+                    'max_length' => 'The length field cannot exceed 3 characters.'
                 ]
             ],
             'placeholder' => [
                 'label' => 'Placeholder',
                 'rules' => 'permit_empty|max_length[50]',
                 'errors' => [
-                    'max_length' => 'The {field} cannot exceed 50 characters.'
+                    'max_length' => 'The placeholder cannot exceed 50 characters.'
                 ]
             ],
             'required' => [
                 'label' => 'Required',
                 'rules' => 'required',
                 'errors' => [
-                    'required' => 'The {field} field is required.'
+                    'required' => 'The required field is required.'
                 ]
             ]
         ];
 
-        // ⚠️ Note: Update logic not implemented yet.
+        if(!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'name' => $this->request->getPost('name'),
+            'type' => $this->request->getPost('type'),
+            'length' => $this->request->getPost('length'),
+            'placeholder' => $this->request->getPost('placeholder'),
+            'required' => $this->request->getPost('required'),
+        ];
+
+        $this->rec_indexes_model->updateRecIndex($id, $data);
+
+         return redirect()->to('indexes')->with('success', 'Updated index successfully!');
     }
 }

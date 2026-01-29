@@ -59,6 +59,11 @@ class RecordIndex extends Model
         return $this->insert($data);
     }
 
+    public function updateRecIndex($id, $data)
+    {
+        return $this->update($id, $data);
+    }
+
     public function getSeriesIndexesById($id)
     {
         return $this->select('record_indexes.*')

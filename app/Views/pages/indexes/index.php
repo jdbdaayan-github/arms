@@ -48,6 +48,17 @@ Record Indexes
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+
+<?php if(session()->has('success')): ?>
+    <script>
+        Swal.fire({
+            title: "Success!",
+            text: "<?= session('success') ?>",
+            icon: "success",
+            confirmButtonText: "OK"
+        });
+    </script>
+<?php endif; ?>
 <script>
 $(document).ready(function() {
     let permissionTable = $("#indexesTable").DataTable({

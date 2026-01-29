@@ -50,9 +50,9 @@ class RoleController extends BaseController
                 ],
             ],
             'description' => [
-                'rules'  => 'permit_empty|max_length[100]',
+                'rules'  => 'permit_empty|max_length[255]',
                 'errors' => [
-                    'max_length' => 'Description cannot exceed 100 characters.',
+                    'max_length' => 'Description cannot exceed 255 characters.',
                 ],
             ],
         ];
@@ -91,9 +91,9 @@ class RoleController extends BaseController
                 ],
             ],
             'description' => [
-                'rules'  => 'permit_empty|max_length[100]',
+                'rules'  => 'permit_empty|max_length[255]',
                 'errors' => [
-                    'max_length' => 'Description cannot exceed 100 characters.',
+                    'max_length' => 'Description cannot exceed 255 characters.',
                 ],
             ],
         ];
