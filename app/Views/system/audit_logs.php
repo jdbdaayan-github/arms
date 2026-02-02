@@ -37,8 +37,8 @@ Audit Logs
 
 <?= $this->section('scripts') ?>
 <script>
-    let csrfName = '<?= csrf_token() ?>';
-    let csrfHash = '<?= csrf_hash() ?>';
+  let csrfName = '<?= csrf_token() ?>';
+  let csrfHash = '<?= csrf_hash() ?>';
 </script>
 <script>
   $(document).ready(function() {
@@ -49,14 +49,14 @@ Audit Logs
       ajax: {
         url: "<?= base_url('audit/ajaxLogs') ?>",
         type: "POST",
-        data: function (d) {
-        d[csrfName] = csrfHash;
-    },
-    dataSrc: function (json) {
-        // 🔥 update CSRF token after every request
-        csrfHash = json.csrfHash;
-        return json.data;
-    }
+        data: function(d) {
+          d[csrfName] = csrfHash;
+        },
+        dataSrc: function(json) {
+          // 🔥 update CSRF token after every request
+          csrfHash = json.csrfHash;
+          return json.data;
+        }
       },
       columns: [{
           data: "id",

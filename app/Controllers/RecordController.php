@@ -17,6 +17,7 @@ use App\Models\RecordSeriesIndex;
 use App\Controllers\BaseController;
 use App\Models\RecordBookmark;
 use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class RecordController extends BaseController
 {
@@ -612,6 +613,19 @@ class RecordController extends BaseController
         $bookmark_model->where('user_id', session()->get('user_id'))->where('record_id', $id)->delete();
 
         return $this->response->setJSON(['success' => true, 'message' => 'Document bookmarked']);
+    }
+
+    public function restore($id)
+    {
+        $record = $this->record_model->getRecordById($id);
+
+        if(!$record) {
+            //
+        }
+
+        $data=['status_id' => 1];
+
+        $this->record_model->updateRecord($id, $data);
     }
 
     public function download($id) {
