@@ -327,12 +327,6 @@ function isMenuOpen($segment1Expected)
                                     <p>Audit</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="<?= base_url('logs/access') ?>" class="nav-link <?= isActive('logs', 'access') ?>">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Activity</p>
-                                </a>
-                            </li>
                         </ul>
                     </li>
 
