@@ -68,13 +68,11 @@ Records
             <div class="card-header d-flex align-items-center justify-content-between py-1">
                 <h3 class="card-title"><i class="fas fa-folder-open mr-2"></i>Records List</h3>
                 <!-- records.create permission -->
-                <?php if (hasRole('Superadmin') || hasPermission('records.create') || hasRole('Standard User')): ?>
                     <div class="card-tools  ml-auto mr-0">
                         <a href="<?= base_url('records/create') ?>" class="btn btn-primary btn-flat btn-sm" style="font-size:12px;">
                             <i class="fas fa-plus"></i> Add Record
                         </a>
                     </div>
-                <?php endif ?>
             </div>
 
             <div class="card-body">
