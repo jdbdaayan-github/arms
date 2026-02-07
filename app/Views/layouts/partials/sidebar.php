@@ -171,8 +171,9 @@ function isMenuOpen($segment1Expected)
                         </ul>
                     </li>
                 <?php endif ?>
-                <!-- Roles -->
+                
                 <?php if (hasRole('Superadmin') || hasPermission('roles.view')): ?>
+                    <!-- Roles -->
                     <li class="nav-item has-treeview <?= isMenuOpen('roles') ?>">
                         <a href="#" class="nav-link <?= isActive('roles') ?>">
                             <i class="nav-icon fas fa-user-shield"></i>
@@ -200,8 +201,8 @@ function isMenuOpen($segment1Expected)
                     </li>
                 <?php endif ?>
 
-                <!-- Permissions -->
                 <?php if (hasRole('Superadmin') || hasPermission('permissions.view')): ?>
+                    <!-- Permissions -->
                     <li class="nav-item has-treeview <?= isMenuOpen('permissions') ?>">
                         <a href="#" class="nav-link <?= isActive('permissions') ?>">
                             <i class="nav-icon fas fa-key"></i>

@@ -10,7 +10,7 @@
     <div class="d-flex align-items-center">
       <a href="<?= base_url() ?>"><b>ARMS</b></a>
     </div>
-    <small style="font-size: 0.8rem; color: #666;">Electronic Records Management System</small>
+    <small style="font-size: 0.8rem; color: #666;">Archival Records Management System</small>
   </div>
   <!-- /.login-logo -->
 
@@ -47,8 +47,6 @@
             </div>
           <?php endif; ?>
         </div>
-
-
         <div class="input-group mb-1">
           <input type="password" name="password" id="password" class="form-control rounded-0 <?= isset($errors['password']) ? 'is-invalid' : '' ?>" placeholder="Password">
           <div class="input-group-append">
@@ -57,12 +55,12 @@
             </div>
           </div>
           <?php if (isset($errors['password'])): ?>
-          <div class="invalid-feedback">
-            <?= $errors['password'] ?>
-          </div>
-        <?php endif; ?>
+            <div class="invalid-feedback">
+              <?= $errors['password'] ?>
+            </div>
+          <?php endif; ?>
         </div>
-        
+
 
         <div class="mb-3 text-right">
           <span id="togglePassword" class="text-info" style="cursor: pointer; user-select: none;">Show Password</span>

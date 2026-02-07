@@ -36,7 +36,7 @@ $routes->group('auth', function ($routes) {
 });
 
 $routes->group('', ['filter' => 'auth'], function ($routes) {
-
+    
     #Dashboards
     $routes->group('dashboard', function ($routes) {
         $routes->get('superadmin', [DashboardController::class, 'superadminDashboard']);

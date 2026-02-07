@@ -122,16 +122,6 @@ class AuthController extends BaseController
                 ->with('login', 'Welcome! ' . $user->firstname);
         }
 
-        if ($role->role_name === 'Archivist') {
-            return redirect()->to('/dashboard/archivist')
-                ->with('login', 'Welcome! ' . $user->firstname);
-        }
-
-        if ($role->role_name === 'Records Officer') {
-            return redirect()->to('/dashboard/records-officer')
-                ->with('login', 'Welcome! ' . $user->firstname);
-        }
-
         if ($role->role_name === 'Standard User') {
             return redirect()->to('/dashboard/standard_user')
                 ->with('login', 'Welcome! ' . $user->firstname);
@@ -148,6 +138,30 @@ class AuthController extends BaseController
         $data['captcha_image'] = $captcha_controller->generate();
 
         return view('auth/register', $data);
+    }
+
+    public function store()
+    {
+        $captcha_word = session()->get('captcha_word');
+
+        $rules = [
+            'firstname' => ['label' => 'First Name', 'rules' => 'required'],
+            'middlename' => 'permit_empty',
+            'lastname' => 'required',
+            'extension' => 'permit_empty',
+            'email' => 'required|valid_email|is_unique[users.email]',
+            'username' => 'required|is_unique[users.username]',
+            'password' => 'required|min_length[6]',
+            'password_confirm' => ['label' => 'Confirm Password', 'rules' => 'match[password]']
+        ];
+
+        if(!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        if($this->request->getPost('captcha') != $captcha_word) {
+            return redirect()->back()->withInput()->with('error', 'Incorrect CAPTCHA. Please try again!');
+        }
     }
 
     public function logout()

@@ -221,32 +221,32 @@ Records
                                 <h3 class="card-title mb-0"><i class="fas fa-file-alt mr-2"></i> Preview</h3>
                             </div>
                             <div class="card-body p-0 text-center" style="height: 500px; overflow: hidden;">
-                        <?php if ($record->confidential == 1 && session()->get('role')=='Standard User' && $record->status_id==2): ?>
-                            <!-- CONFIDENTIAL: NO PREVIEW -->
-                            <div class="d-flex align-items-center justify-content-center h-100">
-                                <div class="text-center text-muted">
-                                    <i class="fas fa-lock fa-3x mb-3"></i>
-                                    <p class="mb-0"><strong>Confidential File</strong></p>
-                                    <small>Preview is disabled for confidential records.</small>
-                                </div>
+                                <?php if ($record->confidential == 1 && session()->get('role') == 'Standard User' && $record->status_id == 2): ?>
+                                    <!-- CONFIDENTIAL: NO PREVIEW -->
+                                    <div class="d-flex align-items-center justify-content-center h-100">
+                                        <div class="text-center text-muted">
+                                            <i class="fas fa-lock fa-3x mb-3"></i>
+                                            <p class="mb-0"><strong>Confidential File</strong></p>
+                                            <small>Preview is disabled for confidential records.</small>
+                                        </div>
+                                    </div>
+                                <?php else: ?>
+                                    <!-- ALLOWED PREVIEW -->
+                                    <?php
+                                    $filePath = base_url('records/preview/' . $record->randomfilename);
+                                    $extension = strtolower(pathinfo($record->randomfilename, PATHINFO_EXTENSION));
+                                    ?>
+
+                                    <?php if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])): ?>
+                                        <img src="<?= $filePath ?>" alt="Preview" class="img-fluid" style="max-height: 100%;">
+                                    <?php elseif ($extension === 'pdf'): ?>
+                                        <iframe src="<?= $filePath ?>#toolbar=0" width="100%" height="500" style="border: none;"></iframe>
+                                    <?php else: ?>
+                                        <p class="mt-5 text-muted">No preview available for this file type.</p>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+
                             </div>
-                        <?php else: ?>
-                            <!-- ALLOWED PREVIEW -->
-                            <?php
-                            $filePath = base_url('records/preview/' . $record->randomfilename);
-                            $extension = strtolower(pathinfo($record->randomfilename, PATHINFO_EXTENSION));
-                            ?>
-
-                            <?php if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])): ?>
-                                <img src="<?= $filePath ?>" alt="Preview" class="img-fluid" style="max-height: 100%;">
-                            <?php elseif ($extension === 'pdf'): ?>
-                                <iframe src="<?= $filePath ?>#toolbar=0" width="100%" height="500" style="border: none;"></iframe>
-                            <?php else: ?>
-                                <p class="mt-5 text-muted">No preview available for this file type.</p>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                    </div>
                         </div>
                     </div>
 

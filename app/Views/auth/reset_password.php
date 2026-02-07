@@ -8,7 +8,7 @@
 <div class="login-box">
   <div class="login-logo d-flex flex-column align-items-center justify-content-center mb-4">
     <a href="<?= base_url() ?>"><b>ARMS</b></a>
-    <small style="font-size: 0.8rem; color: #666;">Electronic Records Management System</small>
+    <small style="font-size: 0.8rem; color: #666;">Archival Records Management System</small>
   </div>
 
   <div class="card">
