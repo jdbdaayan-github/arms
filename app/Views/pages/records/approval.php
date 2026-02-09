@@ -17,7 +17,7 @@ Records
     <div class="container-fluid">
         <div class="card card-outline card-secondary">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h3 class="card-title"><i class="fas fa-check-circle mr-2"></i>Pending Records For Approval</h3>
+                <h3 class="card-title"><i class="fas fa-check-circle mr-2"></i>Pending Records For Archive</h3>
             </div>
 
             <div class="card-body">
@@ -163,7 +163,7 @@ Records
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = `<?= base_url('records/approve/') ?>${id}`;
+                    window.location.href = `<?= base_url('records/archive/') ?>${id}`;
                 }
             });
         });

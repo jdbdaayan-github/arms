@@ -155,6 +155,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('logs/audit/view/(:num)', [SystemController::class, 'audit_view']);
     $routes->get('settings/profile', [SystemController::class, 'profile']);
     $routes->get('settings/preferences', [SystemController::class, 'preferences']);
+    $routes->get('settings/back_up', [SystemController::class, 'backUp']);
+    $routes->get('backup/download', [SystemController::class, 'download']);
     $routes->get('system/checkSession', [SystemController::class, 'checkSession']);
 
     #Reports

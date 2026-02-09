@@ -112,7 +112,7 @@ class Record extends Model
     }
     public function getPendingRecords()
     {
-        return $this->where('created_by', session()->get('user_id'))->where('status_id', 2)->countAllResults();
+        return $this->where('created_by', session()->get('user_id'))->where('status_id', 1)->countAllResults();
     }
 
     public function getRecentRecords()
@@ -143,6 +143,16 @@ class Record extends Model
     public function getArchivedData()
     {
         return $this->where('status_id', 2);
+    }
+
+    public function countArchival()
+    {
+        return $this->getArchivedData()->countAllResults();
+    }
+
+    public function countArchivalByUser($user_id)
+    {
+        return $this->getArchivedData()->where('created_by', $user_id)->countAllResults();
     }
 
     public function forceDelete($id)

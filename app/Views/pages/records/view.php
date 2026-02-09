@@ -88,7 +88,9 @@ Records
                                     <li class="nav-item"><a class="nav-link" href="#versions" data-toggle="tab">Versions</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#indexes" data-toggle="tab">Indexes</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#notes" data-toggle="tab">Notes</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#permissions" data-toggle="tab">Permissions</a></li>
+                                    <?php if(session()->get('role')!='Standard User'): ?>
+                                        <li class="nav-item"><a class="nav-link" href="#permissions" data-toggle="tab">Permissions</a></li>
+                                    <?php endif; ?>
                                 </ul>
                             </div>
                             <div class="card-body">
@@ -173,10 +175,19 @@ Records
 
                                     <!-- Notes Tab -->
                                     <div class="tab-pane" id="notes">
+
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Notes</h6>
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addNoteModal">
+                                                <i class="fas fa-plus"></i> Add Note
+                                            </button>
+                                        </div>
+
                                         <ul class="list-group">
                                             <li class="list-group-item">Initial record creation.</li>
                                             <li class="list-group-item">Updated title on 2025-09-05.</li>
                                         </ul>
+
                                     </div>
 
                                     <!-- Permissions Tab -->
@@ -255,4 +266,42 @@ Records
         </div>
     </div>
 </section>
+<!-- Add Note Modal -->
+<div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="addNoteModalLabel">
+                    <i class="fas fa-sticky-note mr-1"></i> Add Note
+                </h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+
+            <form action="<?= base_url('records/add_note') ?>" method="post">
+                <?= csrf_field() ?>
+
+                <div class="modal-body">
+                    <input type="hidden" name="record_id" value="<?= $record->id ?>">
+
+                    <div class="form-group">
+                        <label>Note</label>
+                        <textarea name="note" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Note
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 <?= $this->endSection() ?>

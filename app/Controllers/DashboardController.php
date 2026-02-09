@@ -62,21 +62,11 @@ class DashboardController extends BaseController
         return view('dashboards/administrator/dashboard');
     }
 
-    public function archivistDashboard()
-    {
-        return view('dashboards/archivist/dashboard');
-    }
-
-    public function recordsOfficerDashboard()
-    {
-        return view('dashboards/records_officer/dashboard');
-    }
-
     public function standardDashboard()
     {
         $data['records'] = $this->record_model->getContriRecentRecords();
         $data['totalRecords'] = $this->record_model->getTotalUpload();
-        $data['totalApoproved'] = $this->record_model->getApprovedRecords();
+        $data['totalArchived'] = $this->record_model->countArchivalByUser(session()->get('user_id'));
         $data['totalPending'] = $this->record_model->getPendingRecords();
 
         return view('dashboards/standard_user/dashboard', $data);

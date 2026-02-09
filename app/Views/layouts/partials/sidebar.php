@@ -114,7 +114,6 @@ function isMenuOpen($segment1Expected)
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>
                                         Archived
-                                        <span class="right badge badge-danger"><?= $pendingArchivalCount ?></span>
                                     </p>
                                 </a>
                             </li>
@@ -345,6 +344,12 @@ function isMenuOpen($segment1Expected)
                                 <a href="<?= base_url('settings/preferences') ?>" class="nav-link <?= isActive('settings', 'preferences') ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Preferences</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= base_url('settings/back_up') ?>" class="nav-link <?= isActive('settings', 'back_up') ?>">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Back_up</p>
                                 </a>
                             </li>
                         </ul>

@@ -114,7 +114,7 @@ class RecordController extends BaseController
         ];
 
         if ($this->record_model->update($id, $data)) {
-            return redirect()->to('records/approval')->with('success', 'Records approved successfully!');
+            return redirect()->to('records/approval')->with('success', 'Records archived successfully!');
         }
     }
 
@@ -124,7 +124,6 @@ class RecordController extends BaseController
         $perPage = (int) $this->request->getGet('per_page') ?: 10;
         $page    = (int) $this->request->getGet('page') ?: 1;
 
-        // === ARCHIVED RECORDS ===
         $builderArchived = $this->record_model->getArchivedData();
         if ($search) {
             $builderArchived = $builderArchived->like('title', $search);
@@ -133,25 +132,10 @@ class RecordController extends BaseController
         $recordsArchived = $builderArchived->paginate($perPage, 'archived', $page);
         $pagerArchived   = $builderArchived->pager;
 
-        // === FOR ARCHIVAL RECORDS ===
-        $builderForArchival = $this->record_model->getForArchivalData();
-        if ($search) {
-            $builderForArchival = $builderForArchival->like('title', $search);
-        }
-
-        $recordsForArchival = $builderForArchival->paginate($perPage, 'for_archival', $page);
-        $pagerForArchival   = $builderForArchival->pager;
-
-        $pendingForArchivalCount = $this->record_model->countPendingArchival();
-
         return view('pages/records/archive', [
             'recordsArchived' => $recordsArchived ?? [],
-            'recordsForArchival' => $recordsForArchival ?? [],
             'pagerArchived' => $pagerArchived,
-            'pagerForArchival' => $pagerForArchival,
-            'search' => $search,
             'perPage' => $perPage,
-            'pendingForArchivalCount' => $pendingForArchivalCount,
         ]);
     }
 
@@ -626,6 +610,8 @@ class RecordController extends BaseController
         $data=['status_id' => 1];
 
         $this->record_model->updateRecord($id, $data);
+
+        return redirect()->to('records/archival')->with('success', 'Record restored succesfully!');
     }
 
     public function download($id) {

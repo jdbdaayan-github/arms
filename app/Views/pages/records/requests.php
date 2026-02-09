@@ -119,7 +119,7 @@ Records
                                                 data-placement="top"
                                                 title="<?= $canCancel ? 'Cancel' : 'Not allowed' ?>"
                                                 <?= $canCancel ? '' : 'disabled' ?>>
-                                                <i class="fas fa-ban"></i>
+                                                <i class="fas fa-trash"></i>
                                             </button>
                                         </td>
                                     </tr>

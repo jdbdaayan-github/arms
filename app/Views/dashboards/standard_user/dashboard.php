@@ -35,8 +35,8 @@ Dashboard
             <div class="col-lg-4 col-12">
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3><?= esc(number_format($totalApoproved)) ?></h3>
-                        <p>Approved Records</p>
+                        <h3><?= esc(number_format($totalArchived)) ?></h3>
+                        <p>Archived Records</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-check"></i>

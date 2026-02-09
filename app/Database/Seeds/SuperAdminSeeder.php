@@ -22,6 +22,19 @@ class SuperAdminSeeder extends Seeder
                 'verified' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
         ],
+        [
+                'firstname' => 'Supe',
+                'middlename'=> 'R.',
+                'lastname'=> 'Admin',
+                'username' => 'superadmin',
+                'email' => 'superadmin@email.com',
+                'password' => password_hash('superadmin1234', PASSWORD_DEFAULT),
+                'status_id' => 2,
+                'role_id' => 1,
+                'is_super' => 1,
+                'verified' => 1,
+                'created_at' => date('Y-m-d H:i:s'),
+        ],
             
         ];
         $this->db->table('users')->insertBatch($superusers);
