@@ -18,6 +18,7 @@ View Record Request
 <section class="content">
     <div class="container-fluid">
         <div class="card">
+
             <div class="card-header">
                 <h3 class="card-title">Record Request Details</h3>
             </div>
@@ -41,7 +42,8 @@ View Record Request
                             <td><?= esc($request->archived_at) ?></td>
                         </tr>
                     <?php endif ?>
-                    <?php if ( $request && $request->description) : ?>
+
+                    <?php if ($request && $request->description): ?>
                         <tr>
                             <th>Description</th>
                             <td><?= esc($request->description) ?></td>
@@ -73,7 +75,15 @@ View Record Request
                     <tr>
                         <th>Status</th>
                         <td>
-                            <span class="badge badge-secondary">
+                            <?php
+                            $badge = match ($request->status) {
+                                'approved'  => 'badge-success',
+                                'denied'    => 'badge-danger',
+                                'completed' => 'badge-primary',
+                                default     => 'badge-secondary',
+                            };
+                            ?>
+                            <span class="badge <?= $badge ?>">
                                 <?= esc(ucfirst($request->status)) ?>
                             </span>
                         </td>
@@ -90,12 +100,120 @@ View Record Request
 
             </div>
 
-            <div class="card-footer text-right">
+            <!-- ACTION BUTTONS -->
+            <div class="card-footer d-flex justify-content-between">
+
                 <a href="<?= base_url('records/requests') ?>" class="btn btn-sm btn-secondary">
                     Back
                 </a>
+
+                <div class="btn-group">
+
+                    <?php if ($request->status === 'Pending'): ?>
+
+                        <form action="<?= base_url('records/requests/approve/' . $request->requestID) ?>"
+                            method="post"
+                            class="form-approve d-inline">
+                            <?= csrf_field() ?>
+                            <button type="button" class="btn btn-sm btn-success btn-approve">
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                        </form>
+
+                        <form action="<?= base_url('records/requests/deny/' . $request->requestID) ?>"
+                            method="post"
+                            class="form-deny d-inline ml-2">
+                            <?= csrf_field() ?>
+                            <button type="button" class="btn btn-sm btn-danger btn-deny">
+                                <i class="fas fa-times"></i> Deny
+                            </button>
+                        </form>
+
+                    <?php elseif ($request->status === 'Approved'): ?>
+
+                        <form action="<?= base_url('records/requests/complete/' . $request->requestID) ?>" method="post">
+                            <?= csrf_field() ?>
+                            <button type="button" class="btn btn-sm btn-primary btn-complete">
+                                <i class="fas fa-flag-checkered"></i> Mark as Completed
+                            </button>
+                        </form>
+
+                    <?php endif ?>
+
+                </div>
             </div>
+
         </div>
     </div>
 </section>
+<?= $this->endSection() ?>
+<?= $this->section('scripts') ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // APPROVE
+    document.querySelectorAll('.btn-approve').forEach(button => {
+        button.addEventListener('click', function () {
+            const form = this.closest('form');
+
+            Swal.fire({
+                title: 'Approve request?',
+                text: 'This request will be approved.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, approve',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // DENY
+    document.querySelectorAll('.btn-deny').forEach(button => {
+        button.addEventListener('click', function () {
+            const form = this.closest('form');
+
+            Swal.fire({
+                title: 'Deny request?',
+                text: 'This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, deny',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.btn-complete').forEach(button => {
+        button.addEventListener('click', function () {
+            const form = this.closest('form');
+
+            Swal.fire({
+                title: 'Mark request as completed?',
+                text: 'This request will be mark as completed.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#007bff',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, Mark as Completed',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+});
+</script>
+
 <?= $this->endSection() ?>

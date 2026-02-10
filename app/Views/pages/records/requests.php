@@ -73,8 +73,13 @@ Records
                                         <td><?= esc($request->status) ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url('records/request_view/') . $request->request_id ?>" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-eye"></i></a>
-                                            <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Archivist')): ?>
-                                                <button class="btn btn-primary btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Approve">
+                                            <?php 
+                                            $canApprove = hasRole('Superadmin')
+                                                || hasRole('Administrator')
+                                                && $request->status === "Pending";
+                                            
+                                            if (hasRole('Superadmin') || hasRole('Administrator')): ?>
+                                                <button class="btn btn-primary btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="<?=  $canApprove ? "" : "Approve" ?>">
                                                     <i class="fas fa-thumbs-up"></i>
                                                 </button>
                                             <?php endif ?>
@@ -94,13 +99,13 @@ Records
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Archivist')): ?>
+                                            <?php if (hasRole('Superadmin') || hasRole('Administrator')): ?>
                                                 <button class="btn btn-danger btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Disapprove">
                                                     <i class="fas fa-thumbs-down"></i>
                                                 </button>
                                             <?php endif ?>
 
-                                            <?php if (hasRole('Superadmin') || hasRole('Administrator') || hasRole('Archivist')): ?>
+                                            <?php if (hasRole('Superadmin') || hasRole('Administrator')): ?>
                                                 <button class="btn btn-success btn-sm return-btn" data-toggle="tooltip" data-placement="top" title="Completed">
                                                     <i class="fas fa-check"></i>
                                                 </button>
@@ -182,8 +187,20 @@ Records
     <script>
         Swal.fire({
             title: 'Success!',
-            text: '<?= session()->get('req_success') ?>',
+            text: '<?= session()->get('success') ?>',
             icon: 'success',
+            showCloseButton: true,
+            showConfirmButton: true,
+        })
+    </script>
+<?php endif ?>
+
+<?php if (session()->get('error')): ?>
+    <script>
+        Swal.fire({
+            title: 'Error!',
+            text: '<?= session()->get('error') ?>',
+            icon: 'error',
             showCloseButton: true,
             showConfirmButton: true,
         })

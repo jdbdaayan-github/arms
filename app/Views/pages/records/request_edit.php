@@ -24,7 +24,7 @@ Record Request
             </div>
 
             <div class="card-body">
-                <form action="<?= base_url('records/updateRequest/'.$request->id) ?>" method="post">
+                <form action="<?= base_url('records/updateRequest/'.$request->requestID) ?>" method="post">
                     <?= csrf_field() ?>
 
                     <!-- Free Text Area -->

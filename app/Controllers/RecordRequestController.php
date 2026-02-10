@@ -136,6 +136,33 @@ class RecordRequestController extends BaseController
         return view('pages/records/request_edit', $data);
     }
 
+    public function updateRequest($id)
+    {
+        $rules = [
+            'description'   => 'required',
+            'request_type'  => 'required',
+            'remarks'       => 'required',
+        ];
+
+        if(!$this->validate($rules))
+        {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'description' => $this->request->getPost('description'),
+            'request_id' => $this->request->getPost('request_type'),
+            'remarks' => $this->request->getPost('remarks')
+        ];
+
+        if(!$this->record_request_model->updateRequest($id, $data))
+        {
+            return redirect()->to('records/requests')->with('error', 'Unable to update request');
+        }
+
+        return redirect()->to('records/requests')->with('success', 'Request updated successfully!');
+    }
+
     public function cancelRequest($id)
     {
         $data = [

@@ -86,7 +86,7 @@ class RecordRequest extends Model
 
     public function getRequestById($id)
     {
-        return $this->select('record_requests.*,records.*,rqt.name as request_type,CONCAT_WS(" ", u.firstname, u.middlename, u.lastname, u.extension) as user_name')
+        return $this->select('record_requests.*, record_requests.id as requestID,records.*,rqt.name as request_type,CONCAT_WS(" ", u.firstname, u.middlename, u.lastname, u.extension) as user_name')
             ->join('records', 'records.id = record_requests.record_id', 'left')
             ->join('record_request_types rqt', 'rqt.id = record_requests.request_id')
             ->join('users u', 'u.id = record_requests.user_id')
