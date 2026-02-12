@@ -71,6 +71,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->post('updateRequest/(:num)', [RecordRequestController::class, 'updateRequest']);
         $routes->get('request/(:num)', [RecordRequestController::class, 'request']);
         $routes->post('requests/approve/(:num)', [RecordRequestController::class, 'approveRequest']);
+        $routes->post('requests/disapproved/(:num)', [RecordRequestController::class, 'disapproveRequest']);
         $routes->post('bookmark/(:num)', [RecordController::class, 'bookmark']);
         $routes->get('restore/(:num)', [RecordController::class, 'restore']);
         $routes->get('test', function () {

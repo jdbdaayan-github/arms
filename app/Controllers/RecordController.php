@@ -149,7 +149,7 @@ class RecordController extends BaseController
         //dd($data);
 
         if ($this->record_model->update($id, $data)) {
-            return redirect()->to('records/archival')->with('success', 'Records archived successfully!');
+            return redirect()->to('records/approval')->with('success', 'Records archived successfully!');
         }
     }
 

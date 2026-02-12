@@ -120,12 +120,12 @@ View Record Request
                             </button>
                         </form>
 
-                        <form action="<?= base_url('records/requests/deny/' . $request->requestID) ?>"
+                        <form action="<?= base_url('records/requests/disapproved/' . $request->requestID) ?>"
                             method="post"
                             class="form-deny d-inline ml-2">
                             <?= csrf_field() ?>
                             <button type="button" class="btn btn-sm btn-danger btn-deny">
-                                <i class="fas fa-times"></i> Deny
+                                <i class="fas fa-times"></i> Disapprove
                             </button>
                         </form>
 

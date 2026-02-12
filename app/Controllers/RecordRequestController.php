@@ -180,6 +180,13 @@ class RecordRequestController extends BaseController
         ];
         
         $this->record_request_model->updateRequest($id, $data);
+
+        if(!$this->record_request_model->updateRequest($id, $data))
+        {
+            return redirect()->to('records/requests')->with('error', 'Unable to update request');
+        }
+
+        return redirect()->to('records/requests')->with('success', 'Request updated successfully!');
     }
 
     public function disapproveRequest($id)
@@ -189,6 +196,13 @@ class RecordRequestController extends BaseController
         ];
         
         $this->record_request_model->updateRequest($id, $data);
+
+        if(!$this->record_request_model->updateRequest($id, $data))
+        {
+            return redirect()->to('records/requests')->with('error', 'Unable to update request');
+        }
+
+        return redirect()->to('records/requests')->with('success', 'Request updated successfully!');
     }
 
     public function completeRequest($id)
